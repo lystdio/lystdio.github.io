@@ -1,0 +1,2045 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/blog/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/blog/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blog/',
+    scheme: 'Mist',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本文为归档内容,原始地址在 博客园.  自从上次不小心把硬盘全部格式化之后，电脑里的几个系统，以及诸多配置都咔嚓了，没办法，又得从头来过。这个总结和记录了Linux学习过程中遇到的问题，以及电脑的配置等等，为下一次手贱做好准备。。。P.S: 本次系统更换为 unbuntu 13.04关于配置1. 源软件中心 -》 编辑 -》软件源 -》　　我一般是选择，163的源，速度还不错，听说最近我们学校也弄">
+<meta name="keywords" content="tech,cnblogs">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux学习笔记（上次更新时间2013&#x2F;07&#x2F;28）">
+<meta property="og:url" content="https://handishenniu.coding.me/blog/2013/06/06/2013-06-06-cb-linux-learning/index.html">
+<meta property="og:site_name" content="撼地神牛">
+<meta property="og:description" content="本文为归档内容,原始地址在 博客园.  自从上次不小心把硬盘全部格式化之后，电脑里的几个系统，以及诸多配置都咔嚓了，没办法，又得从头来过。这个总结和记录了Linux学习过程中遇到的问题，以及电脑的配置等等，为下一次手贱做好准备。。。P.S: 本次系统更换为 unbuntu 13.04关于配置1. 源软件中心 -》 编辑 -》软件源 -》　　我一般是选择，163的源，速度还不错，听说最近我们学校也弄">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-12T10:10:11.271Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux学习笔记（上次更新时间2013&#x2F;07&#x2F;28）">
+<meta name="twitter:description" content="本文为归档内容,原始地址在 博客园.  自从上次不小心把硬盘全部格式化之后，电脑里的几个系统，以及诸多配置都咔嚓了，没办法，又得从头来过。这个总结和记录了Linux学习过程中遇到的问题，以及电脑的配置等等，为下一次手贱做好准备。。。P.S: 本次系统更换为 unbuntu 13.04关于配置1. 源软件中心 -》 编辑 -》软件源 -》　　我一般是选择，163的源，速度还不错，听说最近我们学校也弄">
+
+
+
+
+
+
+  <link rel="canonical" href="https://handishenniu.coding.me/blog/2013/06/06/2013-06-06-cb-linux-learning/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Linux学习笔记（上次更新时间2013/07/28） | 撼地神牛</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?304ebec1c594afeac3282f7afb1f3448";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion .logo-line-before i { left: initial; }
+    .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <meta name="baidu-site-verification" content="mI6O7pmEdr">
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    
+    
+    
+    <a href="https://github.com/lystdio" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blog/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">撼地神牛</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-sitemap">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/sitemap.xml" rel="section"><i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>站点地图</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+  
+
+  
+
+    <a href="https://github.com/lystdio" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" style="fill: #222; color: #fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2013/06/06/2013-06-06-cb-linux-learning/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lion">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="撼地神牛">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linux学习笔记（上次更新时间2013/07/28）
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2013-06-06 11:19:00" itemprop="dateCreated datePublished" datetime="2013-06-06T11:19:00+08:00">2013-06-06</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-12 18:10:11" itemprop="dateModified" datetime="2018-12-12T18:10:11+08:00">2018-12-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <div class="history-article">本文为归档内容,原始地址在 <a href="http://www.cnblogs.com/hustskyking/archive/2013/06/06/linux-learning.html" target="_blank">博客园</a>.</div>
+
+<p>自从上次不小心把硬盘全部格式化之后，电脑里的几个系统，以及诸多配置都咔嚓了，没办法，又得从头来过。这个总结和记录了Linux学习过程中遇到的问题，以及电脑的配置等等，为下一次手贱做好准备。。。</p><br><p>P.S: 本次系统更换为 <span>unbuntu 13.04</span></p><br><h3>关于配置</h3><br><p><strong>1. 源</strong></p><br><p>软件中心 -》 编辑 -》软件源 -》</p><br><p>　　我一般是选择，163的源，速度还不错，听说最近我们学校也弄了一个源（<a href="http://mirrors.hustunique.com" target="_blank" rel="noopener">http://mirrors.hustunique.com</a>），不知道写错没有，但是在系统中没有找到这个源，就将就着速度还不错的163源吧。</p><br><p>改完之后，更新一下源：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get upgrade</span><br></pre></td></tr></table></figure>
+<p>这个也不错（太长了，折叠）&nbsp;</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">1、首先备份Ubuntu 11.04源列表</span><br><span class="line"></span><br><span class="line">    sudo cp /etc/apt/sources.list /etc/apt/sources.list.backup （备份下当前的源列表，有备无患嘛）</span><br><span class="line"></span><br><span class="line">    2、修改更新源</span><br><span class="line">    sudo gedit /etc/apt/sources.list （打开Ubuntu 11.04源列表文件）</span><br><span class="line"></span><br><span class="line">    3、将下面的代码粘贴进去（\#&quot;开头的那一行为注释，可以直接复制进文件中）</span><br><span class="line"></span><br><span class="line"> #台湾源</span><br><span class="line"></span><br><span class="line">deb http://tw.archive.ubuntu.com/ubuntu/ natty main universe restricted multiverse </span><br><span class="line">deb-src http://tw.archive.ubuntu.com/ubuntu/ natty main universe restricted multiverse </span><br><span class="line">deb http://tw.archive.ubuntu.com/ubuntu/ natty-security universe main multiverse restricted </span><br><span class="line">deb-src http://tw.archive.ubuntu.com/ubuntu/ natty-security universe main multiverse restricted </span><br><span class="line">deb http://tw.archive.ubuntu.com/ubuntu/ natty-updates universe main multiverse restricted </span><br><span class="line">deb-src http://tw.archive.ubuntu.com/ubuntu/ natty-updates universe main multiverse restricted</span><br><span class="line"></span><br><span class="line">#网易 Ubuntu 11.04 源（速度很快）</span><br><span class="line"></span><br><span class="line">deb http://mirrors.163.com/ubuntu/ natty main universe restricted multiverse </span><br><span class="line">deb-src http://mirrors.163.com/ubuntu/ natty main universe restricted multiverse </span><br><span class="line">deb http://mirrors.163.com/ubuntu/ natty-security universe main multiverse restricted </span><br><span class="line">deb-src http://mirrors.163.com/ubuntu/ natty-security universe main multiverse restricted </span><br><span class="line">deb http://mirrors.163.com/ubuntu/ natty-updates universe main multiverse restricted </span><br><span class="line">deb http://mirrors.163.com/ubuntu/ natty-proposed universe main multiverse restricted </span><br><span class="line">deb-src http://mirrors.163.com/ubuntu/ natty-proposed universe main multiverse restricted </span><br><span class="line">deb http://mirrors.163.com/ubuntu/ natty-backports universe main multiverse restricted </span><br><span class="line">deb-src http://mirrors.163.com/ubuntu/ natty-backports universe main multiverse restricted </span><br><span class="line">deb-src http://mirrors.163.com/ubuntu/ natty-updates universe main multiverse restricted</span><br><span class="line"></span><br><span class="line"> #骨头源，骨头源是bones7456架设的一个Ubuntu源 ，提供ubuntu,deepin</span><br><span class="line"></span><br><span class="line">deb http://ubuntu.srt.cn/ubuntu/ natty main universe restricted multiverse </span><br><span class="line">deb-src http://ubuntu.srt.cn/ubuntu/ natty main universe restricted multiverse </span><br><span class="line">deb http://ubuntu.srt.cn/ubuntu/ natty-security universe main multiverse restricted </span><br><span class="line">deb-src http://ubuntu.srt.cn/ubuntu/ natty-security universe main multiverse restricted </span><br><span class="line">deb http://ubuntu.srt.cn/ubuntu/ natty-updates universe main multiverse restricted </span><br><span class="line">deb http://ubuntu.srt.cn/ubuntu/ natty-proposed universe main multiverse restricted </span><br><span class="line">deb-src http://ubuntu.srt.cn/ubuntu/ natty-proposed universe main multiverse restricted </span><br><span class="line">deb http://ubuntu.srt.cn/ubuntu/ natty-backports universe main multiverse restricted </span><br><span class="line">deb-src http://ubuntu.srt.cn/ubuntu/ natty-backports universe main multiverse restricted </span><br><span class="line">deb-src http://ubuntu.srt.cn/ubuntu/ natty-updates universe main multiverse restricted</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#大家可以自己根据自己的版本设置一下，不一定局限于ubuntu 11.04，下面列出一些校内更新源。</span><br><span class="line"></span><br><span class="line">#电子科技大学</span><br><span class="line"></span><br><span class="line">deb http://ubuntu.uestc.edu.cn/ubuntu/ natty main restricted universe multiverse</span><br><span class="line">deb http://ubuntu.uestc.edu.cn/ubuntu/ natty-backports main restricted universe multiverse</span><br><span class="line">deb http://ubuntu.uestc.edu.cn/ubuntu/ natty-proposed main restricted universe multiverse</span><br><span class="line">deb http://ubuntu.uestc.edu.cn/ubuntu/ natty-security main restricted universe multiverse</span><br><span class="line">deb http://ubuntu.uestc.edu.cn/ubuntu/ natty-updates main restricted universe multiverse</span><br><span class="line">deb-src http://ubuntu.uestc.edu.cn/ubuntu/ natty main restricted universe multiverse</span><br><span class="line">deb-src http://ubuntu.uestc.edu.cn/ubuntu/ natty-backports main restricted universe multiverse</span><br><span class="line">deb-src http://ubuntu.uestc.edu.cn/ubuntu/ natty-proposed main restricted universe multiverse</span><br><span class="line">deb-src http://ubuntu.uestc.edu.cn/ubuntu/ natty-security main restricted universe multiverse</span><br><span class="line">deb-src http://ubuntu.uestc.edu.cn/ubuntu/ natty-updates main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">#中国科技大学</span><br><span class="line"></span><br><span class="line">deb http://debian.ustc.edu.cn/ubuntu/ natty main restricted universe multiverse</span><br><span class="line">deb http://debian.ustc.edu.cn/ubuntu/ natty-backports restricted universe multiverse</span><br><span class="line">deb http://debian.ustc.edu.cn/ubuntu/ natty-proposed main restricted universe multiverse</span><br><span class="line">deb http://debian.ustc.edu.cn/ubuntu/ natty-security main restricted universe multiverse</span><br><span class="line">deb http://debian.ustc.edu.cn/ubuntu/ natty-updates main restricted universe multiverse</span><br><span class="line">deb-src http://debian.ustc.edu.cn/ubuntu/ natty main restricted universe multiverse</span><br><span class="line">deb-src http://debian.ustc.edu.cn/ubuntu/ natty-backports main restricted universe multiverse</span><br><span class="line">deb-src http://debian.ustc.edu.cn/ubuntu/ natty-proposed main restricted universe multiverse</span><br><span class="line">deb-src http://debian.ustc.edu.cn/ubuntu/ natty-security main restricted universe multiverse</span><br><span class="line">deb-src http://debian.ustc.edu.cn/ubuntu/ natty-updates main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">#北京理工大学</span><br><span class="line"></span><br><span class="line">deb http://mirror.bjtu.edu.cn/ubuntu/ natty main multiverse restricted universe</span><br><span class="line">deb http://mirror.bjtu.edu.cn/ubuntu/ natty-backports main multiverse restricted universe</span><br><span class="line">deb http://mirror.bjtu.edu.cn/ubuntu/ natty-proposed main multiverse restricted universe</span><br><span class="line">deb http://mirror.bjtu.edu.cn/ubuntu/ natty-security main multiverse restricted universe</span><br><span class="line">deb http://mirror.bjtu.edu.cn/ubuntu/ natty-updates main multiverse restricted universe</span><br><span class="line">deb-src http://mirror.bjtu.edu.cn/ubuntu/ natty main multiverse restricted universe</span><br><span class="line">deb-src http://mirror.bjtu.edu.cn/ubuntu/ natty-backports main multiverse restricted universe</span><br><span class="line">deb-src http://mirror.bjtu.edu.cn/ubuntu/ natty-proposed main multiverse restricted universe</span><br><span class="line">deb-src http://mirror.bjtu.edu.cn/ubuntu/ natty-security main multiverse restricted universe</span><br><span class="line">deb-src http://mirror.bjtu.edu.cn/ubuntu/ natty-updates main multiverse restricted universe</span><br><span class="line"></span><br><span class="line">#兰州大学</span><br><span class="line"></span><br><span class="line">deb ftp://mirror.lzu.edu.cn/ubuntu/ natty main multiverse restricted universe</span><br><span class="line">deb ftp://mirror.lzu.edu.cn/ubuntu/ natty-backports main multiverse restricted universe</span><br><span class="line">deb ftp://mirror.lzu.edu.cn/ubuntu/ natty-proposed main multiverse restricted universe</span><br><span class="line">deb ftp://mirror.lzu.edu.cn/ubuntu/ natty-security main multiverse restricted universe</span><br><span class="line">deb ftp://mirror.lzu.edu.cn/ubuntu/ natty-updates main multiverse restricted universe</span><br><span class="line">deb ftp://mirror.lzu.edu.cn/ubuntu-cn/ natty main multiverse restricted universe</span><br><span class="line"></span><br><span class="line">#上海交通大学</span><br><span class="line"></span><br><span class="line">deb http://ftp.sjtu.edu.cn/ubuntu/ natty main multiverse restricted universe</span><br><span class="line">deb http://ftp.sjtu.edu.cn/ubuntu/ natty-backports main multiverse restricted universe</span><br><span class="line">deb http://ftp.sjtu.edu.cn/ubuntu/ natty-proposed main multiverse restricted universe</span><br><span class="line">deb http://ftp.sjtu.edu.cn/ubuntu/ natty-security main multiverse restricted universe</span><br><span class="line">deb http://ftp.sjtu.edu.cn/ubuntu/ natty-updates main multiverse restricted universe</span><br><span class="line">deb http://ftp.sjtu.edu.cn/ubuntu-cn/ natty main multiverse restricted universe</span><br><span class="line">deb-src http://ftp.sjtu.edu.cn/ubuntu/ natty main multiverse restricted universe</span><br><span class="line">deb-src http://ftp.sjtu.edu.cn/ubuntu/ natty-backports main multiverse restricted universe</span><br><span class="line">deb-src http://ftp.sjtu.edu.cn/ubuntu/ natty-proposed main multiverse restricted universe</span><br><span class="line">deb-src http://ftp.sjtu.edu.cn/ubuntu/ natty-security main multiverse restricted universe</span><br><span class="line">deb-src http://ftp.sjtu.edu.cn/ubuntu/ natty-updates main multiverse restricted universe</span><br><span class="line"></span><br><span class="line">View Code</span><br></pre></td></tr></table></figure>
+<p><strong>&nbsp;2. 字体</strong></p><br><p>ubuntu自带的字体文泉字体，边缘很粗糙，不好看 ，我还是比较喜欢微软雅黑。</p><br><p>网上随便搜的一个，有兴趣的可以看看：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">用Ubuntu 系统自带的文泉字体  边缘太模糊  ，所以就上网找了一些更换字体的方法  。跟着做了半天都没成功，后来  发现有个人写了一篇日志  ，编译好了，只需要 按着输入命令就行了  ，下面把方法贴出来</span><br><span class="line">http://www.idyj.net/blog/read.php?5</span><br><span class="line"></span><br><span class="line">支持在Ubuntu8.10、Ubuntu9.04系统上自动安装微软雅黑、monaco-linux、lucida-console等字体。</span><br><span class="line">而且可以设置LED、CRT两种不同的显示器的渲染效果，无需手工配置，实现自动化安装。</span><br><span class="line">使用方法如下：</span><br><span class="line">打开命令控制台，然后运行下面的脚本（可以通过复制下面的内容到命令控制台来执行脚本）：</span><br><span class="line">wget -O get-fonts.sh.zip http://files.cnblogs.com/DengYangjun/get-fonts.sh.zip</span><br><span class="line">unzip -o get-fonts.sh.zip 1&gt;/dev/null</span><br><span class="line">chmod a+x get-fonts.sh</span><br><span class="line">./get-fonts.sh</span><br><span class="line"></span><br><span class="line">删除下载的字体安装脚本文件：</span><br><span class="line">rm get-fonts.sh get-fonts.sh.zip 2&gt;/dev/null</span><br><span class="line"></span><br><span class="line">注销生效</span><br><span class="line"></span><br><span class="line">如果觉得不爽，想恢复以前的字体设置：</span><br><span class="line">cd /etc/fonts/conf.avail</span><br><span class="line">sudo mv 51-local.conf.old 51-local.conf 2&gt;/dev/null</span><br><span class="line">sudo mv 69-language-selector-zh-cn.conf.old 69-language-selector-zh-cn.conf 2&gt;/dev/null</span><br><span class="line">sudo rm -f -r /usr/share/fonts/truetype/myfonts 2&gt;/dev/null</span><br><span class="line">cd -</span><br><span class="line"></span><br><span class="line">修正记录：</span><br><span class="line">#1.添加了最新的Windows 7的微软雅黑字体。（附件大小限制，未实现）</span><br><span class="line">2.修正了CRT渲染的配置文件的链接错误。</span><br><span class="line">3.添加字体：Agency FB</span><br><span class="line">4.添加字体设置恢复功能。</span><br><span class="line"></span><br><span class="line">附注：所有字体文件和安装脚本都通过网络下载，安装速度快慢由你的网络状况决定。</span><br><span class="line"></span><br><span class="line">View Code</span><br></pre></td></tr></table></figure>
+<p><strong>3. 输入法</strong></p><br><p>这里为什么要说打字法。相比linux使用者都有一个很大的感触，智能提示太弱，一个原因是没有足够的本地词库，但如果词库加的太多会导致索引速度很慢，显得很卡。</p><br><p>如果你是在网页中打字的话，我建议你使用<strong>搜狗云输入法</strong>或者<strong>QQ云输入法，</strong>很赞哦~</p><br><p>在这里强调输入法的另外一个原因是，wineQQ和ibus输入法有一些兼容性问题，所以，可能你需要另外安装一个输入法。曾经我用的是谷歌输入法，还是不太好用。</p>
+
+
+<p><strong>4. 翻围墙</strong></p><br><p>经常跟google打交道，所以用他的东西也是理所当然的啦，<a title="百度goagent" href="http://www.baidu.com/s?wd=goagent" target="_blank"><span>goAgent</span></a>，网上搜搜这个关键词吧，你肯定行的，步骤有些繁琐，但是一旦弄好了，你一定会爽到爆的！！！</p><br><p>多说几句，goAgent的包里面已经包含了&nbsp;SwitchySharp的配置文件，<span>/local/SwitchyOptions.bak</span></p><br><p>弄玩之后记得把证书导入进入，否则你会很蛋疼的～ 证书位置：<span> /local/CA.crt</span></p><br><p>&nbsp;好吧，你不要告诉我，你全部弄好了，但是你不会运行。。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python ./path/local/proxy.py</span><br></pre></td></tr></table></figure>
+<p>为了方便下次使用，写个文件放到桌面，下次双击打开就好。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cd ~/desktop</span><br><span class="line">vim proxy.sh</span><br><span class="line"></span><br><span class="line">//写入</span><br><span class="line">python ./path/local/proxy.py</span><br><span class="line"></span><br><span class="line">//存盘</span><br><span class="line">:wq</span><br></pre></td></tr></table></figure>
+<p><strong>5. 备份</strong></p>
+
+
+<p><strong>6. 右键打开终端</strong></p><br><p>1）方法一：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install nautilus-open-terminal</span><br></pre></td></tr></table></figure>
+<p>上面的方法比较直接，安装一个软件辅助就行，但是安装好了之后，需要注销之后才生效，应该可以在命令行里敲个什么代码，刷新当前状态之类的，这个我不是很清楚。</p><br><p>2）方法二：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd ~/.gnome2/nautilus-scriptssudo gedit open-terminal //此处可以任意命名</span><br></pre></td></tr></table></figure>
+<p>将下面代码拷贝进去，ctrl + s保存。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#!/bin/bash</span><br><span class="line">#</span><br><span class="line"># This script opens a gnome-terminal in the directory you select.</span><br><span class="line">#</span><br><span class="line"># Distributed under the terms of GNU GPL version 2 or later</span><br><span class="line">#</span><br><span class="line"># Install in ~/.gnome2/nautilus-scripts or ~/Nautilus/scripts</span><br><span class="line"># You need to be running Nautilus 1.0.3+ to use scripts.</span><br><span class="line"></span><br><span class="line"># When a directory is selected, go there. Otherwise go to current</span><br><span class="line"># directory. If more than one directory is selected, show error.</span><br><span class="line">if [ -n &quot;$NAUTILUS_SCRIPT_SELECTED_FILE_PATHS&quot; ]; then</span><br><span class="line">set $NAUTILUS_SCRIPT_SELECTED_FILE_PATHS</span><br><span class="line">if [ $# -eq 1 ]; then</span><br><span class="line">destination=&quot;$1&quot;</span><br><span class="line"># Go to file&apos;s directory if it&apos;s a file</span><br><span class="line">if [ ! -d &quot;$destination&quot; ]; then</span><br><span class="line">destination=&quot;`dirname &quot;$destination&quot;`&quot;</span><br><span class="line">fi</span><br><span class="line">else</span><br><span class="line">zenity --error --title=&quot;Error - Open terminal here&quot; \</span><br><span class="line">--text=&quot;You can only select one directory.&quot;</span><br><span class="line">exit 1</span><br><span class="line">fi</span><br><span class="line">else</span><br><span class="line">destination=&quot;`echo &quot;$NAUTILUS_SCRIPT_CURRENT_URI&quot; | sed &apos;s/^file:\/\///&apos;`&quot;</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line"># It&apos;s only possible to go to local directories</span><br><span class="line">if [ -n &quot;`echo &quot;$destination&quot; | grep &apos;^[a-zA-Z0-9]\+:&apos;`&quot; ]; then</span><br><span class="line">zenity --error --title=&quot;Error - Open terminal here&quot; \</span><br><span class="line">--text=&quot;Only local directories can be used.&quot;</span><br><span class="line">exit 1</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">cd &quot;$destination&quot;</span><br><span class="line">exec x-terminal-emulator</span><br><span class="line"></span><br><span class="line">右键菜单代码</span><br></pre></td></tr></table></figure>
+<p>然后修改下这段代码的权限</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x  ./open-terminal</span><br></pre></td></tr></table></figure>
+<p><strong>7. 开机自启</strong></p><br><p>联网什么的最麻烦里，就希望一劳永逸，配置一次，以后不管里。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gedit /etc/rc.local</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//然后开始你的胡作非为</span><br><span class="line">mentohust //我们学校最近好像禁用里mentohust，颇为蛋疼</span><br><span class="line"></span><br><span class="line">//于是就只能用锐捷了</span><br><span class="line">./path/rujie.sh -uusername -ppassword -neth0 - sinternet -d0 -S1&lt;start sofeware-name</span><br></pre></td></tr></table></figure>
+<p>在打开的文件中添加命令就行。</p>
+
+
+
+
+<p></p><h3>关于软件</h3><p></p>
+<p><strong>1. 浏览器</strong></p><br><p>我比较喜欢用的是chrome，在liunx下叫做<strong>chromium</strong>，这个东西和google帐号绑定，很多东西转移电脑也能够直接拿到。</p><br><p>我不知道chrome在发什么神经，安装好了之后，不停的刷新google首页，键入任何页面都自动reload到google首页。不能忍了！！！！　　</p><br><p>刚把chrome卸载，却有发现了解决方案，我次奥！！！所以说，遇到问题还是先到网上搜搜，没准儿能解决！</p><br><p>上面问题<strong>解决方案</strong>：</p><br><blockquote><br><p>a. 针对13.04版本下Chromium不断刷新网页问题，你在浏览器设置里面<strong>禁用掉”启用即搜即得\</strong>即可完美解决</p><br><p>b. 把网络关掉（自然就不能一直刷新了：），然后打开设置，点开自己的账户，把搜索里的即使搜索关掉就没事了。</p><br></blockquote><br><p>推荐几款chrome下开发工具：</p><br><p>　　1）<span> xmarks 从windows到linux</span>，很多收藏的网址就靠这个同步啦～</p><br><p>　　2） <span>coloZilla</span>，一款与firefox的rainbow类似的颜色吸取工具，搞前端必备啊！</p><br><p>　　3）&nbsp;<span><span>SwitchySharp</span>， 翻墙靠你了！！！</span></p><br><p><span>　　4）<span>&nbsp;</span><span><span>Quick Note</span>， 轻松作笔记</span></span></p><br><p><span><span>　　5）&nbsp;<span><span>Mobile Tester</span>， 当你弄移动端开发的时候，他可以被成为神器。</span></span></span></p><br><p><span><span><span>　　6） <span><span>FVD Video Downloader</span>，</span>&nbsp;神马？网页视频音频弄不下来，这个家伙帮你下载！</span></span></span></p>
+
+
+<p><strong>2. 编辑器</strong></p><br><p>　　1）<span> Vim</span>， &nbsp;看一些朋友，这软件那真是玩的出神入化啊，他们不是在打字，是在高频弹指啊，尼玛，太快鸟！！！着玩意儿要多配置几个插件~</p><br><p>　　2）<span> Emacs</span>， 这个也很不错，不过我没用过，下次尝试着用它吧～</p><br><p>　　3） &nbsp;<span>Qt</span>， 搞C/C++开发的同学，推荐你用这家伙，集成度高，很给力。</p><br><p>　　4） <span>sublime text</span>， 个人最喜欢的一款软件，相当喜欢的说！！！无论是windows环境还是linux环境，都大爱sublime，现在都版本3了吧～</p><br><p>　　　　<a href="http://www.tuicool.com/topics/10100104" target="_blank" rel="noopener">http://www.tuicool.com/topics/10100104</a></p>
+
+
+<p><strong>3. 图形处理工具</strong></p><br><p><span>GIMP</span>，你懂的。等同于windows下的ps，当然界面略丑陋。</p>
+
+
+<p><strong>4. QQ</strong></p><br><p>&nbsp;<span>wineQQ</span> ，现在版本是2012 beta3版，还行。（兼容性不好）</p><br><p><strong>P.S:</strong> <a href="http://www.cnblogs.com/hustskyking/archive/2013/06/06/linux-learning.html#2702894" target="_blank" rel="noopener">@LovelyOu&nbsp;</a>说pidgin-lwqq不错，当然如果你对聊天界面没啥要求的话，这个也是个不错的插件~ 只是截图比较麻烦。</p><br><p>安装方式：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo add-apt-repository ppa:lainme/pidgin-lwqq sudo apt-get update sudo apt-get install libpurple0 pidgin-lwqq</span><br></pre></td></tr></table></figure>
+<p><span>&nbsp;</span></p><br><p><strong>5. 影音</strong></p><br><p>&nbsp;<span>VLC media player</span>，这玩意儿不错，但是有两个烦人的点，<span>一是，中文乱码，二是，没有字幕</span>。（下次说解决方案）</p>
+
+
+<p><strong>6. 截屏</strong></p><br><p>通常我用的是<span>shutter</span>，截图功能比较强大。</p>
+
+
+<p><strong>7. Flashplayer</strong></p><br><p>这个在软件中心顺便弄上，chrome看视频，省得麻烦。</p>
+
+
+<p></p><h3>一些问题</h3><p></p>
+<p><strong>1. 多个软件同时安装</strong></p><br><blockquote><br><p>E: 无法获得锁 /var/lib/dpkg/lock - open (11: 资源暂时不可用)E: 无法锁定管理目录(/var/lib/dpkg/)，是否有其他进程正占用它？</p>
+
+<p></p></blockquote><p></p>
+<p>&nbsp;比如你的软件中心在安装软件或者更新源，结果你又在命令行里键入sudo apt-get install vim 之类的命令，此时系统是不会响应你的请求的，于是就有了上面这样的报错。</p>
+
+
+<p><strong>2. 权限问题</strong></p><br><p>&nbsp;有的童鞋在网上搜罗里一些软件，结果安装的时候，发现出问题里，安装不了？不要着急，很多情况都是因为权限问题。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chmod +x /path/filename //+x的意思就是让他可以运行</span><br><span class="line">//权限这一块不懂的可以去网速看看，这里不赘述。</span><br></pre></td></tr></table></figure>
+<p><strong>3.ubuntu-E:Encountered a section with no Package: header的解决办法</strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">终端中输入以下两条命令：</span><br><span class="line">sudo rm /var/lib/apt/lists/* -vf</span><br><span class="line">sudo apt-get update</span><br><span class="line">执行完了命令之后，软件更新器应该会自动要求更新的，搞定。</span><br></pre></td></tr></table></figure>
+<p></p><h3>github</h3><p></p>
+<p>网上看了不少文章，觉得这两篇还算不错。</p><br><p>配置：<a href="http://blog.csdn.net/lalor/article/details/7830895" target="_blank" rel="noopener">http://blog.csdn.net/lalor/article/details/7830895</a></p><br><p>使用：<a href="http://blog.csdn.net/wfdtxz/article/details/7973608" target="_blank" rel="noopener">http://blog.csdn.net/wfdtxz/article/details/7973608</a></p><br><p>推荐：<a href="http://my.oschina.net/shipley/blog/98477" target="_blank">http://my.oschina.net/shipley/blog/98477</a></p>
+
+
+
+
+
+
+<p></p><h3>前端这一块</h3><p></p>
+<p><strong>1. wamp环境配置，应该是lamp</strong>，呵呵。<a title="ubuntu下安装Apache+PHP+Mysql" href="http://www.cnblogs.com/hustskyking/articles/apache-php-mysql.html" target="_blank">戳我</a></p><br><p>转载的文章，感觉比较不错，放在自己家里。</p>
+
+
+<p><strong>2. nodeJS</strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install nodejs</span><br><span class="line">sudo apt-get install npm</span><br></pre></td></tr></table></figure>
+<p>比较不喜欢找源码，然后这样做</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./configure</span><br><span class="line">make</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
+<p>apt-get真心方便~</p><br><p>然后尽兴添加你想要的组建</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install express</span><br></pre></td></tr></table></figure>
+<p>当然，安装好了之后测试下</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nodejs --version</span><br></pre></td></tr></table></figure>
+<p>有输出说明是正确的。下面给一串代码，让乃测试</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">var http = require(&quot;http&quot;);</span><br><span class="line">function onRequest(request, response) &#123;</span><br><span class="line">    console.log(&quot;Request received.&quot;);</span><br><span class="line">    response.writeHead(200, &#123;&quot;Content-Type&quot;: &quot;text/plain&quot;&#125;);</span><br><span class="line">    response.write(&quot;Hello World&quot;);</span><br><span class="line">    response.end();</span><br><span class="line">&#125;</span><br><span class="line">http.createServer(onRequest).listen(8888);</span><br><span class="line">console.log(&quot;Server has started.&quot;);</span><br><span class="line"></span><br><span class="line"> 测试代码</span><br></pre></td></tr></table></figure>
+<p><span>&nbsp;</span></p><br><h3>笔者感言</h3><br><p><strong>1.</strong> 建议新手还是玩<strong>稳定版本</strong>，10.04&nbsp; 12.04这些算是经典版本了。</p>
+
+
+
+
+
+
+<p><span><em>以上基本都是没有补充完善，先把几个记得比较清楚的点列出来，下次有时间，慢慢说～</em></span></p>
+
+
+
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/blog/tags/tech/" rel="tag"># tech</a>
+          
+            <a href="/blog/tags/cnblogs/" rel="tag"># cnblogs</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2013/06/04/2013-06-04-cb-RegExp/" rel="next" title="正则表达式30分钟入门教程">
+                <i class="fa fa-chevron-left"></i> 正则表达式30分钟入门教程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2013/06/08/2013-06-08-cb-apache-php-mysql/" rel="prev" title="ubuntu下安装Apache+PHP+Mysql">
+                ubuntu下安装Apache+PHP+Mysql <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Lion</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/blog/archives/">
+                
+                    <span class="site-state-item-count">311</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/blog/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">94</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/blog/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">241</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">关于配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">关于软件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">一些问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">github</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">前端这一块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text">笔者感言</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lion</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script src="/blog/js/src/utils.js?v=6.6.0"></script>
+
+  <script src="/blog/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/blog/js/src/scrollspy.js?v=6.6.0"></script>
+<script src="/blog/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script src="/blog/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/blog/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script src="/blog/js/src/music/aplayer.js?v=6.6.0"></script>
+  <script src="/blog/js/src/music/init.js?v=6.6.0"></script>
+</body>
+</html>

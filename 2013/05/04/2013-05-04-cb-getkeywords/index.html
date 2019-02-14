@@ -1,0 +1,1963 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/blog/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/blog/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blog/',
+    scheme: 'Mist',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本文为归档内容,原始地址在 博客园.  按需求弄了一个 取词 以及 标红 的小应用。先上demo ：http://qianduannotes.sinaapp.com/getKeyword/很多平时常用的东西，都用上了，所以拿出来说说。   一、代码var GetKeywords = {  str: “”,  limit: 11,  keywords:[],  init : function(){">
+<meta name="keywords" content="tech,cnblogs">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Javascript综合应用小案例">
+<meta property="og:url" content="https://handishenniu.coding.me/blog/2013/05/04/2013-05-04-cb-getkeywords/index.html">
+<meta property="og:site_name" content="撼地神牛">
+<meta property="og:description" content="本文为归档内容,原始地址在 博客园.  按需求弄了一个 取词 以及 标红 的小应用。先上demo ：http://qianduannotes.sinaapp.com/getKeyword/很多平时常用的东西，都用上了，所以拿出来说说。   一、代码var GetKeywords = {  str: “”,  limit: 11,  keywords:[],  init : function(){">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png">
+<meta property="og:updated_time" content="2018-12-12T10:10:11.265Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Javascript综合应用小案例">
+<meta name="twitter:description" content="本文为归档内容,原始地址在 博客园.  按需求弄了一个 取词 以及 标红 的小应用。先上demo ：http://qianduannotes.sinaapp.com/getKeyword/很多平时常用的东西，都用上了，所以拿出来说说。   一、代码var GetKeywords = {  str: “”,  limit: 11,  keywords:[],  init : function(){">
+<meta name="twitter:image" content="https://img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://handishenniu.coding.me/blog/2013/05/04/2013-05-04-cb-getkeywords/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Javascript综合应用小案例 | 撼地神牛</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?304ebec1c594afeac3282f7afb1f3448";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion .logo-line-before i { left: initial; }
+    .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <meta name="baidu-site-verification" content="mI6O7pmEdr">
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    
+    
+    
+    <a href="https://github.com/lystdio" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blog/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">撼地神牛</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-sitemap">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/sitemap.xml" rel="section"><i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>站点地图</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+  
+
+  
+
+    <a href="https://github.com/lystdio" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" style="fill: #222; color: #fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2013/05/04/2013-05-04-cb-getkeywords/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lion">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="撼地神牛">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Javascript综合应用小案例
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2013-05-04 02:38:00" itemprop="dateCreated datePublished" datetime="2013-05-04T02:38:00+08:00">2013-05-04</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-12 18:10:11" itemprop="dateModified" datetime="2018-12-12T18:10:11+08:00">2018-12-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/JavaScript/杂物间/" itemprop="url" rel="index"><span itemprop="name">杂物间</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <div class="history-article">本文为归档内容,原始地址在 <a href="http://www.cnblogs.com/hustskyking/archive/2013/05/04/getkeywords.html" target="_blank">博客园</a>.</div>
+
+<p>按需求弄了一个 <strong>取词</strong> 以及 <strong>标红</strong> 的小应用。</p><br><p><a href="http://qianduannotes.sinaapp.com/getKeyword/" target="_blank"><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2013/05/04/o_%e8%a7%86%e5%9b%be.png" data-source="http://images.cnblogs.com/cnblogs_com/hustskyking/477032/o_%e8%a7%86%e5%9b%be.png" alt="" width="716" height="388"></a></p><br><p>先上demo ：<a title="取词&&标红 demo" href="http://qianduannotes.sinaapp.com/getKeyword/" target="_blank">http://qianduannotes.sinaapp.com/getKeyword/</a></p><br><p>很多平时常用的东西，都用上了，所以拿出来说说。</p>
+
+
+<p><strong>一、代码</strong></p><br><div class="cnblogs_Highlighter"><br><pre class="brush:javascript;collapse:true;;gutter:false;">var GetKeywords = {<br>  str: “”,<br>  limit: 11,<br>  keywords:[],<br><br>  init : function(){<br>    var box = this._(“article”),<br>      _this = this;<br><br>    //获取已经存在的关键词<br>    this.getAllKeyWord();<br><br>    //让rmKeyWord函数全局化<br>    window.rmkeyWord = this.rmkeyWord;<br><br>    //取词事件<br>    box.onmouseup = function(evt){<br>      var evt = evt || window.event,<br>        target = evt.target || evt.srcElement;<br><br>      //如果鼠标是在button上弹起，则忽略<br>      if(target.id == “btn”) return;<br>      GetKeywords.str = _this.getSelectionText();<br><br>      if(_this.str.length == 0) return;<br>      if(<em>this.</em>(“btn”)) {<br>        _this.removeBtn();<br>        if(GetKeywords.str == “”) return;<br>        _this.createBtn(evt);<br>        return;<br>      }<br>      _this.createBtn(evt);<br>    }<br>  },<br><br>  //工具函数<br>  _: function(obj){<br>    return document.getElementById(obj);<br>  },<br><br>  //获取选中文本<br>  getSelectionText: function(){<br>    if(window.getSelection) {<br>      return window.getSelection().toString();<br>    } else if(document.selection &amp;&amp; document.selection.createRange) {<br>      return document.selection.createRange().text;<br>    }<br>    return ‘’;<br>  },<br><br>  //创建按钮<br>  createBtn: function(evt){<br>    var button = document.createElement(“div”),<br>      evt = evt || window.event,<br>      x = evt.pageX || evt.x,<br>      y = evt.pageY || evt.y,<br>      i, j, len,<br>      cssList = “”,<br>      <em>this = this,<br>      csses = {<br>        “height” : “30px”,<br>        “line-height” : “30px”,<br>        “position”: “absolute”,<br>        “top”: y + 10 + “px”,<br>        “left”: x + 10 + “px”,<br>        “cursor”: “pointer”,<br>        “border”: “1px solid #000”,<br>        “background”: “#EEE”,<br>        “padding”: “2px 8px”,<br>        “border-radius”: “3px”<br>      };<br>    for(i in csses){<br>      if(csses.hasOwnProperty(i)){<br>        cssList += i + “:” + csses[i] + “;”;<br>      }<br>    }<br>    button.style.cssText = cssList;<br>    button.innerHTML = “添加到关键词列表”;<br>    button.setAttribute(“id”, “btn”);<br><br>    this.</em>(“article”).appendChild(button);<br><br>    button.onclick = function(){<br>      if(_this.str.length &gt; _this.limit){<br>        alert(“关键词长度最长为11，可以通过设置GetKeywords.limit来控制长度。”);<br>        _this.removeBtn();<br>        return;<br>      }<br><br>      for(j = 0, len = GetKeywords.keywords.length; j &lt; len; j++){<br>        if(GetKeywords.keywords[j] == _this.str){<br>          alert(“已经存在该关键词了~”);<br>          _this.removeBtn();<br>          return;<br>        }<br>        continue;<br>      }<br>      _this.keywords.push(_this.str);<br>      _this.setRed(_this.str);<br>      _this.addTo();<br>      <em>this.removeBtn();<br>    };<br>  },<br><br>  //删除按钮<br>  removeBtn: function(){<br>    var btn = this.</em>(“btn”);<br>    btn.parentNode.removeChild(btn);<br>  },<br><br>  //加入到关键词里列表<br>  addTo: function(){<br>    var word = this.<em>(“wordList”);<br>    word.innerHTML += “&lt;span&gt;&lt;font&gt;” + this.str + “&lt;/font&gt;&lt;a href=’#’ onclick=’rmkeyWord(this);’&gt;&lt;/a&gt;&lt;/span&gt;”;<br>  },<br><br>  //关键词标红<br>  setRed: function(str){<br>    var content = this.</em>(“article”),<br>      temp = ‘(‘ + str + ‘)’;<br>      reg = new RegExp(temp,’g’);<br><br>    content.innerHTML = content.innerHTML.replace(reg, “&lt;span style=’color:red;’&gt;$1&lt;/span&gt;”);<br>  },<br><br>  //删除标红<br>  rmRed: function(str){<br>    var content = this.<em>(“article”),<br>      temp = “(&lt;span[^&lt;]*” + str + “&lt;/span&gt;)”;<br>      reg = new RegExp(temp,’gi’);<br>    content.innerHTML = content.innerHTML.replace(reg, str);<br>  },<br><br>  //获取已经存在的关键词（也可以用来获取所有关键词）<br>  getAllKeyWord: function (){<br>    var spans = this.</em>(“wordList”).getElementsByTagName(“span”),<br>      key = [], i = 0, len;<br>    for(len = spans.length; i &lt; len; i++){<br>      var font = spans[i].getElementsByTagName(“font”)[0];<br>      var temp = font.innerText || font.textContent;<br>      this.setRed(temp);<br>      key.push(temp);<br>    }<br>    this.keywords = key;<br>  },<br><br>  //删除关键词<br>  rmkeyWord: function (obj){<br>    var target = obj.parentNode,<br>      word = obj.previousSibling.innerHTML,<br>      i = 0, len;<br>    GetKeywords.rmRed(word);<br>    for(len = GetKeywords.keywords.length; i &lt; len; i++){<br>      if(GetKeywords.keywords[i] == word){<br>        GetKeywords.keywords.splice(i,i);<br>      }<br>      continue;<br>    }<br>    target.parentNode.removeChild(target);<br>    return;<br>  }<br>}<br><br>GetKeywords.init();</pre><br></div><br><br><br><p><span>以上是所有js代码，比较长，下面将列举一些比较突出的点（望高人多多指点）。</span></p>
+
+
+<p><strong>二、代码分析</strong></p><br><p><strong>1.获取文本</strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">getSelectionText: function()&#123;</span><br><span class="line">    if(window.getSelection) &#123;</span><br><span class="line">        return window.getSelection().toString();</span><br><span class="line">    &#125; else if(document.selection &amp;&amp; document.selection.createRange) &#123;</span><br><span class="line">        return document.selection.createRange().text;</span><br><span class="line">    &#125;</span><br><span class="line">    return &apos;&apos;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个在以前（<a class="titlelink" href="http://www.cnblogs.com/hustskyking/archive/2013/04/11/set_and_get_cursor_position.html" target="_blank">JavaScript操控光标，你会么？</a>）的文章里也说过，就不赘述了。</p>
+
+
+<p><strong>2.创建控制框</strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">createBtn: function(evt)&#123;</span><br><span class="line">    var button = document.createElement(&quot;div&quot;),</span><br><span class="line">        //...</span><br><span class="line">        csses = &#123;</span><br><span class="line">            &quot;height&quot; : &quot;30px&quot;,</span><br><span class="line">            &quot;line-height&quot; : &quot;30px&quot;,</span><br><span class="line">            &quot;position&quot;: &quot;absolute&quot;,</span><br><span class="line">            &quot;top&quot;: y + 10 + &quot;px&quot;,</span><br><span class="line">            &quot;left&quot;: x + 10 + &quot;px&quot;,</span><br><span class="line">            &quot;cursor&quot;: &quot;pointer&quot;,</span><br><span class="line">            &quot;border&quot;: &quot;1px solid #000&quot;,</span><br><span class="line">            &quot;background&quot;: &quot;#EEE&quot;,</span><br><span class="line">            &quot;padding&quot;: &quot;2px 8px&quot;,</span><br><span class="line">            &quot;border-radius&quot;: &quot;3px&quot;</span><br><span class="line">        &#125;;</span><br><span class="line">    for(i in csses)&#123;</span><br><span class="line">        if(csses.hasOwnProperty(i))&#123;</span><br><span class="line">            cssList += i + &quot;:&quot; + csses[i] + &quot;;&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    button.style.cssText = cssList;</span><br><span class="line">    button.innerHTML = &quot;添加到关键词列表&quot;;</span><br><span class="line">    button.setAttribute(&quot;id&quot;, &quot;btn&quot;);</span><br><span class="line">　　//...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里有一点我想说说，在写js的时候，会经常涉及到对DOM对象style的处理，如果不想额外加入一个plugins.css之类的文件，可以像上面一样，将样式放置在一个对象中，然后利用for in将其写入，本来开始我用的是</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">obj.style[i] = csses[i];</span><br></pre></td></tr></table></figure>
+<p>不知道为什么，在IE下报错了，后来便用cssText代替。</p><br><p>效果：</p><br><p><a href="http://qianduannotes.sinaapp.com/getKeyword/" target="_blank"><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2013/05/04/o_%e6%b7%bb%e5%8a%a0%e5%88%b0%e5%88%97%e8%a1%a8.png" data-source="http://images.cnblogs.com/cnblogs_com/hustskyking/477032/o_%e6%b7%bb%e5%8a%a0%e5%88%b0%e5%88%97%e8%a1%a8.png" alt="添加到列表" width="610" height="312"></a></p>
+
+
+<p><strong>3.标红</strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//关键词标红</span><br><span class="line">setRed: function(str)&#123;</span><br><span class="line">    var content = this._(&quot;article&quot;),</span><br><span class="line">        temp = &apos;(&apos; + str + &apos;)&apos;;</span><br><span class="line">        reg = new RegExp(temp,&apos;g&apos;);</span><br><span class="line"></span><br><span class="line">    content.innerHTML = content.innerHTML.replace(reg, &quot;&lt;span&gt;$1&lt;/span&gt;&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里主要就是正则表达式的事情了，正则的话，推荐两篇文章</p><br><ul><br><li>一篇是司徒正美的，讲的比较全面，比较系统。<a href="http://www.cnblogs.com/rubylouvre/archive/2009/11/02/1594731.html" target="_blank">点我链接过去→</a></li><br><li>一篇是30分钟搞定正则，这个讲说是对所有语言，JS的话正则这一块还不是特别完善和强大。<a href="http://manual.phpv.net/regular_expression.html" target="_blank">点我链接过去→</a></li><br></ul><br><p>哈哈，相信用过正则的人不需要我来解释这个<span>$1</span>了吧，他的意思就是匹配到的第一个。</p><br><p>当然，删除标红和这个原理是差不多的。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//删除标红</span><br><span class="line">rmRed: function(str)&#123;</span><br><span class="line">    var content = this._(&quot;article&quot;),</span><br><span class="line">        temp = &quot;(&lt;span[^&lt;]*&quot; +=&quot;&quot; str=&quot;&quot; &quot;&lt;=&quot;&quot; span=&quot;&quot;&gt;)&quot;;</span><br><span class="line">        reg = new RegExp(temp,&apos;gi&apos;);</span><br><span class="line"></span><br><span class="line">    content.innerHTML = content.innerHTML.replace(reg, str);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>&lt;/span[^&lt;]*”&gt;</p>
+<p>这里是写完这篇blog才发现的一个bug， IE下如果rmRed中的正则是’g’,貌似该函数会无效，在IE8控制台下查看，NND，输出innerHTML中的标签全部变成大写了，无奈，只好改成’gi’。</p>
+
+
+<p><strong>4.获取所有关键词和删除关键词</strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">//获取已经存在的关键词（也可以用来获取所有关键词）</span><br><span class="line">getAllKeyWord: function ()&#123;</span><br><span class="line">    //...</span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line">//删除关键词</span><br><span class="line">rmkeyWord: function (obj)&#123;</span><br><span class="line">    //...</span><br><span class="line">    GetKeywords.rmRed(word);</span><br><span class="line">    for(len = GetKeywords.keywords.length; i &lt; len; i++)&#123;</span><br><span class="line">        if(GetKeywords.keywords[i] == word)&#123;</span><br><span class="line">            GetKeywords.keywords.splice(i,i);</span><br><span class="line">        &#125;</span><br><span class="line">        continue;</span><br><span class="line">    &#125;</span><br><span class="line">    //...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个地方，有一个疑问，在调用的时候，使用this.keywords没反应，但是改成GetKeywords就行了，还没研究具体原因是什么~</p>
+
+
+<p><strong>5.初始化</strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GetKeywords.init();</span><br></pre></td></tr></table></figure>
+<p>init()为总入口，进去之后，先获取已经存在的关键词，然后标红，接着绑定onmouseup事件。</p>
+
+
+<p><strong>三、然后</strong></p><br><p>当然咯，这个案例的ajax部分还没写，弄完之后还得给后台送过去。。好吧，明天接着弄吧。</p><br><p>写这玩意儿还是花了点功夫，不过鄙人写代码的水平还在初级阶段，望大神们不要吐槽，多提宝贵意见，谢谢！</p><br><p>然后，还是那个demo，<a title="取词&&标红 demo" href="http://qianduannotes.sinaapp.com/getKeyword/" target="_blank">http://qianduannotes.sinaapp.com/getKeyword/</a></p><br><p>顺便，推广下，团队做的一个网站，主要技术是爬虫，高峰期PV稳定在120W以上，找工作的童鞋可以多去踩踩~</p><br><p><strong><a title="海投网" href="http://xjh.haitou.cc/" target="_blank">宣讲会查询系统&mdash;&mdash;海投网</a>&nbsp;</strong></p>
+
+
+<p>P.S：刚让队友测试，还是发现了不少bug，果然考虑问题还是不全面啊~还要继续加油。。。</p>
+
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/blog/tags/tech/" rel="tag"># tech</a>
+          
+            <a href="/blog/tags/cnblogs/" rel="tag"># cnblogs</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2013/04/27/2013-04-27-cb-mianshi/" rel="next" title="腾讯的三轮面试（web前端）">
+                <i class="fa fa-chevron-left"></i> 腾讯的三轮面试（web前端）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2013/05/05/2013-05-05-cb-get-and-post/" rel="prev" title="浅谈HTTP中Get与Post的区别">
+                浅谈HTTP中Get与Post的区别 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Lion</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/blog/archives/">
+                
+                    <span class="site-state-item-count">311</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/blog/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">94</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/blog/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">241</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lion</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script src="/blog/js/src/utils.js?v=6.6.0"></script>
+
+  <script src="/blog/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/blog/js/src/scrollspy.js?v=6.6.0"></script>
+<script src="/blog/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script src="/blog/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/blog/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script src="/blog/js/src/music/aplayer.js?v=6.6.0"></script>
+  <script src="/blog/js/src/music/init.js?v=6.6.0"></script>
+</body>
+</html>

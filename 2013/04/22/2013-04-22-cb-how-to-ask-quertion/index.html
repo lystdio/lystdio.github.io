@@ -1,0 +1,1950 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/blog/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/blog/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blog/',
+    scheme: 'Mist',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本文为归档内容,原始地址在 博客园.    大家提问题前，请仔细阅读下这篇文章。高质量的提问，不光有助于问题的快速解决，还能赢得社区的尊重。如何向开源社区提问题使用软件产品，或多或少都会遇到问题。对于商业产品，我们可以咨询客服寻求帮助。对于公司自己研发的产品，我们可以直接请教专家同事。但对于开源软件，在遇到问题时，如何才能及时有效地寻求帮助呢？本文以开源类库&amp;nbsp;Sea.js&amp;nbsp;为例">
+<meta name="keywords" content="tech,cnblogs,学会提问">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何向开源社区提问题">
+<meta property="og:url" content="https://handishenniu.coding.me/blog/2013/04/22/2013-04-22-cb-how-to-ask-quertion/index.html">
+<meta property="og:site_name" content="撼地神牛">
+<meta property="og:description" content="本文为归档内容,原始地址在 博客园.    大家提问题前，请仔细阅读下这篇文章。高质量的提问，不光有助于问题的快速解决，还能赢得社区的尊重。如何向开源社区提问题使用软件产品，或多或少都会遇到问题。对于商业产品，我们可以咨询客服寻求帮助。对于公司自己研发的产品，我们可以直接请教专家同事。但对于开源软件，在遇到问题时，如何才能及时有效地寻求帮助呢？本文以开源类库&amp;nbsp;Sea.js&amp;nbsp;为例">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-12T10:10:11.262Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="如何向开源社区提问题">
+<meta name="twitter:description" content="本文为归档内容,原始地址在 博客园.    大家提问题前，请仔细阅读下这篇文章。高质量的提问，不光有助于问题的快速解决，还能赢得社区的尊重。如何向开源社区提问题使用软件产品，或多或少都会遇到问题。对于商业产品，我们可以咨询客服寻求帮助。对于公司自己研发的产品，我们可以直接请教专家同事。但对于开源软件，在遇到问题时，如何才能及时有效地寻求帮助呢？本文以开源类库&amp;nbsp;Sea.js&amp;nbsp;为例">
+
+
+
+
+
+
+  <link rel="canonical" href="https://handishenniu.coding.me/blog/2013/04/22/2013-04-22-cb-how-to-ask-quertion/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>如何向开源社区提问题 | 撼地神牛</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?304ebec1c594afeac3282f7afb1f3448";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion .logo-line-before i { left: initial; }
+    .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <meta name="baidu-site-verification" content="mI6O7pmEdr">
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    
+    
+    
+    <a href="https://github.com/lystdio" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blog/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">撼地神牛</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-sitemap">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/sitemap.xml" rel="section"><i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>站点地图</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+  
+
+  
+
+    <a href="https://github.com/lystdio" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" style="fill: #222; color: #fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2013/04/22/2013-04-22-cb-how-to-ask-quertion/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lion">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="撼地神牛">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">如何向开源社区提问题
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2013-04-22 04:24:00" itemprop="dateCreated datePublished" datetime="2013-04-22T04:24:00+08:00">2013-04-22</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-12 18:10:11" itemprop="dateModified" datetime="2018-12-12T18:10:11+08:00">2018-12-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/剪贴板/" itemprop="url" rel="index"><span itemprop="name">剪贴板</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/剪贴板/观点和感想/" itemprop="url" rel="index"><span itemprop="name">观点和感想</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <div class="history-article">本文为归档内容,原始地址在 <a href="http://www.cnblogs.com/hustskyking/archive/2013/04/22/how-to-ask-quertion.html" target="_blank">博客园</a>.</div>
+
+
+
+<p>大家提问题前，请仔细阅读下这篇文章。高质量的提问，不光有助于问题的快速解决，还能赢得社区的尊重。</p><br><hr><br><h1>如何向开源社区提问题</h1><br><p>使用软件产品，或多或少都会遇到问题。对于商业产品，我们可以咨询客服寻求帮助。对于公司自己研发的产品，我们可以直接请教专家同事。但对于开源软件，在遇到问题时，如何才能及时有效地寻求帮助呢？</p><br><p>本文以开源类库&nbsp;<a href="http://seajs.org/" target="_blank" rel="noopener">Sea.js</a>&nbsp;为例，说说我心目中的最佳实践。</p><br><h3><a class="anchor" name="-1" href="//github.com/seajs/seajs/blob/master/CONTRIBUTING.md#-1"></a>提问前</h3><br><p>遇到问题时，心里都很着急。在决定向开源社区提交问题前，最好先做做以下功课：</p><br><h4><a class="anchor" name="-2" href="//github.com/seajs/seajs/blob/master/CONTRIBUTING.md#-2"></a><strong>尝试从官方文档中找到答案</strong></h4><br><p>确保自己阅读过至少一次官方文档。这样在遇到问题时，如果能回忆起只言片语，就可以再去读一遍相关文档，问题往往也就解决了。</p><br><h4><a class="anchor" name="google-" href="//github.com/seajs/seajs/blob/master/CONTRIBUTING.md#google-"></a><strong>Google 是你的朋友</strong></h4><br><p>对于成熟的开源项目，你遇到的问题，很可能别人也遇到过。这时通过 Google、StackOverflow 等网站的搜索服务，可以帮你快速定位并解决问题。永远记住，地球上的你并不孤单，包括你遇到的问题。</p><br><h4><a class="anchor" name="-bug-" href="//github.com/seajs/seajs/blob/master/CONTRIBUTING.md#-bug-"></a><strong>挖掘 Bug 宝藏</strong></h4><br><p>开源软件一般都会有自己的 Bug 管理方案，比如 WebKit、V8、jQuery、Sea.js 等等。从它们的官网上找到 Bug 管理地址，然后通过搜索看看有无你遇到的问题。对于活跃社区来说，这一招经常很管用。比如 jQuery 的&nbsp;<a href="http://bugs.jquery.org/" target="_blank" rel="noopener">Bug Tracker</a>，通过右上角的 Search Tickets 可以找到非常多有用的信息。一个运作良好的 Bug 库，经常是一座巨大的宝藏。Sea.js 是直接通过&nbsp;<a href="//github.com/seajs/seajs/issues">GitHub Issues</a>&nbsp;来管理，你可以在 Issues 中找到很多信息。</p><br><h4><a class="anchor" name="-3" href="//github.com/seajs/seajs/blob/master/CONTRIBUTING.md#-3"></a><strong>求助身边的朋友</strong></h4><br><p>如果你使用的开源软件，在朋友圈或同事圈里也有人使用，那么抬起你的脚、或拿起你的电话，真挚诚恳的探讨不会遭遇拒绝，而会增进友谊。不要犹豫，你的内心渴望面对面交流，你的朋友也是。</p><br><p>如果以上 4 步都无法解决你遇到的问题，也别犹豫，立马向开源社区提交问题就好。</p><br><h3><a class="anchor" name="-4" href="//github.com/seajs/seajs/blob/master/CONTRIBUTING.md#-4"></a>提问时</h3><br><p>提问有很多种，比如你认识作者，直接面对面请教就行。下面探讨的是如何通过互联网的方式来问问题。</p><br><h4><a class="anchor" name="-5" href="//github.com/seajs/seajs/blob/master/CONTRIBUTING.md#-5"></a><strong>平和对等的心态</strong></h4><br><p>很多开源软件都是免费的，作者往往是业余时间出于兴趣在维护，没有义务回答社区问题。提问时，不要把自己摆在顾客的位置，比如</p><br><blockquote><br><p>项目马上要上线了，请务必帮忙解决 这是我的邮箱，请及时联系我</p><br></blockquote><br><p>另外，也不要把自己摆在乞食者的位置，比如</p><br><blockquote><br><p>冰天雪地跪求解答 救命啊，我的网站挂了</p><br></blockquote><br><p>在开源社区，一切皆是朋友。无论对方是 Linux 内核的作者，还是某个 jQuery 插件的作者，你和作者都是对等的。你的提问是在帮助开源软件完善。平和对等的心态，可以让你的问题赢得更多人的阅读和思考。</p><br><h4><a class="anchor" name="-6" href="//github.com/seajs/seajs/blob/master/CONTRIBUTING.md#-6"></a><strong>通过正确的途径提交</strong></h4><br><p>如果遇到问题的开源软件有专门的 Bug 管理系统，请最好到这些指定系统中提交。比如，对于前端开发工程师来说，下面这些 Tracker 系统很重要。</p><br><ul><br><li><a href="http://bugs.jquery.com/report" target="_blank" rel="noopener">jQuery Tickets</a></li><br><li><a href="//bugs.webkit.org/">WebKit Bugzilla</a></li><br><li><a href="//bugzilla.mozilla.org/">Mozilla Bugzilla</a></li><br></ul><br><p>还有各个开源类库的 Issues 库，比如 Sea.js 的是：<a href="//github.com/seajs/seajs/issues">seajs/issues</a></p><br><p>最不好的途径是</p><br><ul><br><li><br><p>QQ 、阿里旺旺、微信等群组。这些群组主要是用来工作或休闲的。对开源项目来说，在这些地方提问，作者一般不会关注，效率非常低。</p><br></li><br><li><br><p>微博、Facebook 等社交网络。不少人在微博上通过 at 或私信询问 Sea.js 问题，这些我经常看不到。看到了，也不情愿回复。微博是扯淡、交流情感的地方，一般是写代码写累了，才去逛逛，很少会有在社交网络上回答技术问题的心情。</p><br></li><br></ul><br><p>通过正确的途径提交问题，一般可以让你的问题得到及时准确的回复。</p><br><h4><a class="anchor" name="-7" href="//github.com/seajs/seajs/blob/master/CONTRIBUTING.md#-7"></a><strong>使用明确、有意义的标题</strong></h4><br><p>抱着平和对等的心态，找到合适的途径后，就得静下心来将遇到的问题写成文字。书写文字不是一件简单的事情，我们可以从遵循一些简单的规则开始。</p><br><p>首先是标题要简洁清晰，要言之有物。比如</p><br><blockquote><br><p>我遇到了一个 Ajax 问题 Sea.js 在我的浏览器上运行不了</p><br></blockquote><br><p>上面的标题很糟糕，光看标题作者无法知道发生了什么事。当开源社区的问题很多时，上面这类标题，经常会让作者直接忽视或将优先级降到很低。更妥当的标题是</p><br><blockquote><br><p>Ajax 请求未返回正确的 responseXML Sea.js 2.0 在 IE6 上运行时抛错</p><br></blockquote><br><p>明确、有意义的标题，可以帮助作者确定问题具体是什么类型、预估需要多少时间解决、是否现在马上解决等。一个好的标题，也有利于社区知识的沉淀和后期搜索。标题有如一个人的颜面衣着，虽然不是关键，但在嘈杂的信息社区中，这很重要。</p><br><h4><a class="anchor" name="-8" href="//github.com/seajs/seajs/blob/master/CONTRIBUTING.md#-8"></a><strong>遵循良好的模板</strong></h4><br><p>如果社区提供了问题模板，一定要仔细看下。比如 Google Code 社区，当你创建一个问题时，会自动提供以下模板：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">What steps will reproduce the problem?</span><br><span class="line">该问题的重现步骤是什么？</span><br><span class="line">1.</span><br><span class="line">2.</span><br><span class="line">3.</span><br><span class="line"></span><br><span class="line">What is the expected output? What do you see instead?</span><br><span class="line">你期待的结果是什么？实际看到的又是什么？</span><br><span class="line"></span><br><span class="line">What version of the product are you using? On what operating system?</span><br><span class="line">你正在使用产品的哪个版本？在什么操作系统上？</span><br><span class="line"></span><br><span class="line">Please provide any additional information below.</span><br><span class="line">如果有的话，请在下面提供更多信息。</span><br></pre></td></tr></table></figure>
+<p>遵循这个模板去描述问题，经常能省很多事。作者一般也非常欢迎通过模板提交的问题。如果社区没有提供模板，也可以自己遵循以上模板来提交。</p><br><p>下面针对问题内容，具体说说一些需要注意的点。</p><br><h4><a class="anchor" name="-9" href="//github.com/seajs/seajs/blob/master/CONTRIBUTING.md#-9"></a><strong>语法正确、格式清晰</strong></h4><br><p>虽然我们不是作家，但正确的语法、清晰的格式，可以让读者赏心悦目，也就更有心情帮你一起思考解决问题。</p><br><p>对于很多需要代码来描述的问题，要尤其注意格式，比如</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">seajs.use(&apos;jquery&apos;,function($)&#123;$(document).ready(function() &#123; /* ... */ &#125;)&#125;);</span><br></pre></td></tr></table></figure>
+<p>可读性不如</p><br><div class="highlight"><br><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">seajs.use(&apos;jquery&apos;, function($) &#123;</span><br><span class="line">  $(document).ready(function() &#123;</span><br><span class="line">    // ...</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure><br><br></div><br><p>GitHub 的 Markdown 语法可以很好地支持代码排版、语法高亮等，建议书写代码时，一定要先阅读下说明：<a href="http://github.github.com/github-flavored-markdown/" target="_blank" rel="noopener">GitHub Flavored Markdown</a>。这能让你的内容看起来很专业，社区也就更有意愿会去帮助你，否则糟糕的排版，经常带来的是发帖之后的石沉大海。</p><br><h4><a class="anchor" name="-10" href="//github.com/seajs/seajs/blob/master/CONTRIBUTING.md#-10"></a><strong>描述事实、而不是猜测</strong></h4><br><p>事实是指，依次进行了哪些操作、产生了怎样的结果。比如</p><br><blockquote><br><p>我在 Windows XP 下用 IE6 打开&nbsp;<a href="http://seajs.org/" target="_blank" rel="noopener">seajs.org</a>&nbsp;后，点击\5 分钟上手 Sea.js”，这时浏览器弹出脚本错误提示，例子显示不正确。</p><br></blockquote><br><p>上面是一段比较好的事实描述（更好的是把错误提示也截图上来），而不要像下面这样猜测：</p><br><blockquote><br><p>Sea.js 在 IE6 下运行不正常，我怀疑是源码第 213 行有问题。</p><br></blockquote><br><p>上面的描述，会让作者一头雾水、甚至很恼火。尽量避免猜测性描述，除非你能先描述事实，在事实描述清楚之后，再给出合理的猜测是欢迎的。</p><br><p>对于前端项目来说，如果能提供可重现错误的在线可访问代码，那是最好不过的。一旦你这么用心去做了，作者往往也会很用心地立马帮你解决。</p><br><h4><a class="anchor" name="-11" href="//github.com/seajs/seajs/blob/master/CONTRIBUTING.md#-11"></a><strong>描述目标、而不是过程</strong></h4><br><p>经常会有这种情况，提问者在脑袋里有个更高层次的目标，他们在自以为能达到目标的特定道路上卡住了，然后跑来问该怎么走。比如</p><br><blockquote><br><p>Sea.js 的 parseMap 方法在遇到 map 的多个配置项同时匹配同一个路径时，应该允许用户指定是全部生效还是仅第一个匹配的配置项生效。</p><br></blockquote><br><p>上面这个问题的背后，提问者实际上想解决的是如何通过 Sea.js 来做版本管理。提问者选择了通过 map 的方式来实现，但这过程中遇到了问题，因此跑过来继续怎么走。然而，如果只是描述过程，往往会把作者也绕进去。</p><br><p>实际情况却是，提问者选择的路本身就是一条崎岖之路，对于要解决的问题，实际上有更好的方式。这种情况下，描述清楚目标，讲清楚要干什么非常重要。</p><br><p>在描述自己是怎么做之前，一定要先描述要做什么。提问题时，What 往往比 How 更重要。</p><br><h4><a class="anchor" name="-12" href="//github.com/seajs/seajs/blob/master/CONTRIBUTING.md#-12"></a><strong>要有具体场景</strong></h4><br><p>无论在开源社区，还是微博、知乎等平台上，有一种非常常见的问题：</p><br><blockquote><br><p>如何维护 JavaScript 代码？ 如何使用 Sea.js 进行模块化开发？</p><br></blockquote><br><p>这类问题还有很多，每每遇到，只能笑笑，然后悄悄地忽略掉。因此这类问题很难回答，就如下面这些问题一样：</p><br><blockquote><br><p>如何才能让生命有意义？ 如何打败淘宝？</p><br></blockquote><br><p>这类提问者，一般比较浮躁，经常对问题本身也没有经过思考。踏实的提问者，不会让问题浮在空中无法回答，而会在具体场景中让问题落地：</p><br><blockquote><br><p>我的项目有 20 多个 JS 文件，接下来还会急剧增加。目前遇到以下问题……（省略五百字）…… 请问如何维护？</p><br></blockquote><br><h4><a class="anchor" name="-13" href="//github.com/seajs/seajs/blob/master/CONTRIBUTING.md#-13"></a><strong>仔细检查、确保准确</strong></h4><br><p>是人都会犯错误，特别是在如此快节奏的互联网环境下。好不容易把问题描述清楚时，不要急着立刻提交。在提交前，至少保证从头到尾再仔细阅读一遍，比如语法错误、错别字、标点符号、排版等等。做到这些，不光是尊重别人，也是尊重自己。</p><br><h3><a class="anchor" name="-14" href="//github.com/seajs/seajs/blob/master/CONTRIBUTING.md#-14"></a>提问后</h3><br><p>提交问题后，建议通过邮件等方式订阅回复。互联网上最有效的沟通方式是异步沟通，不要期待作者马上回复，也不要心烦意乱着急地等待。出去看看天，数数云朵，你会逐步明白什么是风轻云淡。</p><br><h4><a class="anchor" name="-15" href="//github.com/seajs/seajs/blob/master/CONTRIBUTING.md#-15"></a><strong>尽可能补充信息</strong></h4><br><p>在接收到回复时，仔细阅读。最经常的情况是，社区回复的，经常不是你想要的。比如</p><br><blockquote><br><p>根据你的描述，问题无法重现。能否提供具体使用环境和重现步骤？</p><br></blockquote><br><p>这时要淡定。仔细看看自己提交的问题描述是否足够清晰，如果有可补充的信息，尽量补充，以帮助作者能尽快定位问题。比如</p><br><blockquote><br><p>很抱歉，我前面有一步描述不正确，实际情况是我是在 IETester 中运行的……</p><br></blockquote><br><p>谦和淡定的交流，不光能帮助你解决问题，还有助于你结交更多朋友。</p><br><h4><a class="anchor" name="-16" href="//github.com/seajs/seajs/blob/master/CONTRIBUTING.md#-16"></a><strong>适当的总结</strong></h4><br><p>当问题终于解决时，建议对问题进行总结。可以编辑原帖，也可以通过博客等方式总结。你的总结，会让遇到同样问题的朋友们受益，并且对自己的技能也是一种提高。前端业界，无论国内还是国外，有很多牛人之所以成为牛人，很大程度上都是因为有总结思考的好习惯。</p><br><h4><a class="anchor" name="-17" href="//github.com/seajs/seajs/blob/master/CONTRIBUTING.md#-17"></a><strong>不要忘记感谢</strong></h4><br><p>最后，记得感谢。很多开源软件的作者，都是利用业余时间在创作代码。你的感谢，汇集许许多多大家的感谢，会让开源社区充满爱与力量。</p><br><h3><a class="anchor" name="-18" href="//github.com/seajs/seajs/blob/master/CONTRIBUTING.md#-18"></a>延伸阅读</h3><br><ul><br><li><a href="http://www.chiark.greenend.org.uk/~sgtatham/bugs-cn.html" target="_blank" rel="noopener">如何有效地报告 Bug</a></li><br><li><a href="http://www.wapm.cn/smart-questions/smart-questions-zh.html" target="_blank" rel="noopener">提问的智慧</a></li><br><li><a href="http://code.google.com/p/cpyug/wiki/ZenForAsk" target="_blank" rel="noopener">回答的智慧</a></li><br></ul><br><hr><br><p>最后的最后，如果你认可这篇文章，欢迎以各种形式转载。你的传播，能让整个开源社区更美好。</p>
+
+
+<p>本文转自：<a href="//github.com/seajs/seajs/blob/master/CONTRIBUTING.md" target="_blank">github</a></p>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/blog/tags/tech/" rel="tag"># tech</a>
+          
+            <a href="/blog/tags/cnblogs/" rel="tag"># cnblogs</a>
+          
+            <a href="/blog/tags/学会提问/" rel="tag"># 学会提问</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2013/04/13/2013-04-13-cb-readyState_3_interactive/" rel="next" title="利用XMLHttpRequest响应头部的Date来做倒计时">
+                <i class="fa fa-chevron-left"></i> 利用XMLHttpRequest响应头部的Date来做倒计时
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2013/04/22/2013-04-22-cb-category-of-picture/" rel="prev" title="最受欢迎的几种图片格式及其常见用法">
+                最受欢迎的几种图片格式及其常见用法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Lion</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/blog/archives/">
+                
+                    <span class="site-state-item-count">311</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/blog/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">94</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/blog/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">241</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">如何向开源社区提问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.0.1.</span> <span class="nav-text">提问前</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.0.1.1.</span> <span class="nav-text">尝试从官方文档中找到答案</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.0.1.2.</span> <span class="nav-text">Google 是你的朋友</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.0.1.3.</span> <span class="nav-text">挖掘 Bug 宝藏</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.0.1.4.</span> <span class="nav-text">求助身边的朋友</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.0.2.</span> <span class="nav-text">提问时</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.0.2.1.</span> <span class="nav-text">平和对等的心态</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.0.2.2.</span> <span class="nav-text">通过正确的途径提交</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.0.2.3.</span> <span class="nav-text">使用明确、有意义的标题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.0.2.4.</span> <span class="nav-text">遵循良好的模板</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.0.2.5.</span> <span class="nav-text">语法正确、格式清晰</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.0.2.6.</span> <span class="nav-text">描述事实、而不是猜测</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.0.2.7.</span> <span class="nav-text">描述目标、而不是过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.0.2.8.</span> <span class="nav-text">要有具体场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.0.2.9.</span> <span class="nav-text">仔细检查、确保准确</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.0.3.</span> <span class="nav-text">提问后</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.0.3.1.</span> <span class="nav-text">尽可能补充信息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.0.3.2.</span> <span class="nav-text">适当的总结</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.0.3.3.</span> <span class="nav-text">不要忘记感谢</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.0.4.</span> <span class="nav-text">延伸阅读</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lion</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script src="/blog/js/src/utils.js?v=6.6.0"></script>
+
+  <script src="/blog/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/blog/js/src/scrollspy.js?v=6.6.0"></script>
+<script src="/blog/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script src="/blog/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/blog/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script src="/blog/js/src/music/aplayer.js?v=6.6.0"></script>
+  <script src="/blog/js/src/music/init.js?v=6.6.0"></script>
+</body>
+</html>

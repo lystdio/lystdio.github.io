@@ -1,0 +1,2057 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/blog/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/blog/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blog/',
+    scheme: 'Mist',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本文为归档内容,原始地址在 博客园.  读完这篇文章，预计会消耗你 40 分钟的时间。Ajax 出现的时候，刮来了一阵异步之风，现在 Nodejs 火爆，又一阵异步狂风刮了过来。需求是越来越苛刻，用户对性能的要求也是越来越高，随之而来的是页面异步操作指数般增长，如果不能恰当的控制代码逻辑，我们就会陷入无穷的回调地狱中。ECMAScript 6 已经将异步操作纳入了规范，现代浏览器也内置了 Prom">
+<meta name="keywords" content="tech,cnblogs,异步,Promise">
+<meta property="og:type" content="article">
+<meta property="og:title" content="细嗅Promise">
+<meta property="og:url" content="https://handishenniu.coding.me/blog/2014/09/29/2014-09-29-cb-promise/index.html">
+<meta property="og:site_name" content="撼地神牛">
+<meta property="og:description" content="本文为归档内容,原始地址在 博客园.  读完这篇文章，预计会消耗你 40 分钟的时间。Ajax 出现的时候，刮来了一阵异步之风，现在 Nodejs 火爆，又一阵异步狂风刮了过来。需求是越来越苛刻，用户对性能的要求也是越来越高，随之而来的是页面异步操作指数般增长，如果不能恰当的控制代码逻辑，我们就会陷入无穷的回调地狱中。ECMAScript 6 已经将异步操作纳入了规范，现代浏览器也内置了 Prom">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-12T10:10:11.308Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="细嗅Promise">
+<meta name="twitter:description" content="本文为归档内容,原始地址在 博客园.  读完这篇文章，预计会消耗你 40 分钟的时间。Ajax 出现的时候，刮来了一阵异步之风，现在 Nodejs 火爆，又一阵异步狂风刮了过来。需求是越来越苛刻，用户对性能的要求也是越来越高，随之而来的是页面异步操作指数般增长，如果不能恰当的控制代码逻辑，我们就会陷入无穷的回调地狱中。ECMAScript 6 已经将异步操作纳入了规范，现代浏览器也内置了 Prom">
+
+
+
+
+
+
+  <link rel="canonical" href="https://handishenniu.coding.me/blog/2014/09/29/2014-09-29-cb-promise/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>细嗅Promise | 撼地神牛</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?304ebec1c594afeac3282f7afb1f3448";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion .logo-line-before i { left: initial; }
+    .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <meta name="baidu-site-verification" content="mI6O7pmEdr">
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    
+    
+    
+    <a href="https://github.com/lystdio" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blog/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">撼地神牛</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-sitemap">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/sitemap.xml" rel="section"><i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>站点地图</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+  
+
+  
+
+    <a href="https://github.com/lystdio" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" style="fill: #222; color: #fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2014/09/29/2014-09-29-cb-promise/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lion">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="撼地神牛">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">细嗅Promise
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2014-09-29 08:39:00" itemprop="dateCreated datePublished" datetime="2014-09-29T08:39:00+08:00">2014-09-29</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-12 18:10:11" itemprop="dateModified" datetime="2018-12-12T18:10:11+08:00">2018-12-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/JavaScript/前端杂烩/" itemprop="url" rel="index"><span itemprop="name">前端杂烩</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <div class="history-article">本文为归档内容,原始地址在 <a href="http://www.cnblogs.com/hustskyking/archive/2014/09/29/promise.html" target="_blank">博客园</a>.</div>
+
+<p id="_1">读完这篇文章，预计会消耗你 40 分钟的时间。<a class="headeranchor-link" name="user-content-_1" href="#_1"></a></p><br><p>Ajax 出现的时候，刮来了一阵异步之风，现在 Nodejs 火爆，又一阵异步狂风刮了过来。需求是越来越苛刻，用户对性能的要求也是越来越高，随之而来的是页面异步操作指数般增长，如果不能恰当的控制代码逻辑，我们就会陷入无穷的回调地狱中。</p><br><p>ECMAScript 6 已经将异步操作纳入了规范，现代浏览器也内置了 Promise 对象供我们进行异步编程，那么此刻，还在等啥？赶紧学习学习 Promise 的内部原理吧！</p><br><h3 id="promise_1"><a class="headeranchor-link" name="user-content-promise_1" href="#promise_1"></a>第一章 了解 Promise</h3><br><h4 id="_2"><a class="headeranchor-link" name="user-content-_2" href="#_2"></a>一、场景再现</h4><br><p>由于 javascript 的单线程性质，我们必须等待上一个事件执行完成才能处理下一步，如下：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">// DOM ready之后执行</span><br><span class="line">$(document).ready(function()&#123;</span><br><span class="line">    // 获取模板</span><br><span class="line">    $.get(url, function(tpl)&#123;</span><br><span class="line">        // 获取数据</span><br><span class="line">        $.get(url2, function(data)&#123;</span><br><span class="line">            // 构建 DOMString</span><br><span class="line">            makeHtml(tpl, data, function(str)&#123;</span><br><span class="line">                // 插入到 DOM 中</span><br><span class="line">                $(obj).html(str);</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>为了减少首屏数据的加载，我们将一些模板和所有数据都放在服务器端，当用户操作某个按钮时，需要将模板和数据拼接起来插入到 DOM 中，这个过程还必须在 DOMReady 之后才能执行。这种情况是十分常见的，如果异步操作再多一些，整个代码的缩进让人看着很不舒服，为了优雅地处理这个问题，ECMAScript 6 引入了 Promise 的概念，目前一些现代浏览器已经支持这些新东西了！</p><br><h4 id="_3"><a class="headeranchor-link" name="user-content-_3" href="#_3"></a>二、模型</h4><br><p>为了让代码流程更加清晰，我们假想着能够按照下面的流程来跑程序：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">new Promise(ready).then(getTpl).then(getData).then(makeHtml).resolve();</span><br></pre></td></tr></table></figure>
+<p>先将要事务按照执行顺序依次 push 到事务队列中，push 完了之后再通过 resolve 函数启动整个流程。</p><br><p>整个流程的操作模型如下：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">promise(ok).then(ok_1).then(ok_2).then(ok_3).reslove(value)------+</span><br><span class="line">         |         |          |          |                       |</span><br><span class="line">         |         |          |          |        +=======+      |</span><br><span class="line">         |         |          |          |        |       |      |</span><br><span class="line">         |         |          |          |        |       |      |</span><br><span class="line">         +---------|----------|----------|--------→  ok() ←------+</span><br><span class="line">                   |          |          |        |   ↓   |</span><br><span class="line">                   |          |          |        |   ↓   |</span><br><span class="line">                   +----------|----------|--------→ ok_1()|</span><br><span class="line">                              |          |        |   ↓   |</span><br><span class="line">                              |          |        |   ↓   |</span><br><span class="line">                              +----------|--------→ ok_2()|</span><br><span class="line">                                         |        |   ↓   |</span><br><span class="line">                                         |        |   ↓   |</span><br><span class="line">                                         +--------→ ok_3()-----+</span><br><span class="line">                                                  |       |    |</span><br><span class="line">                                                  |       |    ↓</span><br><span class="line">@ Created By Barret Lee                           +=======+   exit</span><br></pre></td></tr></table></figure>
+<p>在 resolve 之前，promise 的每一个 then 都会将回调函数压入队列，resolve 后，将 resolve 的值送给队列的第一个函数，第一个函数执行完毕后，将执行结果再送入下一个函数，依次执行完队列。一连串下来，一气呵成，没有丝毫间断。</p><br><h4 id="_4"><a class="headeranchor-link" name="user-content-_4" href="#_4"></a>三、简单的封装</h4><br><p>如果了解 Promise，可以移步下方，看看对 Promise 的封装：</p><br><p>Github: <a href="//github.com/barretlee/myPromise" target="_blank">//github.com/barretlee/myPromise</a>DEMO: <a href="http://barretlee.github.io/myPromise/index.html" target="_blank">http://barretlee.github.io/myPromise/index.html</a></p><br><p>如果还不是很了解，可以往下阅读全文，了解一二。</p><br><h3 id="promise_2"><a class="headeranchor-link" name="user-content-promise_2" href="#promise_2"></a>第二章 Promise 原理</h3><br><h4 id="promise_3"><a class="headeranchor-link" name="user-content-promise_3" href="#promise_3"></a>一、什么是 Promise ？</h4><br><p>那么，什么是 Promise ？</p><br><p>Promise 可以简单理解为一个事务，这个事务存在三种状态：</p><br><ol><br><li>已经完成了 resolved</li><br><li>因为某种原因被中断了 rejected</li><br><li>还在等待上一个事务结束 pending</li><br><br></ol><br><p>上文中我们举了一个栗子，获取模板和数据之后再将拼合的数据插入到 DOM 中，这里我们将整个程序分解成多个事务：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">事务一：     获取模板</span><br><span class="line">               ↓</span><br><span class="line">事务二：     获取数据</span><br><span class="line">               ↓</span><br><span class="line">事务三： 拼合之后插入到 DOM</span><br></pre></td></tr></table></figure>
+<p>在事务一结束之前，也就是模板代码从服务器拉取过来之前，事务二和事务三都处于 pending 状态，他们必须等待上一个事务结束。而事务一结束之后会将自身状态标记为 resolved，并把该事务中处理的结果移交给事务二继续处理（当然，这里如果没有数据返回，事务二就不会获得上一个事务的数据），依次类推，直到最后一个事务操作结束。</p><br><p>在事务操作的过程中，若遇到错误，比如事务一获取数据存在跨域问题，那事务就会操作失败，此时它会将自身的状态标记为 rejected，由于后续事务都是承接前一事务的，前一事务已经宣告工程已经玩不成了，那么后续的所有事务都会将自己标记为 rejected，其标记理由（reason）就是出错事务的报错信息（这个报错信息可以使用 try…catch 来捕获，也可以通过程序自身来捕获，如 ajax 的 onerror 事件、ajax 返回的状态码为 404 等）。</p><br><p><strong>小结：Promise 就是一个事务的管理器。他的作用就是将各种内嵌回调的事务用流水形式表达，其目的是为了简化编程，让代码逻辑更加清晰。</strong></p><br><p>由于整个程序的实现比较难理解，对于 Promise，我们将分为两部分阐述：</p><br><ul><br><li>无错误传递的 Promise，也就是事务不会因为任何原因中断，事务队列中的事项都会被依次处理，此过程中 Promise 只有 pending 和 resolved 两种状态，没有 rejected 状态。</li><br><li>包含错误的 Promise，每个事务的处理都必须使用容错机制来获取结果，一旦出错，就会将错误信息传递给下一个事务，如果错误信息会影响下一个事务，则下一个事务也会 rejected，如果不会，下一个事务可以正常执行，依次类推。</li><br></ul><br><h4 id="promise-promise"><a class="headeranchor-link" name="user-content-promise-promise" href="#promise-promise"></a>二、无错误传递的 Promise（简化版的 Promise）</h4><br><p>首先，我们需要用一个变量（status）来标记事务的状态，然后将事务（affair）也保存到 Promise 对象中。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var Promise = function(affair)&#123;</span><br><span class="line">    this.state = &quot;pending&quot;;</span><br><span class="line">    this.affair = affair || function(o) &#123; return o; &#125;;</span><br><span class="line">    this.allAffairs = [];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>Promise 有两个重要的方法，一个是 then，另一个是 resolve：</p><br><ul><br><li>then，将事务添加到事务队列（allAffairs）中</li><br><li>resolve，开启流程，让整个操作从第一个事务开始执行</li><br></ul><br><p>在操作事务之前，我们会先把各种事务依次放入事务队列中，这里会用到 then 方法：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Promise.prototype.then = function (nextAffair)&#123;</span><br><span class="line">    var promise = new Promise();</span><br><span class="line">    if (this.state == &quot;resloved&quot;)&#123;</span><br><span class="line">        // 如果当前状态是已完成，则这个事务将会被立即执行</span><br><span class="line">        return this._fire(promise, nextAffair);</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        // 否则将会被加入队列中</span><br><span class="line">        return this._push(promise, nextAffair);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>如果整个操作已经完成了，那 then 方法送进的事务会被立即执行，</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Promise.prototype._fire = function (nextPromise, nextAffair)&#123;</span><br><span class="line">    var nextResult = nextAffair(this.result);</span><br><span class="line">    if (nextResult instanceof Promise)&#123;</span><br><span class="line">        nextResult.then(function(obj)&#123;</span><br><span class="line">            nextPromise.resolve(obj);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        nextPromise.resolve(nextResult);</span><br><span class="line">    &#125;</span><br><span class="line">    return nextPromise;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<pre><span>被立即执行之后会返回一个结果，这个结果会被传递到下一个事务中作为原料，但是这里需要考虑两种情况：</span></pre>
+<ol>
+<li>异步，如果这个结果也是一个 Promise，则需要等待这个 Promise 执行完毕再将最终的结果传到下一个事务中。</li>
+<li>同步，如果这个结果不是 Promise，则直接将结果传递给下一个事务。</li>
+</ol>
+<p>第一种情况还是比较常见的，比如我们在一个事务中有一个子事务队列需要处理，此时必须等待子事务完成才能回到主事务队列中。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Promise.prototype.resolve = function (obj)&#123;</span><br><span class="line">    if (this.state != &quot;pending&quot;) &#123;</span><br><span class="line">        throw &quot;流程已完成，不能再次开启流程！&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">    this.state = &quot;resloved&quot;;</span><br><span class="line">    // 执行该事务，并将执行结果寄存到 Promise 管理器上</span><br><span class="line">    this.result = this.affair(obj);</span><br><span class="line">    for (var i = 0, len = this.allAffairs.length; i &lt; len; ++i)&#123;</span><br><span class="line">        // 往后执行事务</span><br><span class="line">        var affair = this.allAffairs[i];</span><br><span class="line">        this._fire(affair.promise, affair.affair);</span><br><span class="line">    &#125;</span><br><span class="line">    return this;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>resolve 接受一个参数，这个数据是交给第一个事务来处理的，因为第一个事务的启动可能需要点原料，这个数据就是原料，它也可以是空。该事物处理完毕之后，将操作结果（result）寄存在 Promise 对象上，方便引用，然后将结果（result）作为原料送入下一个事务。依次类推。</p>
+<p>我们看到 then 方法中还调用了一个 _push ，这个方法的作用是将事务推进事务管理器（Promise）。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Promise.prototype._push = function (nextPromise, nextAffair)&#123;</span><br><span class="line">    this.allAffairs.push(&#123;</span><br><span class="line">        promise: nextPromise,</span><br><span class="line">        affair: nextAffair</span><br><span class="line">    &#125;);</span><br><span class="line">    return nextPromise;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>以上操作，我们就实现了一个简单的事务管理器，可以测试下下面的代码：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">// 初始化事务管理器</span><br><span class="line">var promise = new Promise(function(data)&#123;</span><br><span class="line">    console.log(data);</span><br><span class="line">    return 1;</span><br><span class="line">&#125;);</span><br><span class="line">// 添加事务</span><br><span class="line">promise.then(function(data)&#123;</span><br><span class="line">    console.log(data);</span><br><span class="line">    return 2;</span><br><span class="line">&#125;).then(function(data)&#123;</span><br><span class="line">    console.log(data);</span><br><span class="line">    return 3;</span><br><span class="line">&#125;).then(function(data)&#123;</span><br><span class="line">    console.log(data);</span><br><span class="line">    console.log(&quot;end&quot;);</span><br><span class="line">&#125;);</span><br><span class="line">// 启动事务</span><br><span class="line">promise.resolve(&quot;start&quot;);</span><br></pre></td></tr></table></figure>
+
+<p>可以看到依次输出的结果为：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt; start</span><br><span class="line">&gt; 1</span><br><span class="line">&gt; 2</span><br><span class="line">&gt; 3</span><br><span class="line">&gt; end</span><br></pre></td></tr></table></figure>
+
+<p>由于上述实现十分简陋，链式调用没做太好的处理，请读者自行完善：）</p>
+<p>下面是一个异步操作演示：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">var promise = new Promise(function(data)&#123;</span><br><span class="line">    console.log(data);</span><br><span class="line">    return &quot;end&quot;;</span><br><span class="line">&#125;);</span><br><span class="line">promise.then(function(data)&#123;</span><br><span class="line">    // 这里需要返回一个 Promise，让主事务切换到子事务处理</span><br><span class="line">    return (function(data)&#123;</span><br><span class="line">        // 创建一个子事务</span><br><span class="line">        var promise = new Promise();</span><br><span class="line">        setTimeout(function()&#123;</span><br><span class="line">            console.log(data);</span><br><span class="line">            // 一秒之后才启动子事务，模拟异步延时</span><br><span class="line">            promise.resolve();</span><br><span class="line">        &#125;, 1000);</span><br><span class="line">        return promise;</span><br><span class="line">    &#125;)(data);</span><br><span class="line">&#125;);</span><br><span class="line">promise.resolve(&quot;start&quot;);</span><br></pre></td></tr></table></figure>
+
+<pre><span>可以看到依次输出的结果为：</span></pre>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; start</span><br><span class="line">&gt; end （1s之后输出）</span><br></pre></td></tr></table></figure>
+<p>将函数写的稍微好看点：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">function delay(data)&#123;</span><br><span class="line">    // 创建一个子事务</span><br><span class="line">    var promise = new Promise();</span><br><span class="line">    setTimeout(function()&#123;</span><br><span class="line">        console.log(data);</span><br><span class="line">        // 一秒之后才启动子事务，模拟异步延时</span><br><span class="line">        promise.resolve();</span><br><span class="line">    &#125;, 1000);</span><br><span class="line">    return promise;</span><br><span class="line">&#125;</span><br><span class="line">// 主事务</span><br><span class="line">var promise = new Promise(function(data)&#123;</span><br><span class="line">    console.log(data);</span><br><span class="line">    return &quot;end&quot;;</span><br><span class="line">&#125;);</span><br><span class="line">promise.then(delay);</span><br><span class="line">promise.resolve(&quot;start&quot;);</span><br></pre></td></tr></table></figure>
+<p></p><h4><span>三、包含错误传递的 Promise</span></h4><p></p>
+<p>真的很羡慕你能看到这么详细的文章，当然，后面会更加精彩！</p><br><p>没有错误处理的 Promise 只能算是一个半成品，虽说可以通过在最外层加一个 try..catch 来捕获错误，但没法具体定位是哪个事务发生的错误。并且这里的错误不仅仅包含 JavaScript Error，还有诸如 ajax 返回的 data code 不是 200 的情况等。</p><br><p>先看一个浏览器内置 Promise 的实例（该代码可在现代浏览器下运行）：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">new Promise(function(resolve, reject)&#123;</span><br><span class="line">    resolve(&quot;start&quot;);</span><br><span class="line">&#125;).then(function(data)&#123;</span><br><span class="line">    console.log(data);</span><br><span class="line">    throw &quot;error&quot;;</span><br><span class="line">&#125;).catch(function(err)&#123;</span><br><span class="line">    console.log(err);</span><br><span class="line">    return &quot;end&quot;;</span><br><span class="line">&#125;).then(function(data)&#123;</span><br><span class="line">    console.log(data)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre><span>Promise 的回调和 then 方法都是接受两个参数：</span></pre>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">new Promise(function(resolve, reject)&#123;</span><br><span class="line">    // ...</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">promise.then(</span><br><span class="line">    function(value)&#123;/* code here */&#125;,</span><br><span class="line">    function(reason)&#123;/* code here */&#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>事务处理过程中，如果有值返回，则作为 value，传入到 resolve 函数中，若有错误产生，则作为 reason 传入到 reject 函数中处理。</p><br><p>在初始化 Promise 对象时，若传入的回调中没有执行 resolve 或者 reject，这需要我们主动去启动事务队列。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">promise.resolve();</span><br><span class="line">promise.reject();</span><br></pre></td></tr></table></figure>
+<p>上面两种都是可以启动一个队列的。这里跟第二章第二节的 resolve 函数用法类似。Promise 对象还提供了 catch 函数，起用法等价于下面所示：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">promise.catch();</span><br><span class="line">// 等价于</span><br><span class="line">promise.then(null, function(reason)&#123;&#125;);</span><br></pre></td></tr></table></figure>
+<p>还有两个 API：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">promise.all();</span><br><span class="line">promise.race();</span><br></pre></td></tr></table></figure>
+<p>后续再讲。先看看这个有错误处理的 Promise 是如何实现的。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">function Promise(resolver)&#123;</span><br><span class="line">    this.status = &quot;pending&quot;;</span><br><span class="line">    this.value = null;</span><br><span class="line">    this.handlers = [];</span><br><span class="line">    this._doPromise.call(this, resolver);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>_doPromise 方法在实例化 Promise 函数时就执行。如果送入的回调函数 resolver 中已经 resolve 或者 reject 了，程序就已经启动了，所以在实例化的时候就开始判断。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">_doPromise: function(resolver)&#123;</span><br><span class="line">    var called = false, self = this;</span><br><span class="line">    try&#123;</span><br><span class="line">        resolver(function(value)&#123;</span><br><span class="line">            // 如果没有 call 则继续，并标记 called 为 true</span><br><span class="line">            !called &amp;&amp; (called = !0, self.resolve(value));</span><br><span class="line">        &#125;, function(reason)&#123;</span><br><span class="line">            // 同上</span><br><span class="line">            !called &amp;&amp; (called = !0, self.reject(reason));</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125; catch(e) &#123;</span><br><span class="line">        // 同上，捕获错误，传递错误到下一个 then 事务</span><br><span class="line">        !called &amp;&amp; (called = !0, self.reject(e));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>只要 resolve 或者 reject 就会标记程序 called 为 true，表示程序已经启动了。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">resolve: function(value) &#123;</span><br><span class="line">    try&#123;</span><br><span class="line">        if(this === value)&#123;</span><br><span class="line">            throw new TypeError(&quot;流程已完成，不能再次开启流程！&quot;);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            // 如果还有子事务队列，继续执行</span><br><span class="line">            value &amp;&amp; value.then &amp;&amp; this._doPromise(value.then);</span><br><span class="line">        &#125;</span><br><span class="line">        // 执行完了之后标记为完成</span><br><span class="line">        this.status = &quot;fulfilled&quot;;</span><br><span class="line">        this.value = value;</span><br><span class="line">        this._dequeue();</span><br><span class="line">    &#125; catch(e) &#123;</span><br><span class="line">        this.reject(e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;,</span><br><span class="line">reject: function(reason) &#123;</span><br><span class="line">    // 标记状态为出错</span><br><span class="line">    this.status = &quot;rejected&quot;;</span><br><span class="line">    this.value = reason;</span><br><span class="line">    this._dequeue();</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>可以看到，每次 resolve 的时候都会用一个 try..catch 包裹来捕获未知错误。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">_dequeue: function()&#123;</span><br><span class="line">    var handler;</span><br><span class="line">    // 执行事务，直到队列为空</span><br><span class="line">    while (this.handlers.length) &#123;</span><br><span class="line">        handler = this.handlers.shift();</span><br><span class="line">        this._handle(handler.thenPromise, handler.onFulfilled, handler.onRejected);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>无论是 resolve 还是 reject 都会让程序往后奔流，直到结束所有事务，所以这两个方法中都有 _dequeue 函数。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">_handle: function(thenPromise, onFulfilled, onRejected)&#123;</span><br><span class="line">    var self = this;</span><br><span class="line"></span><br><span class="line">    setTimeout(function() &#123;</span><br><span class="line">        // 判断下次操作采用哪个函数，reject 还是 resolve</span><br><span class="line">        var callback = self.status == &quot;fulfilled&quot;</span><br><span class="line">                       ? onFulfilled</span><br><span class="line">                       : onRejected;</span><br><span class="line">        // 只有是函数才会继续回调</span><br><span class="line">        if (typeof callback === &quot;function&quot;) &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                self.resolve.call(thenPromise, callback(self.value));</span><br><span class="line">            &#125; catch(e) &#123;</span><br><span class="line">                self.reject.call(thenPromise, e);</span><br><span class="line">            &#125;</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        // 否则就将 value 传递给下一个事务了</span><br><span class="line">        self.status == &quot;fulfilled&quot;</span><br><span class="line">                        ? self.resolve.call(thenPromise, self.value)</span><br><span class="line">                        : self.reject.call(thenPromise, self.value);</span><br><span class="line">    &#125;, 1);</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>这个函数跟上一节提到的 _fire 类似，如果 callback 是 function，就会进入子事务队列，处理完了之后退回到主事务队列。最后一个 then 方法，将事务推进队列。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">then: function(onFulfilled, onRejected)&#123;</span><br><span class="line">    var thenPromise = new Promise(function() &#123;&#125;);</span><br><span class="line"></span><br><span class="line">    if (this.status == &quot;pending&quot;) &#123;</span><br><span class="line">        this.handlers.push(&#123;</span><br><span class="line">            thenPromise: thenPromise,</span><br><span class="line">            onFulfilled: onFulfilled,</span><br><span class="line">            onRejected: onRejected</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        this._handle(thenPromise, onFulfilled, onRejected);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return thenPromise;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果第二节没有理解清楚，这一节也会让人头疼，这一部分讲的比较粗糙。</p><br><h3 id="_5"><a class="headeranchor-link" name="user-content-_5" href="#_5"></a>第三章 异步编程</h3><br><h4 id="jquery-defferred"><a class="headeranchor-link" name="user-content-jquery-defferred" href="#jquery-defferred"></a>一、jQuery 中的 Defferred 对象</h4><br><p>或许你在面试的时候，有面试官问你：</p><br><blockquote><br><p><code>$.ajax()</code> 执行后返回的结果是什么？</p><br></blockquote><br><p>在 jQuery1.5 版本就已经引入了 Defferred 对象，当时为了引入这个东西，整个 jQuery 都被重构了。Defferred 跟 Promise 类似，它表示一个还未完成任务的对象，而 Promise 确切的说，是一个代表未知值的对象。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$.ajax(&#123;</span><br><span class="line">    url: url</span><br><span class="line">&#125;).done(function(data, status, xhr)&#123;</span><br><span class="line">    //...</span><br><span class="line">&#125;).fail(function()&#123;</span><br><span class="line">    //...</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>回忆下第二章第一节中的 Promise，是不是如出一辙，只是 jQuery 还提供了更多的语法糖：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$.ajax(&#123;</span><br><span class="line">    url: url,</span><br><span class="line">    success: function(data)&#123;</span><br><span class="line">        //...</span><br><span class="line">    &#125;,</span><br><span class="line">    error: funtion()&#123;</span><br><span class="line">        //...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>他允许将 done 和 fail 两个函数的回调放在 ajax 初始化的参数 success 和 fail 上，其原理还是一样的，同样，还有这样的东西：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$.when(taskOne, taskTwo).done(function () &#123;</span><br><span class="line">    console.log(&quot;都执行完毕后才会输出我！&quot;);</span><br><span class="line">&#125;).fail(function()&#123;</span><br><span class="line">    console.log(&quot;只要有一个失败，就会输出我！&quot;)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><span>当 taskOne 和 taskTwo 都完成之后才执行 done 回调，这个浏览器内置的 Promise 也有对应的函数：</span></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Promise.all([true, Promise.resolve(1), ...]).then(function(value)&#123;</span><br><span class="line">    //....</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>浏览器内置的 Promise 还提供了一个 API：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Promise.race([true, Promise.resolve(1), ...]).then(function(value)&#123;</span><br><span class="line">    //....</span><br><span class="line">&#125;, function(reason)&#123;</span><br><span class="line">    //...</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>只要 race 参数中有一个 resolve 或者 reject，then 回调就会出发。</p><br><h4 id="_6"><a class="headeranchor-link" name="user-content-_6" href="#_6"></a>二、基于事件响应的异步模型</h4><br><p><a href="http://weibo.com/shyvo" target="_blank" rel="noopener">@朴灵</a> 写的 <a href="//github.com/JacksonTian/eventproxy">EventProxy</a> 就是基于事件响应的异步模型，按理说，这个实现的逻辑是最清晰的，不过代码量稍微多一点。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">function taskA()&#123;</span><br><span class="line">    setTimeout(function()&#123;</span><br><span class="line">        var result = &quot;A&quot;;</span><br><span class="line">        E.emit(&quot;taskA&quot;, result);</span><br><span class="line">    &#125;, 1000);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function taskB()&#123;</span><br><span class="line">    setTimeout(function()&#123;</span><br><span class="line">        var result = &quot;B&quot;;</span><br><span class="line">        E.emit(&quot;taskB&quot;, result);</span><br><span class="line">    &#125;, 1000);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">E.all([&quot;taskA&quot;, &quot;taskB&quot;], function(A, B)&#123;</span><br><span class="line">    return A + B;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p></p><p>我没有看他的源码，但是想想，应该是这个逻辑。只需要在消息中心管理各个 emit 以及消息注册。这里的错误处理值得思考下。</p><p></p>
+<p></p><p>在半年前，也写过一篇关于异步编程的文章：<a href="http://www.cnblogs.com/hustskyking/p/javascript-asynchronous-programming.html" target="_blank" rel="noopener">JavaScript异步编程原理</a>，感兴趣的可以去读一读。</p><p></p>
+<p></p><h3 id="_7"><a class="headeranchor-link" name="user-content-_7" href="#_7"></a>第四章 小结</h3><p></p>
+<p></p><h4 id="_8"><a class="headeranchor-link" name="user-content-_8" href="#_8"></a>一、小结</h4><p></p>
+<p></p><p>文章比较长，阅读了好几天别人写的东西，自己提笔还是比较轻松的，本文大概花费了 6 个小时撰写。</p><p></p>
+<p></p><p>本文主要解说了 Promise 的应用场景和实现原理，如果你能够顺畅的读完全文并且之处文中的一些错误，说明你已经悟到了：）</p><p></p>
+<p></p><p>Promise 使用起来不难，但是理解其原理还是有点偏头痛的，所以下面列举的几篇相关阅读也建议读者点进去看看。</p><p></p>
+<p></p><h4 id="_9"><a class="headeranchor-link" name="user-content-_9" href="#_9"></a>二、相关阅读</h4><p></p>
+<ul><br><li><a href="http://www.html5rocks.com/zh/tutorials/es6/promises/" target="_blank" rel="noopener">JavaScript Promises</a></li><br><li><a href="http://mweb.baidu.com/p/promise-introduction.html" target="_blank" rel="noopener">Promise 初探</a></li><br><li><a href="http://mweb.baidu.com/p/javascript-async-0.html" target="_blank" rel="noopener">JavaScript中的异步梳理（0）</a></li><br><li><a href="http://mweb.baidu.com/p/javascript-async-2-promises-a.html" target="_blank" rel="noopener">JavaScript中的异步梳理（2）&mdash;&mdash;使用Promises/A</a></li><br><li><a href="http://www.web-tinker.com/article/20154.html" target="_blank" rel="noopener">jQuery的Deferred对象</a></li><br><li><a href="http://blog.qivhou.com/translation/2013/08/20/promise-deferred-objects-in-javascript-pt2-practical-use/" target="_blank" rel="noopener">JavaScript中的Promise和Deferred对象 第二部分：实战</a></li><br><li><a href="//developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">MDN</a></li><br><li><a href="http://www.cnblogs.com/hustskyking/p/javascript-asynchronous-programming.html" target="_blank" rel="noopener">JavaScript异步编程原理</a></li><br></ul>
+
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/blog/tags/tech/" rel="tag"># tech</a>
+          
+            <a href="/blog/tags/cnblogs/" rel="tag"># cnblogs</a>
+          
+            <a href="/blog/tags/异步/" rel="tag"># 异步</a>
+          
+            <a href="/blog/tags/Promise/" rel="tag"># Promise</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2014/09/29/2014-09-29-工作半年多了/" rel="next" title="工作半年多了">
+                <i class="fa fa-chevron-left"></i> 工作半年多了
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2014/10/02/2014-10-02-what-is-our-persuits/" rel="prev" title="我们在追求什么？">
+                我们在追求什么？ <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Lion</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/blog/archives/">
+                
+                    <span class="site-state-item-count">311</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/blog/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">94</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/blog/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">241</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#promise_1"><span class="nav-number">1.</span> <span class="nav-text">第一章 了解 Promise</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#_2"><span class="nav-number">1.1.</span> <span class="nav-text">一、场景再现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#_3"><span class="nav-number">1.2.</span> <span class="nav-text">二、模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#_4"><span class="nav-number">1.3.</span> <span class="nav-text">三、简单的封装</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#promise_2"><span class="nav-number">2.</span> <span class="nav-text">第二章 Promise 原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#promise_3"><span class="nav-number">2.1.</span> <span class="nav-text">一、什么是 Promise ？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#promise-promise"><span class="nav-number">2.2.</span> <span class="nav-text">二、无错误传递的 Promise（简化版的 Promise）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">2.3.</span> <span class="nav-text">三、包含错误传递的 Promise</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#_5"><span class="nav-number">3.</span> <span class="nav-text">第三章 异步编程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#jquery-defferred"><span class="nav-number">3.1.</span> <span class="nav-text">一、jQuery 中的 Defferred 对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#_6"><span class="nav-number">3.2.</span> <span class="nav-text">二、基于事件响应的异步模型</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#_7"><span class="nav-number">4.</span> <span class="nav-text">第四章 小结</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#_8"><span class="nav-number">4.1.</span> <span class="nav-text">一、小结</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#_9"><span class="nav-number">4.2.</span> <span class="nav-text">二、相关阅读</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lion</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script src="/blog/js/src/utils.js?v=6.6.0"></script>
+
+  <script src="/blog/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/blog/js/src/scrollspy.js?v=6.6.0"></script>
+<script src="/blog/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script src="/blog/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/blog/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script src="/blog/js/src/music/aplayer.js?v=6.6.0"></script>
+  <script src="/blog/js/src/music/init.js?v=6.6.0"></script>
+</body>
+</html>

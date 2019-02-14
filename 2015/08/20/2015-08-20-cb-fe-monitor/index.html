@@ -1,0 +1,2024 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/blog/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/blog/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blog/',
+    scheme: 'Mist',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本文为归档内容,原始地址在 博客园.  在复杂的网络环境和浏览器环境下，自测、QA测试以及 Code Review 都是不够的，如果对页面稳定性和准确性要求较高，就必须有一套完善的代码异常监控体系，本文从前端代码异常监控的方法和问题着手，尽量全面地阐述错误日志收集各个阶段中可能遇到的阻碍和处理方案。收集日志的方法平时收集日志的手段，可以归类为两个方面，一个是逻辑中的错误判断，为主动判断；一个是利用">
+<meta name="keywords" content="tech,cnblogs">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端代码异常日志收集与监控">
+<meta property="og:url" content="https://handishenniu.coding.me/blog/2015/08/20/2015-08-20-cb-fe-monitor/index.html">
+<meta property="og:site_name" content="撼地神牛">
+<meta property="og:description" content="本文为归档内容,原始地址在 博客园.  在复杂的网络环境和浏览器环境下，自测、QA测试以及 Code Review 都是不够的，如果对页面稳定性和准确性要求较高，就必须有一套完善的代码异常监控体系，本文从前端代码异常监控的方法和问题着手，尽量全面地阐述错误日志收集各个阶段中可能遇到的阻碍和处理方案。收集日志的方法平时收集日志的手段，可以归类为两个方面，一个是逻辑中的错误判断，为主动判断；一个是利用">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png">
+<meta property="og:image" content="https://img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png">
+<meta property="og:updated_time" content="2018-12-12T10:10:11.320Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="前端代码异常日志收集与监控">
+<meta name="twitter:description" content="本文为归档内容,原始地址在 博客园.  在复杂的网络环境和浏览器环境下，自测、QA测试以及 Code Review 都是不够的，如果对页面稳定性和准确性要求较高，就必须有一套完善的代码异常监控体系，本文从前端代码异常监控的方法和问题着手，尽量全面地阐述错误日志收集各个阶段中可能遇到的阻碍和处理方案。收集日志的方法平时收集日志的手段，可以归类为两个方面，一个是逻辑中的错误判断，为主动判断；一个是利用">
+<meta name="twitter:image" content="https://img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png">
+
+
+
+
+
+
+  <link rel="canonical" href="https://handishenniu.coding.me/blog/2015/08/20/2015-08-20-cb-fe-monitor/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>前端代码异常日志收集与监控 | 撼地神牛</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?304ebec1c594afeac3282f7afb1f3448";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion .logo-line-before i { left: initial; }
+    .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+  <meta name="baidu-site-verification" content="mI6O7pmEdr">
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    
+    
+    
+    <a href="https://github.com/lystdio" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blog/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">撼地神牛</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-sitemap">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/sitemap.xml" rel="section"><i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>站点地图</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/blog/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+  
+  
+
+  
+
+    <a href="https://github.com/lystdio" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" style="fill: #222; color: #fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2015/08/20/2015-08-20-cb-fe-monitor/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lion">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="撼地神牛">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">前端代码异常日志收集与监控
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2015-08-20 12:20:00" itemprop="dateCreated datePublished" datetime="2015-08-20T12:20:00+08:00">2015-08-20</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-12 18:10:11" itemprop="dateModified" datetime="2018-12-12T18:10:11+08:00">2018-12-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/JavaScript/前端杂烩/" itemprop="url" rel="index"><span itemprop="name">前端杂烩</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/JavaScript/前端杂烩/网络交互/" itemprop="url" rel="index"><span itemprop="name">网络交互</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <div class="history-article">本文为归档内容,原始地址在 <a href="http://www.cnblogs.com/hustskyking/archive/2015/08/20/fe-monitor.html" target="_blank">博客园</a>.</div>
+
+<p>在复杂的网络环境和浏览器环境下，自测、QA测试以及 Code Review 都是不够的，如果对页面稳定性和准确性要求较高，就必须有一套完善的代码异常监控体系，本文从前端代码异常监控的方法和问题着手，尽量全面地阐述错误日志收集各个阶段中可能遇到的阻碍和处理方案。</p><br><h3 id="_2"><a class="headeranchor-link" name="user-content-_2" href="#_2"></a>收集日志的方法</h3><br><p>平时收集日志的手段，可以归类为两个方面，一个是逻辑中的错误判断，为主动判断；一个是利用语言给我们提供的捷径，暴力式获取错误信息，如 <code>try..catch</code> 和 <code>window.onerror</code>。</p><br><p><strong>1. 主动判断</strong></p><br><p>我们在一些运算之后，得到一个期望的结果，然而结果不是我们想要的</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// test.js</span><br><span class="line">function calc()&#123;</span><br><span class="line">  // code...</span><br><span class="line">  return val;</span><br><span class="line">&#125;</span><br><span class="line">if(calc() !== &quot;someVal&quot;)&#123;</span><br><span class="line">  Reporter.send(&#123;</span><br><span class="line">    position: &quot;test.js::&lt;function&gt;calc&quot;</span><br><span class="line">    msg: &quot;calc error&quot;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p></p>
+<p>这种属于逻辑错误/状态错误的反馈，在接口 <code>status</code> 判断中用的比较多。</p><br><p><strong>2. <code>try..catch</code> 捕获</strong></p><br><p>判断一个代码段中存在的错误：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">try &#123;</span><br><span class="line">  init();</span><br><span class="line">  // code...</span><br><span class="line">&#125; catch(e)&#123;</span><br><span class="line">  Reporter.send(format(e));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以 <code>init</code> 为程序的入口，代码中所有同步执行出现的错误都会被捕获，这种方式也可以很好的避免程序刚跑起来就挂。</p><br><p><strong>3. <code>window.onerror</code></strong></p><br><p>捕获全局错误：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">window.onerror = function() &#123;</span><br><span class="line">  var errInfo = format(arguments);</span><br><span class="line">  Reporter.send(errInfo);</span><br><span class="line">  return true;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>在上面的函数中返回 <code>return true</code>，错误便不会暴露到控制台中。下面是它的参数信息：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * @param &#123;String&#125;  errorMessage   错误信息</span><br><span class="line"> * @param &#123;String&#125;  scriptURI      出错的文件</span><br><span class="line"> * @param &#123;Long&#125;    lineNumber     出错代码的行号</span><br><span class="line"> * @param &#123;Long&#125;    columnNumber   出错代码的列号</span><br><span class="line"> * @param &#123;Object&#125;  errorObj       错误的详细信息，Anything</span><br><span class="line"> */</span><br><span class="line">window.onerror = function(errorMessage, scriptURI, lineNumber,columnNumber,errorObj) &#123;</span><br><span class="line">    // code..</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>window.onerror</code> 算是一种特别暴力的容错手段，<code>try..catch</code> 也是如此，他们底层的实现就是利用 C/C++ 中的 <code>goto</code> 语句实现，一旦发现错误，不管目前的堆栈有多深，不管代码运行到了何处，直接跑到顶层或者 <code>try..catch</code> 捕获的那一层，这种一脚踢开错误的处理方式并不是很好。</p><br><h3 id="_3"><a class="headeranchor-link" name="user-content-_3" href="#_3"></a>收集日志存在的问题</h3><br><p>收集日志的目的是为了及时发现问题，最好日志能够告诉我们，错误在哪里，更优秀的做法是，不仅告诉错误在哪里，还告诉我们，如何处理这个错误。终极目标是，发现错误，自动容错，这一步是最难的。</p><br><h4 id="1-script-error"><a class="headeranchor-link" name="user-content-1-script-error" href="#1-script-error"></a>1. 无具体报错信息，Script error.</h4><br><p>先看下面的例子，test.html</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- http://barret/test.html --&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">  window.onerror = function()&#123;</span><br><span class="line">    console.log(arguments);</span><br><span class="line">  &#125;;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;script src=&quot;http://barret/test.js&quot;&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>test.js</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// http://barret/test.js</span><br><span class="line">function test()&#123;</span><br><span class="line">  ver a = 1;</span><br><span class="line">  return a+1;</span><br><span class="line">&#125;</span><br><span class="line">test();</span><br></pre></td></tr></table></figure>
+<p>我们期望收集到的日志是下面这样具体的信息：</p><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2015/08/20/200018292699298.png" data-source="http://images0.cnblogs.com/blog2015/387325/201508/200018292699298.png" alt=""></p><br><p>为了对资源进行更好的配置和管理，我们通常将静态资源放到异域上</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- http://barret/test.html --&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">  window.onerror = function()&#123;</span><br><span class="line">    console.log(arguments);</span><br><span class="line">  &#125;;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;script src=&quot;http://localhost/test.js&quot;&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>而拿到的结果却是：</p><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2015/08/20/200018372534203.png" data-source="http://images0.cnblogs.com/blog2015/387325/201508/200018372534203.png" alt=""></p><br><p>翻开 Chromium 的 WebCore <a href="http://trac.webkit.org/browser/branches/chromium/1453/Source/WebCore/dom/ScriptExecutionContext.cpp#L293" target="_blank" rel="noopener">源码</a>，可以看到：</p><br><p><a href="http://trac.webkit.org/browser/branches/chromium/1453/Source/WebCore/dom/ScriptExecutionContext.cpp#L293" target="_blank"><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2015/08/20/200018447228952.png" data-source="http://images0.cnblogs.com/blog2015/387325/201508/200018447228952.png" alt=""></a></p><br><p>跨域情况下，返回的结果是 <code>Script error.</code>。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// http://trac.webkit.org/browser/branches/chromium/1453/Source/WebCore/dom/ScriptExecutionContext.cpp#L333</span><br><span class="line">String message = errorMessage;</span><br><span class="line">int line = lineNumber;</span><br><span class="line">String sourceName = sourceURL;</span><br><span class="line">// 已经拿到了所有的错误信息，但如果发现是非同源情况，`sanitizeScriptError` 中复写错误信息</span><br><span class="line">sanitizeScriptError(message, line, sourceName, cachedScript);</span><br></pre></td></tr></table></figure>
+<p><a href="http://trac.webkit.org/browser/branches/chromium/648/Source/WebCore/dom/ScriptExecutionContext.cpp?rev=77122#L301" target="_blank" rel="noopener">旧版</a> 的 WebCore 中只判断了 <code>securityOrigin()-&gt;canRequest(targetURL)</code>，新版中还多了一个 <code>cachedScript</code> 的判断，可以看出浏览器对这方面的限制越来越严格。</p><br><p>在本地测试了下：</p><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2015/08/20/200018530976144.png" data-source="http://images0.cnblogs.com/blog2015/387325/201508/200018530976144.png" alt=""></p><br><p>可见在 <code>file://</code> 协议下，<code>securityOrigin()-&gt;canRequest(targetURL)</code> 也是 <code>false</code>。</p><br><p><strong>为何<code>Script error.</code>?</strong></p><br><p>简单报错： <code>Script error</code>，目的是避免数据泄露到不安全的域中，一个简单的例子：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=&quot;bank.com/login.html&quot;&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>上面我们并没有引入一个 js 文件，而是一个 html，这个 html 是银行的登录页面，如果你已经登录了 <code>bank.com</code>，那 login 页面就会自动跳转到 <code>Welcome xxx…</code>，如果未登录则跳转到 <code>Please Login…</code>，那么 JS 报错也会是 <code>Welcome xxx… is not defined</code>，<code>Please Login… is not defined</code>，通过这些信息可以判断一个用户是否登录他的银行帐号，给 hacker 提供了十分便利的判断渠道，这是相当不安全的。</p><br><p><strong><code>crossOrigin</code>参数跳过跨域限制</strong></p><br><p>image 和 script 标签都有 crossorigin 参数，它的作用就是告诉浏览器，我要加载一个外域的资源，并且我信任这个资源。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=&quot;http://localhost/test.js&quot; crossorigin=&quot;&quot;&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>然而，却报错了：</p><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2015/08/20/200019005666192.png" data-source="http://images0.cnblogs.com/blog2015/387325/201508/200019005666192.png" alt=""></p><br><p>这是意料之中的错误，跨域资源共享策略要求，服务器也设置 <code>Access-Control-Allow-Origin</code> 的响应头：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">header(&apos;Access-Control-Allow-Origin: *&apos;);</span><br></pre></td></tr></table></figure>
+<p>回头看看我们 CDN 的资源，</p><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2015/08/20/200019081911756.png" data-source="http://images0.cnblogs.com/blog2015/387325/201508/200019081911756.png" alt=""></p><br><p>Javascript/CSS/Image/Font/SWF 等这些静态资源其实都已经早早地加上了 CORS 响应头。</p><br><h4 id="2"><a class="headeranchor-link" name="user-content-2" href="#2"></a>2. 压缩代码无法定位到错误的具体位置</h4><br><p>线上的代码几乎都是经过打包压缩的，几十上百的文件压缩后打包成一个，而且只有一行。当我们收到 <code>a is not defined</code> 的时候，如果只在特定场景下才报错，我们根本无法定位到这个被压缩的 <code>a</code> 是个什么东西，那么此时的错误日志就是无效的。</p><br><p>第一个想到的办法是利用 sourceMap，利用它可以定位到压缩代码某一点在未压缩代码的具体位置。下面是 sourceMap 引入的格式，在代码的最后一行加入：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">//# sourceMappingURL=index.js.map</span><br></pre></td></tr></table></figure>
+<p>以前使用的是 “//@” 作为开头，现在使用 “//#”，然而对于错误上报，这玩意儿没啥用。JS 不能拿到他真实的行数，只能通过 Chrome DevTools 这样的工具辅助定位，而且并不是每个线上资源都会添加 sourceMap 文件。sourceMap 的用途目前还只能体现在开发阶段。</p><br><p>当然，如果理解了 sourceMap 的 VLQ编码和位置对应关系，也可以将拿到的日志进行二次解析，映射到真实路径位置，这个成本比较高，貌似暂时也没人尝试过。</p><br><p>那么，有什么办法，可以定位错误的具体位置，或者说有什么办法可以缩小我们定位问题的难度呢？</p><br><p>可以这样考虑：打包的时候，在每两个合并的文件之间加上 1000 个空行，最后上线的文件就会变成</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">(function()&#123;var longCode.....&#125;)(); // file 1</span><br><span class="line"></span><br><span class="line">// 1000 个空行</span><br><span class="line"></span><br><span class="line">(function()&#123;var longCode.....&#125;)(); // file 2</span><br><span class="line"></span><br><span class="line">// 1000 个空行</span><br><span class="line"></span><br><span class="line">(function()&#123;var longCode.....&#125;)(); // file 3</span><br><span class="line"></span><br><span class="line">// 1000 个空行</span><br><span class="line"></span><br><span class="line">(function()&#123;var longCode.....&#125;)(); // file 4</span><br><span class="line"></span><br><span class="line">var _fileConfig = [&apos;file 1&apos;, &apos;file 2&apos;, &apos;file 3&apos;, &apos;file 4&apos;]</span><br></pre></td></tr></table></figure>
+<p>如果报错在第 3001 行，</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">window.onerror = function(msg, url, line, col, error)&#123;</span><br><span class="line">  // line = 3001</span><br><span class="line">  var lineNum = line;</span><br><span class="line">  console.log(&quot;错误位置：&quot; + _fileConfig[parseInt(lineNum / 1000) - 1]);</span><br><span class="line">  // -&gt; &quot;错误位置：file 3&quot;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>可以计算出，错误出现在第三个文件中，范围就缩小了很多。</p><br><h4 id="3-error"><a class="headeranchor-link" name="user-content-3-error" href="#3-error"></a>3. error 事件的注册</h4><br><p>多次注册 error 事件，不会重复执行多个回调：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var fn = window.onerror = function() &#123;</span><br><span class="line">  console.log(arguments);</span><br><span class="line">&#125;;</span><br><span class="line">window.addEventListener(&quot;error&quot;, fn);</span><br><span class="line">window.addEventListener(&quot;error&quot;, fn);</span><br></pre></td></tr></table></figure>
+<p>触发错误之后，上面代码的结果为：</p><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2015/08/20/200019171131048.png" data-source="http://images0.cnblogs.com/blog2015/387325/201508/200019171131048.png" alt=""></p><br><p><code>window.onerror</code> 和 <code>addEventListener</code> 都执行了，并只执行了一次。</p><br><h4 id="4"><a class="headeranchor-link" name="user-content-4" href="#4"></a>4. 收集日志的量</h4><br><p>没有必要将所有的错误信息全部送到 Log 中，这个量太大了。如果网页 PV 有 1kw，那么一个必现错误发送的 log 信息将有 1kw 条，大约一个 G 的日志。我们可以给 <code>Reporter</code> 函数添加一个采样率：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">function needReport (sampling)&#123;</span><br><span class="line">  // sampling: 0 - 1</span><br><span class="line">  return Math.random() </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个采样率可以按需求来处理，可以同上，使用一个随机数，也可以使用 cookie 中的某个字段（如 nickname）的最后一个字母/数字来判定，也可以将用户的 nickname 进行 hash 计算，再通过最后一位的字母/数字来判断，总之，方法是很多的。</p><br><h3 id="_4"><a class="headeranchor-link" name="user-content-_4" href="#_4"></a>收集日志布点位置</h3><br><p>为了更加精准的拿到错误信息，有效地统计错误日志，我们应该更多地采用主动式埋点，比如在一个接口的请求中：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">// Module A Get Shops Data</span><br><span class="line">$.ajax(&#123;</span><br><span class="line">  url: URL,</span><br><span class="line">  dataType: &quot;jsonp&quot;,</span><br><span class="line">  success: function(ret) &#123;</span><br><span class="line">    if(ret.status === &quot;failed&quot;) &#123;</span><br><span class="line">      // 埋点 1</span><br><span class="line">      return Reporter.send(&#123;</span><br><span class="line">        category: &quot;WARN&quot;,</span><br><span class="line">        msg: &quot;Module_A_GET_SHOPS_DATA_FAILED&quot;</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    if(!ret.data || !ret.data.length) &#123;</span><br><span class="line">      // 埋点 2</span><br><span class="line">      return Reporter.send(&#123;</span><br><span class="line">        category: &quot;WARN&quot;,</span><br><span class="line">        msg: &quot;Module_A_GET_SHOPS_DATA_EMPTY&quot;</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  error: function() &#123;</span><br><span class="line">    // 埋点 3</span><br><span class="line">    Reporter.send(&#123;</span><br><span class="line">      category: &quot;ERROR&quot;,</span><br><span class="line">      msg: &quot;Module_A_GET_SHOPS_DATA_ERROR&quot;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>上面我们精准地布下了三个点，描述十分清晰，这三个点会对我们后续排查线上问题提供十分有利的信息。</p><br><p><strong>关于 <code>try..catch</code> 的使用</strong></p><br><p>对于 <code>try..catch</code> 的使用，我的建议是：能不用，尽量不要用。JS代码都是自己写出来的，哪里会出现问题，会出现什么问题，心中应该都有个谱，平时用到 <code>try..catch</code> 的一般只有两个地方：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// JSON 格式不对</span><br><span class="line">try&#123;</span><br><span class="line">  JSON.parse(JSONString);</span><br><span class="line">&#125;catch(e)&#123;&#125;</span><br><span class="line"></span><br><span class="line">// 存在不可 decode 的字符</span><br><span class="line">try&#123;</span><br><span class="line">  decodeComponentURI(string);</span><br><span class="line">&#125;catch(e)&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>类似这样的错误都是不太可控的。可以在使用到 <code>try..catch</code> 的地方思考是否可以使用其他方式做兼容。感谢 EtherDream 的<a href="http://www.cnblogs.com/hustskyking/p/fe-monitor.html#3253158" target="_blank" rel="noopener">补充</a>。</p><br><p><strong>关于 <code>window.onerror</code> 的使用</strong></p><br><p>可以尝试如下代码：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// test.js</span><br><span class="line">throw new Error(&quot;SHOW ME&quot;);</span><br><span class="line">window.onerror = function()&#123;</span><br><span class="line">  console.log(arguments);</span><br><span class="line">  // 阻止在控制台中打印错误信息</span><br><span class="line">  return true;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><span>上面的代码直接报错了，没有继续往下执行。页面中可能有好几个 script 标签，但是 </span><code>window.onerror</code><span> 这个错误监听一定要放到最前头！</span></p>
+<p></p><h3 id="_5"><a class="headeranchor-link" name="user-content-_5" href="#_5"></a>错误的警报与提示</h3><p></p>
+<p>什么时候该警报？不能有错就报。上面也说了，因为网络环境和浏览器环境因素，复杂页面我们允许千分之一的错误率。日志处理后的数据图：</p><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2015/08/20/200019264726641.png" data-source="http://images0.cnblogs.com/blog2015/387325/201508/200019264726641.png" alt=""></p><br><p>图中有两根线，橙色线是今日的数据，浅蓝色线是往日平均数据，每隔 10 分钟产生一条记录，横坐标是 0-24 点的时间轴，纵坐标是错误量。可以很明显的看出，在凌晨一两点左右，服务出现了异常，错误信息是平均值的十几倍，那么这个时候就改报警了。</p><br><p>报警的条件可以设置得严苛一点，因为误报是件很烦人的事情，短信、邮件、软件等信息轰炸，有的时候还是大半夜。那么，一般满足如下条件可以报警：</p><br><ul><br><li>错误超过阈值，比如 10分钟最多允许 100 个错误，结果超过了 100</li><br><li>错误超过平均值的 10 倍，超过平均值就报警，这个逻辑显然不正确，但是超过了平均值的 10 倍，基本可以认定服务出问题了</li><br><li>在纳入对比之前，要过滤同 IP 出现的错误，比如一个错误出现在 for 循环或者 while 循环中，再比如一个用户在蹲点抢购，不停的刷新</li><br></ul><br><p><strong>友好的错误提示</strong></p><br><p>对比下面两条日志，catch 的错误日志：</p><br><blockquote><br><p>Uncaught ReferenceError: vd is not defined</p><br></blockquote><br><p>自定义的错误日志：</p><br><blockquote><br><p>“生日模块中获取后端接口信息时，eval 解析出错，错误内容为：vd is not defined.”<br>该错误在最近 10 分钟内出现 1000 次，这个错误往日的平均出错量是 50 次 / 10 分钟</p>
+
+<p></p></blockquote><p></p>
+<p></p><h3 id="_6"><a class="headeranchor-link" name="user-content-_6" href="#_6"></a>网络错误日志工作草案</h3><p></p>
+<p></p><p>W3C Web Performance工作组发布了网络错误日志工作草案。该文档定义了一个机制，允许Web站点声明一个网络错误汇报策略，浏览器等用户代理可以利用这一机制，汇报影响资源正确加载的网络错误。该文档还定义了一个错误报告的标准格式及其在浏览器和Web服务器之间的传输机制。</p><p></p>
+<p></p><p>详细草案：<a href="http://www.w3.org/TR/2015/WD-network-error-logging-20150305/" target="_blank" rel="noopener">http://www.w3.org/TR/2015/WD-network-error-logging-20150305/</a></p><p></p>
+<p></p><h3 id="_7"><a class="headeranchor-link" name="user-content-_7" href="#_7"></a>小结</h3><p></p>
+<p></p><p>功能、测试和监控是程序开发的三板斧，很多工程师可以将功能做的尽善尽美，也了解一些测试方面的知识，可是在监控这个方向上基本处于大脑空白。错误日志的收集、整理算是监控的一个小部分，但是它对我们了解网站稳定性至关重要。文中有忽略的地方希望读者可以补充，错误的地方还望斧正。</p><p></p>
+<p></p><h3 id="_8"><a class="headeranchor-link" name="user-content-_8" href="#_8"></a>拓展阅读</h3><p></p>
+<ul><br><li><a href="http://xbingoz.com/328.html" target="_blank" rel="noopener">基于window.onerror事件 建立前端错误日志</a> by Dx. Yang</li><br><li><a href="http://www.aliued.cn/2012/10/27/%E6%9E%84%E5%BB%BAweb%E5%89%8D%E7%AB%AF%E5%BC%82%E5%B8%B8%E7%9B%91%E6%8E%A7%E7%B3%BB%E7%BB%9F-fdsafe.html" target="_blank" rel="noopener">构建web前端异常监控系统–FdSafe</a> by 石破</li><br><li><a href="http://www.ruanyifeng.com/blog/2013/01/javascript_source_map.html" target="_blank" rel="noopener">JavaScript Source Map 详解</a> by 阮一峰</li><br><li><a href="http://www.w3.org/TR/2010/WD-html5-20100624/webappapis.html#handler-window-onerror" target="_blank" rel="noopener">HTML5标准-window.onerror</a></li><br><li><a href="http://msdn.microsoft.com/en-us/library/cc197053%28VS.85%29.aspx" target="_blank" rel="noopener">MSDN-window.onerror</a></li><br><li><a href="//developer.mozilla.org/en/DOM/window.onerror">MDN-window.onerror</a></li><br><li><a href="http://www.w3.org/TR/2015/WD-network-error-logging-20150305/" target="_blank" rel="noopener">网络错误日志</a></li><br><br></ul>
+
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/blog/tags/tech/" rel="tag"># tech</a>
+          
+            <a href="/blog/tags/cnblogs/" rel="tag"># cnblogs</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2015/08/17/2015-08-17-cb-iconfont-opt/" rel="next" title="iconfont的蜕化操作">
+                <i class="fa fa-chevron-left"></i> iconfont的蜕化操作
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2015/08/21/2015-08-21-cb-upgrade-insecure-requests/" rel="prev" title="让浏览器不再显示 https 页面中的 http 请求警报">
+                让浏览器不再显示 https 页面中的 http 请求警报 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Lion</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/blog/archives/">
+                
+                    <span class="site-state-item-count">311</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/blog/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">94</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/blog/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">241</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#_2"><span class="nav-number">1.</span> <span class="nav-text">收集日志的方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#_3"><span class="nav-number">2.</span> <span class="nav-text">收集日志存在的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-script-error"><span class="nav-number">2.1.</span> <span class="nav-text">1. 无具体报错信息，Script error.</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2"><span class="nav-number">2.2.</span> <span class="nav-text">2. 压缩代码无法定位到错误的具体位置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-error"><span class="nav-number">2.3.</span> <span class="nav-text">3. error 事件的注册</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4"><span class="nav-number">2.4.</span> <span class="nav-text">4. 收集日志的量</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#_4"><span class="nav-number">3.</span> <span class="nav-text">收集日志布点位置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#_5"><span class="nav-number">4.</span> <span class="nav-text">错误的警报与提示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#_6"><span class="nav-number">5.</span> <span class="nav-text">网络错误日志工作草案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#_7"><span class="nav-number">6.</span> <span class="nav-text">小结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#_8"><span class="nav-number">7.</span> <span class="nav-text">拓展阅读</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lion</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script src="/blog/js/src/utils.js?v=6.6.0"></script>
+
+  <script src="/blog/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/blog/js/src/scrollspy.js?v=6.6.0"></script>
+<script src="/blog/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script src="/blog/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/blog/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  <script src="/blog/js/src/music/aplayer.js?v=6.6.0"></script>
+  <script src="/blog/js/src/music/init.js?v=6.6.0"></script>
+</body>
+</html>
