@@ -412,7 +412,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2015/05/11/2015-05-11-cb-hosts-modify/">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2014/11/01/2014-11-01-cb-communication-in-d2/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lion">
@@ -432,7 +432,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/blog/2015/05/11/2015-05-11-cb-hosts-modify/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/15/index.html">修改Hosts为何不生效，是DNS缓存？</a>
+                <a href="/blog/2014/11/01/2014-11-01-cb-communication-in-d2/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/15/index.html">谈谈D2</a>
               
             
           </h1>
@@ -457,7 +457,7 @@
                 
               
 
-              <time title="创建时间：2015-05-11 10:47:00" itemprop="dateCreated datePublished" datetime="2015-05-11T10:47:00+08:00">2015-05-11</time>
+              <time title="创建时间：2014-11-01 11:32:00" itemprop="dateCreated datePublished" datetime="2014-11-01T11:32:00+08:00">2014-11-01</time>
             
 
             
@@ -491,21 +491,21 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/工具/" itemprop="url" rel="index"><span itemprop="name">工具</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/笔记本/" itemprop="url" rel="index"><span itemprop="name">笔记本</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/工具/前端杂烩/" itemprop="url" rel="index"><span itemprop="name">前端杂烩</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/笔记本/观点和感想/" itemprop="url" rel="index"><span itemprop="name">观点和感想</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/工具/前端杂烩/网络交互/" itemprop="url" rel="index"><span itemprop="name">网络交互</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/笔记本/观点和感想/前端杂烩/" itemprop="url" rel="index"><span itemprop="name">前端杂烩</span></a></span>
 
                 
                 
@@ -541,418 +541,12 @@
       
         
           
-            <div class="history-article">本文为归档内容,原始地址在 <a href="http://www.cnblogs.com/hustskyking/archive/2015/05/11/hosts-modify.html" target="_blank">博客园</a>.</div>
+            <div class="history-article">本文为归档内容,原始地址在 <a href="http://www.cnblogs.com/hustskyking/archive/2014/11/01/communication-in-d2.html" target="_blank">博客园</a>.</div>
 
-<p><strong>Update:</strong></p><br><ul><br><li>如果浏览器使用了代理工具，修改 Hosts 也不会生效。这里是因为，浏览器会优先考虑代理工具（如添加 pac 文件、SwitchySharp等）的代理，建议调试的时候先关闭这些代理。</li><br><li>使用 pac 文件代理有的时候部分文件的代理不生效，应该是 pac 对应的代理服务器上，做了部分处理。</li><br><li>部分浏览器也有 DNS 缓存，如 chrome(chrome://dns)，这是为什么重启浏览器也不生效的原因，一般设定时间为 60s (如 Firefox)。</li><br><li>浏览器有DNS缓存，系统也会存在 DNS 缓存，有的时候即便在 chrome://dns 清空了浏览器 DNS 缓存，依然不生效，是因为系统 DNS 缓存还未刷新，刷新方式可以看<a href="http://cnzhx.net/blog/how-to-flush-dns-cache-in-linux-windows-mac/" target="_blank" rel="noopener">这篇文章</a>。</li><br></ul><br><hr><br><p>&nbsp;相信很多同学都在使用 SwitchHosts/<a href="http://ihosts.alibaba.net/" target="_blank">iHosts</a>/Gas Mask 等 Hosts 管理工具，当然也有人直接修改 <code>/etc/hosts</code> 或者 <code>system32/drivers/etc/hosts</code> 文件，而经常遇到的疑问是：咿，刚才不是修改并且保存了么，为何 Chrome 浏览器还不生效呢？</p><br><ul><br><li>有人说重启下浏览器就好了，</li><br><li>有人说清空下缓存 DNS（chrome://net-internals/#DNS）就好了，</li><br><li>有人说隐私模式下打开就好了，</li><br><li>有人说等一分钟吧…</li><br></ul><br><p>结果就是，进入隐私模式的都好了，重启、清空缓存DNS和等一分钟的同学还在继续纠结中。。。</p><br><p>上面提到的三个工具，SwitchHosts/iHosts/Gas Mask，其实也只有 iHosts 生效了(Mac下)。</p><br><p>开发过程中我们会无数次的切换 Hosts，如果不知道原理，我们在测试的时候还是很心惊胆战的=_=||</p><br><h3 id="0">修改Hosts不生效的根本原因</h3><br><p><strong>因为服务器设置了 <code>keep-alive</code> ！次要原因是存在浏览器 DNS 缓存和系统 DNS 缓存。</strong></p><br><p>&gt; Keep-alive <a href="http://zh.wikipedia.org/wiki/HTTP%E6%8C%81%E4%B9%85%E8%BF%9E%E6%8E%A5" target="_blank">相关文档</a></p><br><p>服务器在响应头设置了 <code>Connection: keep-alive</code> （一般的网页都会设置 keep-alive，保持长连接，避免多次连接产生网络消耗）之后，客户端会跟服务器保持长连接，只要长连接不断开，页面在请求的时候就不会重新解析域名！</p><br><p>我们可以这样来测试：</p><br><ol><br><li>打开一个你至少两分钟没有打开的浏览器（你也可以关闭掉你的浏览器，然后重新打开，记得把所有的 tab 都关了，除了当前 tab ^_^）</li><br><li>在 hosts 添加 <code>127.0.0.1 <a href="http://www.taobao.com" target="_blank" rel="noopener">www.taobao.com</a></code></li><br><li>新开 tab，打开 <a href="http://www.taobao.com" target="_blank" rel="noopener">www.taobao.com</a>，是不是进不去了 &lt;这里说明 hosts 修改生效了&gt;</li><br><li>注释掉刚才hosts修改，<code># 127.0.0.1 <a href="http://www.taobao.com" target="_blank" rel="noopener">www.taobao.com</a></code> ，再打开 <a href="http://www.taobao.com" target="_blank" rel="noopener">www.taobao.com</a>，很好，正常打开了 &lt;这里说明 hosts 修改也生效了&gt;</li><br><li>去掉注释符，<code>127.0.0.1 <a href="http://www.taobao.com" target="_blank" rel="noopener">www.taobao.com</a></code> ，再打开 <a href="http://www.taobao.com" target="_blank" rel="noopener">www.taobao.com</a>，依然可以访问！！！</li><br><li>Chrome 中进入 chrome://net-internals/#sockets，<img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2015/05/11/111045527042806.png" data-source="http://images.cnitblog.com/blog2015/387325/201505/111045527042806.png" alt="">，可以看到淘宝首页中很多域名都是与服务器保持着长连接，点击上方的 <code>close idle sockets</code> 按钮，可以关闭所有的长连接</li><br><li>此时，再去访问 <a href="http://www.taobao.com" target="_blank" rel="noopener">www.taobao.com</a>，是不是进不去了！</li><br></ol><br><h3 id="1">为何一些修改可以让 “Hosts 生效”</h3><br><h4 id="2">1. 重启浏览器</h4><br><p>重启浏览器之后，所有的连接（包括长连接）都会断开，自然就生效了</p><br><h4 id="3">2. 隐私模式打开</h4><br><p>因为隐私模式下不会复用 TCP 连接，新开连接的时候，会重新解析 DNS 域名，自然也生效了</p><br><h4 id="4">3. iHosts 管理器在 Mac 下生效</h4><br><p>因为我在 Windows 下测试过，貌似没有立即生效。问了 iHosts 的作者@必隆，他告诉我，在修改 hosts 文件的时候，会重启网络服务，这个时候必然会断开所有的 TCP 连接（重启网络服务，差不多相当于先断网再联网…)</p><br><h4 id="5">4. 修改之后，等一会儿…</h4><br><p>“等一会儿”，要稍微等久一点，<code>keep-alive</code> 的默认设置是 120s，开发者也有可能增大或者减小这个配置，所以”等一会儿”也是很伤神的=。 =</p><br><p>看到这里，你对其中的原理是否有所了解了呢？</p>
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2015/05/03/2015-05-03-cb-fe-project/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Lion">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="撼地神牛">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/blog/2015/05/03/2015-05-03-cb-fe-project/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/15/index.html">前端工程架构探讨</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2015-05-03 12:56:00" itemprop="dateCreated datePublished" datetime="2015-05-03T12:56:00+08:00">2015-05-03</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-12-12 18:10:11" itemprop="dateModified" datetime="2018-12-12T18:10:11+08:00">2018-12-12</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/前端杂烩/" itemprop="url" rel="index"><span itemprop="name">前端杂烩</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <div class="history-article">本文为归档内容,原始地址在 <a href="http://www.cnblogs.com/hustskyking/archive/2015/05/03/fe-project.html" target="_blank">博客园</a>.</div>
-
-
-<p>回忆一下我们在工程开发中对目录结构的定义，一般分为两种，单页面多模块，多页面多模块。在单页面多模块的工程结构里，我们会考虑模块的复用性，比如：如何将公共的东西（样式、函数等）提取出来方便其他模块复用。在多页面多模块的场景中，也是一样，不过除了把全局共用的样式和方法提取到公共目录外，我们还会将多个地方都会用到的模块作为通用模块处理。</p>
-<h3 id="一、通常开发模式的问题探讨"><a href="#一、通常开发模式的问题探讨" class="headerlink" title="一、通常开发模式的问题探讨"></a>一、通常开发模式的问题探讨</h3><p>下图是一个单页面多模块的工程目录结构图：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── Gruntfile.js</span><br><span class="line">├── package.json</span><br><span class="line">├── build</span><br><span class="line">└── src</span><br><span class="line">    ├── base</span><br><span class="line">    │   ├── base.sass</span><br><span class="line">    │   └── global.js</span><br><span class="line">    ├── mods</span><br><span class="line">    │   ├── preference</span><br><span class="line">    │   │   ├── index.js</span><br><span class="line">    │   │   ├── index.sass</span><br><span class="line">    │   │   └── index.xtpl.html</span><br><span class="line">    │   ├── promo</span><br><span class="line">    │   ├── qr</span><br><span class="line">    │   └── response</span><br><span class="line">    └── index.js</span><br></pre></td></tr></table></figure>
-<p>我们把源码放在 src 文件夹里面，公共的文件（iconfont 、sprite 图片、CSS 和 JS 等）放到 base 目录下，页面中的每个模块都会在 mods 下新建一个文件夹，使用 <code>index.js</code> 来管理模块的渲染。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// index.js</span></span><br><span class="line">define(<span class="function"><span class="keyword">function</span>(<span class="params">require</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> Lazyload = <span class="built_in">require</span>(<span class="string">'lazyload'</span>);</span><br><span class="line">    <span class="keyword">var</span> Preference = <span class="built_in">require</span>(<span class="string">'./mods/preference/index'</span>);</span><br><span class="line">    <span class="keyword">var</span> Qr = <span class="built_in">require</span>(<span class="string">'./mods/qr/index'</span>);</span><br><span class="line">    <span class="keyword">var</span> Promo = <span class="built_in">require</span>(<span class="string">'./mods/promo/index'</span>);</span><br><span class="line">    <span class="keyword">var</span> Response = <span class="built_in">require</span>(<span class="string">'./mods/response/index'</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">new</span> Response();</span><br><span class="line">    <span class="keyword">if</span>(xxx)&#123;</span><br><span class="line">        <span class="keyword">new</span> Promo();</span><br><span class="line">    &#125;</span><br><span class="line">    Lazyload(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">new</span> Qr();</span><br><span class="line">        <span class="keyword">new</span> Preference();</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>这样的工程结构是十分通用，结构也比较清晰的，不过在模块的管理上，这里会存在两个问题：</p>
-<ul>
-<li>AB模块存在较多的共用代码，我们有两种方式处理，一是将公共部分提取出来放到 base 目录下，二是 B 模块直接根据相对路径引用 A 模块。一旦业务上有需求，说 A 模块要下线，那下线之后，第一种方案放置在 base 目录下的代码就不合理了，第二种方案中 B 模块就不能用了，需要将 A 模块的东西部分迁移到 B 模块。</li>
-<li>问题 1 的逆过程：线上目前存在 A 模块，业务上需求需要添加跟 A 模块相似的 B 模块，如果想直接复用 A 模块的代码，一种方式是更小颗粒地分拆 A 模块，然后 B 使用相对路径引用 A，另一种方式是将 A 的共用代码提取出来放到 base 下。两种处理方式都有一定的工作量，而且还会出现问题 1 提到的问题。</li>
-</ul>
-<p>其实说到底还是模块的耦合度过高，只要模块之间存在交集，一个模块的改动就可能会影响到其他模块。多人开发中，这里还存在其他方面的问题：</p>
-<ul>
-<li>并不是每个开发者对接手的项目都有一个全局的把控，下线一个模块时，会不太敢删除 base 目录下跟该模块相关的东西，甚至都不太敢删除这个模块，只是在 <code>index.js</code> 中注释了这个模块的初始化。日积月累，冗余代码便会渗入到项目的各个地方…</li>
-<li>修改一个模块需要编译打包所有的代码，这样的调试效率十分低下，而且这个模块出错，就可能造成整个程序的崩溃。</li>
-<li>代码历史版本管理的颗粒度不够，比如我修改了 A、B、C 三个模块，依次上线了三次，现在要回滚修改 A 的操作，如何处理？如果 ABC 三个模块都能够利用代码管理工具管理代码，那回滚就方便多了。</li>
-</ul>
-<h3 id="二、模块化处理"><a href="#二、模块化处理" class="headerlink" title="二、模块化处理"></a>二、模块化处理</h3><p>去耦合的方式就是让模块之间共用的东西减少，当模块之间不存在共用内容时，耦合度基本就是零了。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── init.js</span><br><span class="line">├── build</span><br><span class="line">└── src</span><br><span class="line">    ├── preference &lt;git&gt;</span><br><span class="line">    │   ├── index.js</span><br><span class="line">    │   ├── index.sass</span><br><span class="line">    │   └── index.xtpl.html</span><br><span class="line">    ├── promo &lt;git&gt;</span><br><span class="line">    ├── qr &lt;git&gt;</span><br><span class="line">    └── response &lt;git&gt;</span><br></pre></td></tr></table></figure>
-<p>如上图所示，与之前的结构相比，已经少了很多东西：</p>
-<ul>
-<li><code>index.js</code> 初始化模块的东西不见了，多了一个 <code>init.js</code></li>
-<li><code>base</code> 目录不见了</li>
-<li>每个模块都变成了一个 git 仓库</li>
-</ul>
-<h4 id="1-脚本的初始化"><a href="#1-脚本的初始化" class="headerlink" title="1. 脚本的初始化"></a>1. 脚本的初始化</h4><p>先看看 <code>init.js</code> 在干啥：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// init.js</span></span><br><span class="line"><span class="keyword">var</span> $mods = $(<span class="string">"[tb-mods]"</span>);</span><br><span class="line">$mods.each(functon($mod)&#123;</span><br><span class="line">    <span class="keyword">if</span>($mod.attr(<span class="string">"finish"</span>) !== FINISH_TAG) &#123;</span><br><span class="line">        $mod.attr(<span class="string">"finish"</span>, FINISH_TAG);</span><br><span class="line">        <span class="comment">// 需要懒加载便懒加载</span></span><br><span class="line">        <span class="keyword">if</span>($mod.attr(<span class="string">"lazyload"</span>))&#123;</span><br><span class="line">            Lazyload($mod);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 否则直接初始化</span></span><br><span class="line">        S.use($mod.attr(<span class="string">"path"</span>), <span class="function"><span class="keyword">function</span>(<span class="params">S, Mod</span>)</span>&#123;</span><br><span class="line">            <span class="keyword">new</span> Mod($mod);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Lazyload</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="comment">// code here..</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><code>init.js</code> 不再对模块进行精确初始化，文档从上往下遍历，找到模块便直接初始化，如果需要懒加载就加入到懒加载队列，开发者不用理会页面上有多少模块，更不用理会各个模块叫做什么名字。</p>
-<p><code>index.js</code> 中 require 很多很多模块，每次添加一个模块或者删除模块都要改动这个文件，而是用 <code>init.js</code> 不会存在这个问题。</p>
-<h4 id="2-模块的版本控制"><a href="#2-模块的版本控制" class="headerlink" title="2. 模块的版本控制"></a>2. 模块的版本控制</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- index.xtpl.html --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">tb-mods</span>=<span class="string">""</span> <span class="attr">lazyload</span>=<span class="string">""</span> <span class="attr">path</span>=<span class="string">"tb/promo/1.0.0"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">tb-mods</span>=<span class="string">""</span> <span class="attr">lazyload</span>=<span class="string">""</span> <span class="attr">path</span>=<span class="string">"tb/qr/2.0.0"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">tb-mods</span>=<span class="string">""</span> <span class="attr">lazyload</span>=<span class="string">""</span> <span class="attr">path</span>=<span class="string">"tb/preference/2.2.1"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">tb-mods</span>=<span class="string">""</span> <span class="attr">path</span>=<span class="string">"tb/response/3.0.2"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>页面上的 DOM 就是标识，存在 DOM 属性标识就执行这个标识对应的脚本，执行顺序就是 DOM 的摆放顺序。</p>
-<p>每个模块代码都使用单个 git 仓库管理，这样能够更好地追踪单个模块的修改记录和版本，也可以解决上面提出的问题（依次修改 ABC 模块，并上线了三次，如果需要回滚 A 模块，则 BC 模块的修改也要跟着滚回去）。</p>
-<h4 id="3-ABTest-需求"><a href="#3-ABTest-需求" class="headerlink" title="3. ABTest 需求"></a>3. ABTest 需求</h4><p>修改一个模块后，只需要修改他在 DOM 的版本号即可上线。如果遇到 ABTest 的需求，那也十分好办了：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- index.xtpl.html --&gt;</span></span><br><span class="line">&#123;&#123;#if condition&#125;&#125;</span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">tb-mods</span>=<span class="string">""</span> <span class="attr">lazyload</span>=<span class="string">""</span> <span class="attr">path</span>=<span class="string">"tb/promo/1.0.0"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">&#123;&#123;else&#125;&#125;</span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">tb-mods</span>=<span class="string">""</span> <span class="attr">path</span>=<span class="string">"tb/promo/2.0.0"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">&#123;&#123;/if&#125;&#125;</span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">tb-mods</span>=<span class="string">""</span> <span class="attr">lazyload</span>=<span class="string">""</span> <span class="attr">path</span>=<span class="string">"tb/qr/2.0.0"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">tb-mods</span>=<span class="string">""</span> <span class="attr">path</span>=<span class="string">"tb/response/3.0.2"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p><code>tb/promo</code> 目前有两个版本，1.0.0 和 2.0.0，需求是两个版本以 50% 的概率出现，直接在 <code>index.xtpl.html</code> 做如上修改，程序是十分清晰的。</p>
-<h4 id="4-公共文件的处理"><a href="#4-公共文件的处理" class="headerlink" title="4. 公共文件的处理"></a>4. 公共文件的处理</h4><p>那么，公共的代码跑哪里去了？其实我们并不希望有公共的代码产生，上一节中已经提出了耦合给我们带来的维护问题，但是一个项目中必然会有大量可复用的东西，尤其是当页面出现很多相似模块的时候。</p>
-<p><strong>1）模块的复用</strong></p>
-<p>一个模块的渲染，需要两样东西，<code>渲染壳子（模板） + 数据</code>，渲染的壳子可能是一样的，只是数据源不一样，很多情况下我们可以复用一套 CSS 和 JS 代码，通过下面的方式：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- index.xtpl.html --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">tb-mods</span>=<span class="string">""</span> <span class="attr">lazyload</span>=<span class="string">""</span> <span class="attr">path</span>=<span class="string">"tb/promo/1.0.0"</span> <span class="attr">source</span>=<span class="string">"data/st/json/v2"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">tb-mods</span>=<span class="string">""</span> <span class="attr">lazyload</span>=<span class="string">""</span> <span class="attr">path</span>=<span class="string">"tb/promo/1.0.0"</span> <span class="attr">source</span>=<span class="string">"data/wt/json/v1"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>在两个相似模块中，我们使用的是同一套 js - <code>tb/promo/1.0.0</code>，但是使用了两个不同的数据源 <code>data/st/json/v2</code>, <code>data/wt/json/v1</code>。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// init.js</span></span><br><span class="line">$mods.each(functon($mod)&#123;</span><br><span class="line">    <span class="keyword">if</span>($mod.attr(<span class="string">"finish"</span>) !== FINISH_TAG) &#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">        S.use($mod.attr(<span class="string">"path"</span>), <span class="function"><span class="keyword">function</span>(<span class="params">S, Mod</span>)</span>&#123;</span><br><span class="line">            <span class="comment">// 将数据源传入</span></span><br><span class="line">            <span class="keyword">new</span> Mod($mod, $mod.attr(<span class="string">"source"</span>));</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>在初始化脚本中，我们将模块需要用到的数据源传入到模块初始化程序中，这样页面就成功的复用了 <code>tb/promo/1.0.0</code> 的资源。</p>
-<p><strong>2）CSS 的复用问题使用 less 的 mixin 处理</strong></p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@a: red;</span><br><span class="line">@b: white;</span><br><span class="line"><span class="selector-class">.s1</span>()&#123;</span><br><span class="line">    <span class="attribute">color</span>: @a;</span><br><span class="line">    <span class="attribute">background</span>: @b;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.s2</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: @a;</span><br><span class="line">    <span class="attribute">background</span>: @b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>LESS 是 CSS 的预处理语言，上面的代码打包之后，<code>.s1</code> 是不存在的，只有 <code>.s2</code> 会被打包出来，但是两者都可以 mixin 到其他类中：</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.s</span> &#123;</span><br><span class="line">    .s1;</span><br><span class="line">    <span class="selector-class">.s2</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>利用这个特点，我们可以把共用的 css 都包装成类似 <code>.s1</code> 的 less 代码，模块中需要的时候就 mixin，不需要的话，放在那里也没关系，不会造成代码冗余。</p>
-<p><strong>3）JavaScript 的代码复用问题</strong></p>
-<p>页面级别的 JS 代码其实并不多，比如我们平时用的比较频繁的有 Slide、Lazyload、Tab、Storage 等，但这些东西都是以组件的形式引入到页面中。仔细想一想，JS 中哪些代码是需要页面共用的？相对整个项目的文件大小，共用的部分又有多少？</p>
-<p>我们使用的基础库方法并不全面，比如：没有对 URL 解析的 <code>unparam</code> 方法，而这个方法用的也比较多，希望放到公共部分中去。回头想想，这样的小函数实现起来有啥难度么，三四行代码就能写出来的东西，建议放到组件内部搞定。这会造成一定的代码冗余，但是带来的解耦收益与费力写几行代码的成本相比，这完全是可以接受的。</p>
-<p>页面共用的统计代码、错误收集代码、数据缓存方案、组件通讯代码等，这些量比较大、使用颇为频繁的内容，可以封装成组件，以组件形式引入进来。</p>
-<p>这里还需要很多思考…</p>
-<h4 id="5-模块之间的通讯"><a href="#5-模块之间的通讯" class="headerlink" title="5. 模块之间的通讯"></a>5. 模块之间的通讯</h4><p>模块之间的通讯最让人纠结的是，A 模块想跟 B 模块说话，但是 B 模块还没有初始化出来。所以我们需要引入一个中间人 S，每个模块初始化成功之后都去问一问 S，有没有人给我留言。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// B 给 A 留言，如果 A 存在，则直接将 msg 发给 A</span></span><br><span class="line"><span class="comment">// 如果不存在则送入 S 的消息队列</span></span><br><span class="line">S.tell(<span class="string">"A"</span>, &#123;</span><br><span class="line">    <span class="keyword">from</span> : <span class="string">"B"</span>,</span><br><span class="line">    msg: &#123;&#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// A 模块初始化的时候，获取其他模块的留言</span></span><br><span class="line">S.getMessage(<span class="string">"A"</span>， <span class="function"><span class="keyword">function</span>(<span class="params">msg</span>)</span>&#123;</span><br><span class="line">    <span class="comment">// dosomething...</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h3 id="三、小结"><a href="#三、小结" class="headerlink" title="三、小结"></a>三、小结</h3><p>还有很多东西不在主题的讨论范围内，就不一一列举出来了。</p>
-<p>项目开发参与的人越多，代码就越难维护，约束只是一时的，编程方式、编码格式等的约束并不能从根本上解决问题，一旦约束的点未覆盖，结构就会开始散乱，最后必然又会迎来一次整体的重构。</p>
-<p>方法和结果不能改变习惯，所以我们应该从模式出发。</p>
-<p></p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2015/04/24/2015-04-24-cb-Thinking-in-FE-Quality/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Lion">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="撼地神牛">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/blog/2015/04/24/2015-04-24-cb-Thinking-in-FE-Quality/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/15/index.html">对前端质量保障的思考</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2015-04-24 12:24:00" itemprop="dateCreated datePublished" datetime="2015-04-24T12:24:00+08:00">2015-04-24</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-12-12 18:10:11" itemprop="dateModified" datetime="2018-12-12T18:10:11+08:00">2018-12-12</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/前端杂烩/" itemprop="url" rel="index"><span itemprop="name">前端杂烩</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <div class="history-article">本文为归档内容,原始地址在 <a href="http://www.cnblogs.com/hustskyking/archive/2015/04/24/Thinking-in-FE-Quality.html" target="_blank">博客园</a>.</div>
-
-<p>我们时时在踩坑，有时也忍不住埋怨前人给我们留下了无数的坑，可回头想想，自己是不是也在挖坑等别人踩…</p><br><p>上次听 赵海平 的讲座，他提到 Facebook 没有测试人员，以前和现在都没有，以后也不打算有。还提到上线之后就开发者坐在系统前等着，只要有bug，系统能够在五分钟之内检测到，并提供快捷方式修复。我惊叹的是他们能够在五分钟之内监控到所有的问题，实时回馈并及时修复。</p><br><p>当然在探讨质量保障这个话题前，我们需要明确几个关键点：编码前、提交代码、测试、上线、回滚、上线后。针对这几个点，下面我谈一谈我的看法。</p><br><h3>一、编码前</h3><br><p>上家公司实习期间印象最深的交流是参与编码规范讨论，当时我还呼呼的整理了两份文档：<a href="http://www.cnblogs.com/hustskyking/p/javascript-spec.html" target="_blank" rel="noopener">前端编码规范之JavaScript</a>,<a href="http://www.cnblogs.com/hustskyking/p/css-spec.html" target="_blank" rel="noopener">前端编码规范之CSS</a>。后来也看到团队在各种工具上添加控制和提示，如 Sublime Text 添加 jslint 配置，项目目录下添加 .jslint 配置，打包工具提示代码的不规范，强制修复等等。</p><br><p>上面提到的代码规范主要是代码展现层面的规范，他可以让团队写出来的代码就跟一个模子刻出来似的，结构、命名、函数体大小等等很接近，看着很舒服。举几个例子说明他的重要性。</p><br><p><strong>1. 统一使用 UTF8 编码</strong></p><br><p>我平时开发都是使用的 UTF8 编码。有次从仓库拉下来发现很多文件都是 GBK 编码，修改时一个文件忘记转换编码，提交发现 锟斤拷 出来了。</p><br><p><strong>2. TAB 缩进</strong></p><br><p>我比较喜欢使用四个空格作为 TAB 缩进。一次多人开发的时，发现同事的代码是两个空格的缩进，结果，我改成了四个空格提交之后，又被改回来两个空格，然后我接着改回去…</p><br><p><strong>3. 加不加分号</strong></p><br><p>以前写过一篇文章，谈了下自己对分号的看法：<a href="http://www.cnblogs.com/hustskyking/p/semicolon-retalk.html" target="_blank" rel="noopener">Javascript分号，加还是不加？</a>，我的回答是加但非必须。</p><br><p>代码的规范，对程序本身的意义并不是很大，他不会作用在程序的逻辑上，作用点在于团队合作。一个项目可能是多人开发，也可能是今天我开发，明天托付给你。如果两个人在编码习惯上的差异很大，就会偏头痛…有一点需要特别提出来，就是写注释！某次排查一个线上问题，找到了问题所在的文件，但是文件中的逻辑实在是太过复杂，四五百行代码仅三行注释，眼睛都看花了。其实只要在大段的代码前加几句注释，说明本段代码的大意，在排查定位问题的时候就可以忽略一部分代码块，可以为修复线上bug争取不少时间。</p><br><h3>二、提交代码</h3><br><p>这部分特指工具。可以说过了工具这一道关卡，代码基本就获得自由，bug 也就开始横飞了。目前工具可以为我们做的事情：</p><br><p><strong>1. 检测</strong></p><br><ul class="task-list"><br><li>现在并没有做 jslint 之类的配置，所以代码的展示是没怎么规范的。</li><br><li>编码应该统一为 UTF-8 格式，如果不是这种格式，工具应该有所提示。</li><br><li>代码块过长提示，一个函数不应该写到几百上千行，拆分代码刚开始是辛苦，一旦后续复用的时候，就会很爽很爽了（当然，刚开始编码的时候就应该考虑一个函数的颗粒度控制）。</li><br></ul><br><p>更重要的是对语法的检测，我们可能把 <code>document</code> 拼写成了 <code>doucment</code>，甚至使用 <code>for in</code> 来遍历一个数组，这种问题时而出现，工具是否考虑帮助我们处理掉一些简单的愚蠢的错误。</p><br><p><strong>2. 压缩</strong></p><br><p>压缩代码的时候，我踩过坑：<a href="http://hi.barretlee.com/2015/03/26/attention-in-gulp-minify-css/" target="_blank" rel="noopener">gulp打包压缩css遇到的坑</a>，我相信很多人都认识 grunt 和 gulp，但是一定鲜有人自己配置过这些东西，并投入到项目中。</p><br><p>代码的压缩，一方面可以减少线上流量，一方面也是出于安全的考虑。压缩后的代码线上报错很难定位到准确的位置，有些问题只能在用户的电脑上复现，”代理到本地这个法子”远程操作的时候是不靠谱的。压缩不仅仅应该把代码缩短，还要考虑线上排查问题的难度。</p><br><p>在压缩的时候可以考虑添加空行，将网页错误定位范围缩减到单个文件。也可以使用 sourceMap 之类的辅助方式。在<a href="http://www.cnblogs.com/cathsfz/p/how-to-capture-and-analyze-javascript-error.html" target="_blank" rel="noopener">这篇文章</a>中有过一些讨论。</p><br><p><strong>3. 合并</strong></p><br><p>很多事情，别人不考虑，工具就得考虑。</p><br><p>这里有一个思考，HTTP2.0 支持多路复用，一个连接可以进行多次 HTTP 的传输，那以后的 sprite 图、文件的合并等是不是也应该重新考虑了。文件的全部合并真的是最省资源的方式么？是否可以考虑更多的合并方案？</p><br><h3>三、测试</h3><br><p>赵海平 说，技术实践中的三件套：功能 + 测试 + 监控。很多大公司的工程师，深谙功能开发之道，测试方面也能达到 60 分的水平，但是程序的监控上，做的很差，包括 Facebook 的程序员。三件套，对一个优秀的工程师来说，缺一不可。</p><br><p>这里要说的是程序开发三板斧的第二板，测试。</p><br><p>我们很自然地联想到了QA，阿里有一大波的测试人员。写完代码提测，好像剩下的就只是测试同学找BUG，我们等着修BUG。前端的测试跟后端还不太一样，逻辑可以测，但是 UI 效果、交互效果不好测，只能靠几双眼睛盯着看，几个鼠标不停地点点点。。。</p><br><p>虽说逻辑可以通过写测试用例进行测试，会去写测试用例的人却不多。我记得当时学习 AOP 编程的时候，给 ajax 添加了一些 mock 功能，可以在页面上模拟请求测试效果(如<a href="//github.com/jakerella/jquery-mockjax">jquery-mockjax</a>)。<br>编写测试用例确实可以解决很多的问题，但是如何培养编写测试用例的习惯，如何更加便利的测试我们的测试用例，这又是一个值得思考的话题。</p><br><p>自动化工具一大缺点是很难捕获到特定环境下的错误。据统计，不管你的代码写得多健壮，在一千个用户下，总有那么一个用户，因为浏览器安装了插件、网络问题等导致代码报错，再比如我们在做灰度测试的时候，让用户名首字母为 a-m 的用户命中灰度时出现的错误等等，这些错误自动化测试工具是无法发现的。</p><br><p>所以我们要把 错误日志统计 灵活地使用起来，他能够使你深入用户，拿到最原始的错误信息。</p><br><h3>四、上线</h3><br><p>现在涉及到前端上线的，有多个地方（公司有很多发布系统）：</p><br><ul class="task-list"><br><li>TMS发布</li><br><li>aone2发布</li><br><li>gitlab发布</li><br><li>awp发布</li><br><li>etc.</li><br><br></ul><br><p>gitlab发布通过域名严格区分测试、预发和线上环境，操作界限明确，出错的概率还是很低的（这要求开发者对 git 命令的操作十分熟练），如果几次 reset revert stash 之后便开始犯蒙，那出问题的概率就增大了。每次打下 tag 之前，我都会很仔细地 diff 下代码，看看本次发布和上次发布之间做了哪些修改，确认这些修改点再 push tag。</p><br><p>aone2的发布，并不是每个人都用过，它的靠谱在于有三种发布方式：</p><br><ul class="task-list"><br><li>全网发布，半小时完成</li><br><li>小淘宝环境灰度发布，两小时完成</li><br><li>分三次发布，小流量上线，一天完成</li><br><br></ul><br><p>同时也提供了十分方便的回滚机制，只要拥有应用的权限，可以随时回滚代码，效率极高。</p><br><p>TMS 的发布，我觉得是问题最多的。首先，前端和运营都会拥有发布权限，运营喜欢”瞎搞”，部分页面（如JSON输出）并没有提供页面预览，运营填完之后也不会跑到页面查看效果，于是就出问题了。。TMS发布每次修改只发布一个文件，CDN 发布一个文件的速度是很快的，当你点击发布的那个瞬间，整个同步就基本完成了。可是，当某个节点同步出错，TMS 并没有给出提示，这是第二个隐患。第三个点，TMS坑爹的没有灰度，对一些重要的发布，没有灰度就需要十分十分的谨慎，虽说出错可以及时回滚，但万一没有看到隐性的错误，那就悲惨了。</p><br><h3>五、回滚</h3><br><p>没人可以保证自己写的东西绝对不出问题，因为有太多的环境因素是我们想也想不到的，比如最近某类控件在小淘宝环境下全挂了，试问，前端怎么会想到这是Nginx 的灰度系统出问题了，在灰度发布的时候文件没有同步成功，导致整个灰度环境出错。</p><br><p>所以，一定要给你的程序想一套快速回滚方案。尤其是在做 ABTest 的时候，新版的效果不好需要回滚到之前的状态，这种事情经常有。</p><br><p>回滚需要注意两点：</p><br><ol class="task-list"><br><li>要快。</li><br><li>上一个状态要保证无错误。</li><br><br></ol><br><p>只要我们能够保证发到线上的每一个版本都是稳定版，那回滚就是 0 风险的事情。</p><br><h3>六、监控</h3><br><p>程序开发三板斧的第三板，监控。前端对测试就不太重视，更不用提监控了。没有监控就只能提心吊胆的过日子。</p><br><p>其实我们使用自动化工具测试、每天用肉眼顶着自己的页面看，这些都属于监控，但是深入到用户的监控，我们做的太少！</p><br><h3>七、小结</h3><br><p>看到老大在群里发了几条研发相关的红线：</p><br><blockquote><br><p>1、禁止代码未经测试发布;<br>2、禁止代码发布后不进行线上验证;<br>3、禁止核心应用发布没有对应的回滚方案。</p>
+<p>很多参与了 <a href="http://d2forum.alibaba-inc.com/" target="_blank" rel="noopener">D2</a> 的人还不知道 D2 是个什么东西，印象中就是很多很多前端工程师汇聚在一起，交流技术。D2 是 D2前端技术论坛的简称，英文名 Designer &lt; Developer Frontend Technology Forum。下面的介绍比较官方：</p><br><blockquote><br><p>D2 由「淘宝网」发起，每届由 D2 前端技术论坛组委会（下简称 D2 组委会）组织，不同公司轮流承办。<br><strong>D2 前端技术论坛的基本宗旨：</strong></p><br><ul><br><li>Designer+Developer：让左右大脑相互碰撞，激起更多的火花。</li><br><li>基于商业实践：不脱离日常工作，帮助商业取得更好的成功。</li><br><li>开放：不会把任何想法、任何作品据为私有，一切都更开放。</li><br><br></ul><br><p><strong>D2 前端技术论坛的讨论范围：</strong></p><br><ul><br><li>互联网前端技术与产品：前端技术的应用，开发中的实际案例。</li><br><li>前端开发的行业发展：展望整个行业的发展方向，引领前端开发最新方向。</li><br><br></ul><br><p><strong>D2 前端技术论坛的最终目标：</strong></p><br><ul><br><li>创造业内交流平台</li><br><li>引导、规范行业发展</li><br><li>影响前端技术发展</li><br><br></ul><br><br></blockquote><br><p>今年的 D2 由阿里巴巴承办，参与人数有一千多人。前端盛事，群英荟萃，火花不断。谈D2，这个话题有点大了，本文主要说一说 D2 会场的气氛和分享内容的甄选角度，同时也谈一谈自己对前端发展的看法。</p><br><h3 id="d2_1"><a class="headeranchor-link" name="user-content-d2_1" href="#d2_1"></a>一、D2现场</h3><br><p>本届D2在上周六举办，隔了一个星期才来总结，记忆都有些淡了，不过大体的感受还是有的。与会登记人数有 1067 人，其中男性 884 人，女性 183 人，晚上酒会参加人数 118+ 人。这个规模，可以试想一下是个什么样的场面。与会者主要都是参与前端开发的工程师，也有少数还未毕业的学生。</p><br><p>对于参与者，D2 只设了一道坎，那就是在 <a href="//github.com/soulteary/Get-D2-2014-Ticket">github</a> 上 fork 项目，然后 pull request，提交内容中附带个人的博客地址或者微博等相关信息，方便审核者对你有一个简单的了解。我觉得这也是很有必要的。</p><br><p>各大公司都派出了自己的代表，但更多还是自发前往杭州。在盛会上，我看到了不少群友/同学/朋友/同事，由于当日着一身中国风服饰，加上出门前自拍了一张放到网上，会场很多朋友认出了我（其实，前端圈子还是蛮小的嘛~）。所以我相信，参与了 D2 的你，也一定看到了不少往日熟悉的身影。</p><br><p>本次 D2 有两个会场，主会场可容纳八九百人，分会场能够容纳一百多人，分会场的第一个分享被两三百人挤爆了，后续大家都默默的驻守在主会场，所以分会场后几场还是有些相对萧条的。</p><br><p>主会场</p><br><p><a href="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2014/11/01/011126593624339.jpg" data-source="http://images.cnitblog.com/blog/387325/201411/011126593624339.jpg"><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2014/11/01/011126593624339.jpg" data-source="http://images.cnitblog.com/blog/387325/201411/011126593624339.jpg" alt="主会场"></a></p><br><p>分会场</p><br><p><a href="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2014/11/01/011126361907584.jpg" data-source="http://images.cnitblog.com/blog/387325/201411/011126361907584.jpg"><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2014/11/01/011126361907584.jpg" data-source="http://images.cnitblog.com/blog/387325/201411/011126361907584.jpg" alt="分会场"></a></p><br><p>酒会场</p><br><p><a href="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2014/11/01/011128021596319.jpg" data-source="http://images.cnitblog.com/blog/387325/201411/011128021596319.jpg"><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2014/11/01/011128021596319.jpg" data-source="http://images.cnitblog.com/blog/387325/201411/011128021596319.jpg" alt="酒会场"></a></p><br><p>引用<a href="http://weibo.com/dh20156" target="_blank" rel="noopener">@dh20156</a> 的一句话：</p><br><blockquote><br><p>举办一场千人会议确实不容易，但只要<code>主题明确</code>，<code>计划妥当</code>，<code>流程清晰</code>，<code>执行到位</code>，还是可以愉快玩耍的!</p>
 
 <p></p></blockquote><p></p>
-<p>毫无疑问，这些都是必须严格遵守的。规范会先把坏习惯压住，进而被理解，最后被消化吸收。</p><br><p>前端质量保障之路，任重而道远！</p>
-
-
+<p>因为刚毕业，接触前端时间也不是很长，之前对 D2 没什么了解，这也是我第一次参加 D2，真切的感受到了会场的活跃。我觉得，<strong>更重要的是，会场之后的活跃！</strong></p><br><h3 id="_1"><a class="headeranchor-link" name="user-content-_1" href="#_1"></a>二、分享内容的甄选</h3><br><p>下面是本届 D2 分享的内容列表，及相关 PPT 链接：</p><br><ul><br><li><a href="http://vdisk.weibo.com/s/C30SUspJtfdET" target="_blank" rel="noopener">《指尖上的数据》</a></li><br><li><a href="http://vdisk.weibo.com/s/C30SUspJtfe1v" target="_blank" rel="noopener">《支付宝前后端分离的思考与实践》</a></li><br><li><a href="http://vdisk.weibo.com/s/C30SUspJtfe4O" target="_blank" rel="noopener">《nodejs一小步 前端开发一大步》</a></li><br><li><a href="http://vdisk.weibo.com/s/C30SUspJtfe1b" target="_blank" rel="noopener">《Listen to the buzz of Angular.JS》</a></li><br><li><a href="http://vdisk.weibo.com/s/C30SUspJtfdhI" target="_blank" rel="noopener">《第三方开发前端实践》</a></li><br><li><a href="http://vdisk.weibo.com/s/C30SUspJtfe20" target="_blank" rel="noopener">《企业级 NPM 服务在阿里的实践》</a></li><br><li><a href="http://vdisk.weibo.com/s/C30SUspJtfdi5" target="_blank" rel="noopener">《面向多端的蘑菇街前端技术架构》</a></li><br><li><a href="http://vdisk.weibo.com/s/C30SUspJtex-X" target="_blank" rel="noopener">《航旅无线H5技术体系成长之路》</a></li><br><li><a href="http://vdisk.weibo.com/s/C30SUspJtf4sv" target="_blank" rel="noopener">《京东前端工业化实践之路》</a></li><br><li><a href="http://vdisk.weibo.com/s/C30SUspJtfe1a" target="_blank" rel="noopener">《淘宝前端工程与自动化体系》</a></li><br><li><a href="http://johnhax.net/2014/es6-js-future/" target="_blank" rel="noopener">《透过ES6看JS未来》</a></li><br><li><a href="http://vdisk.weibo.com/s/C30SUspJtesC9" target="_blank" rel="noopener">《架构与IBM前端 》</a></li><br><li><a href="http://vdisk.weibo.com/s/C30SUspJtf7lO" target="_blank" rel="noopener">《豆瓣的前端发展思路》</a></li><br><br></ul><br><p>具体也可以在<a href="http://d2forum.alibaba-inc.com/" target="_blank" rel="noopener">官网</a>上查看。</p><br><p>事实上，本次D2总共提交了三四十个分享主题，上述这些主题都是经过前端资深专家的慎重思考和筛选之后确定的。从分享的标题中，我们可以提炼出这些字眼：数据、架构、体系、实践、发展、nodejs、工程。很显然，前端开发已经告别了刀根火种的猿人时代，对前端技术的讨论方向并未局限在某个知识点上，更多的是工程化实践和自动化系统的构建，这也是各大互联网公司发展起来后一个必然的趋势。</p><br><p>Nodejs 的出现为前端工程师在服务器端开辟了一块领域，有人说我们抢了后端同学的饭碗。并非如此，Nodejs 作为一个中间层出现在前后端之间，厘清了各端之间的职责，为web发展提供了更加清晰的思路，这一点毋庸置疑。但是这次没听到<a href="http://weibo.com/xicilion" target="_blank" rel="noopener">@响马大叔</a> 的 <a href="//github.com/xicilion/fibjs">fibjs</a> 分享，还是有些遗憾。</p><br><p>各大公司为了抢占市场份额，业务方向也是由点及面的扩散，业务增多不能单靠增加工程师的数量来跟上业务需求，只能让技术跟上时代的脚步。</p><br><p>会场是有姑娘的，找姑娘交流技术也是本次参加 D2 的一个重要使命，所以请原谅我不能为大家一一分享上述每个主题的细节内容。认认真真听进去的只有百度FEX的张可竞分享的《指尖上的数据》。主题很文艺，内容也是很贴切，下面就简单复述下介绍的内容，并谈谈自己的感受。</p><br><p>移动互联网的迅速崛起，让前端工程师们有点猝不及防。在移动设备上，人们通过手指的触摸来了解这个大千世界，张可竞从手指触摸的细节和数据在移动终端呈现的形态上着手，做了深入的分析，最后回到技术上，他提到了这么几个点：</p><br><ul><br><li>设备的适配问题</li><br><li>手机的性能问题</li><br><li>技术框架</li><br><li>…</li><br><br></ul><br><p>这些都是移动开发中的疼点，也是值得每一个开发者去探究的问题。去年我给老外做过一次外包，在设计上就已经很明显的感觉到国内外移动互联网技术差异，其实技术都在那里，只是国内的技术潮流还在婴幼儿阶段跃跃欲试，含苞待放。</p><br><h3 id="_2"><a class="headeranchor-link" name="user-content-_2" href="#_2"></a>三、我对前端发展的看法</h3><br><p>很多人对 ECMAScript 6 持消极态度，说把 JavaScript 搞的太复杂了，越来越像 Ruby/Python/Java 了，一门语言的丰富，不仅仅是对语言本身的拓展，这些内容取决于市场的需求。而且本次 D2 讨论的话题是不是和 ES6 引入了模块化、异步编程等相关内容十分契合呢！</p><br><p>HTML5规范历时8年，也在近期宣布制定完成。如今的 web 发展步入了一个平稳阶段，我认为后续我们需要思考的，包含如下问题：</p><br><ul><br><li>信息安全问题</li><br><li>实时通讯问题</li><br><li>应用开发问题</li><br><li>….</li><br><br></ul><br><h3 id="_3"><a class="headeranchor-link" name="user-content-_3" href="#_3"></a>四、小结</h3><br><p>最后还是一如既往地做个小结，三个点。</p><br><p><strong>1. 移动端内容过少</strong></p><br><p>移动互联网技术是个重要的议题，据我所知，目前阿里很大一部分的流量来自于移动终端。而本次重点对移动端技术的介绍偏少。希望下次 D2 能够有些拓展！</p><br><p><strong>2. 听分享不是重点</strong></p><br><p>过来听分享会不是重点。分享效果取决于分享者的演讲能力以及他们对分享内容研究的深度。而二者兼备的人并不多，加上受众并不全是资深的工程师，很多内容是难以一时消化的。</p><br><p>前端峰会的目的，前面也说了：创造业内交流平台，引导、规范行业发展，影响前端技术发展。我觉得，最实际的意义是多认识几个人，以后遇到问题多几个人可以一起探讨、交流。</p><br><p><strong>3. 无障碍体验区</strong></p><br><p>除了几个会场，还有一些分区，其中一个叫做『无障碍体验』，现代人都讲求”民主”、”平等”，技术上也是一样，我们应该更多地关注社会弱势群体。目前阿里巴巴建立了无障碍兴趣小组，我们会在业余时间针对阿里巴巴页面做一些信息无障碍的优化以及推广，也希望更多公司加入进来，提高产品易用性，让信息无障碍深入人心。</p><br><p>最后，让我们一起来期待明年的<strong>D2盛典</strong>吧！</p>
           
         
       
@@ -1008,7 +602,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2015/04/15/2015-04-15-st3-node-build-system/">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2014/10/02/2014-10-02-what-is-our-persuits/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lion">
@@ -1028,7 +622,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/blog/2015/04/15/2015-04-15-st3-node-build-system/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/15/index.html">sublime text 3 没有node的build-system</a>
+                <a href="/blog/2014/10/02/2014-10-02-what-is-our-persuits/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/15/index.html">我们在追求什么？</a>
               
             
           </h1>
@@ -1053,7 +647,7 @@
                 
               
 
-              <time title="创建时间：2015-04-15 00:00:00" itemprop="dateCreated datePublished" datetime="2015-04-15T00:00:00+08:00">2015-04-15</time>
+              <time title="创建时间：2014-10-02 00:00:00" itemprop="dateCreated datePublished" datetime="2014-10-02T00:00:00+08:00">2014-10-02</time>
             
 
             
@@ -1087,7 +681,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/工具/" itemprop="url" rel="index"><span itemprop="name">工具</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/笔记本/" itemprop="url" rel="index"><span itemprop="name">笔记本</span></a></span>
 
                 
                 
@@ -1123,20 +717,19 @@
       
         
           
-            <p>郁闷了好多次了，Mac 系统 Sublime Text 3，具体版本是 Stable Channel，Build 3083，没有 node 的 build-system，为了方便调试，每次都得把巨型的 webstrom 打开，今天摸索了下，找到了方案~</p>
-<p>首先安装下 <code>Javascript &amp; Coffee Build System</code> 的插件，这个时候 ST 会多出三个 Build-System，分别是</p>
-<ol>
-<li>xjs</li>
-<li>xjs - Compile</li>
-<li>xjs - Harmony</li>
-</ol>
-<p>使用 xjs 就可以运行 js 脚本，直接 Ctrl + B 可能会报错，说 </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">not found file or fold `node`</span><br></pre></td></tr></table></figure>
-<p>云云的错误。我们的 node 一般安装在 <code>/usr/local/bin/node</code> 这个地方。而环境变量，如果没有修改的话应该是这些：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/bin:/usr/sbin/:/bin:/sbin</span><br></pre></td></tr></table></figure>
-<p>你可以将 <code>/usr/local/bin/node</code> 加入到环境变量，也可以这样</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ln -s /usr/<span class="built_in">local</span>/bin/node /usr/bin/node</span><br></pre></td></tr></table></figure>
-<p>OK，就这么愉快的搞定了，如果想以 harmony 方式运行，可以按下 <code>Ctrl+Shift+B</code>，选择 <code>xjs - Harmony</code> 就行了。</p>
+            <p>最近看阮一峰写的《如何变得有思想？》，脑中不时冒出诸多问题：</p>
+<ul>
+<li>工作是为了什么？</li>
+<li>我们活着是为了什么？</li>
+<li>如何实现自己的价值？</li>
+<li>我有思想么？</li>
+<li>钱很重要么？</li>
+<li>…</li>
+</ul>
+<p>可能在你感觉前路弥漫、驻足之时，也会思考这几个问题。</p>
+<p>有些人奋斗了很多年，突然看到一个比自己年轻三五七八岁的小伙，在自己专注的领域远胜于自己，内心不免有些淡淡的忧伤。这些都是可以理解的。为了超越自己，为了找到更好的归宿，我们费尽心机，奋力拼搏，可到了最后，发现自己的努力一文不值（或者只指一文）时，那感觉就像从万丈悬崖跌落，心里空洞了许多。</p>
+<p>我们在追求什么？月薪3000的人在大城市漂泊，他们在寻求更安稳的生存之道，月薪3w的人在追求更好的生活。“生存之道”和“生活”，这两个词未免也显得也太抽象了，我只知道，很少会有人满足。</p>
+<p>不知为何会思考这个话题，但随着文字洒落下来，这种思绪又渐渐弥散了…</p>
 
           
         
@@ -1193,7 +786,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2015/04/13/2015-04-13-xcode-select-error/">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2014/09/29/2014-09-29-cb-promise/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lion">
@@ -1213,7 +806,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/blog/2015/04/13/2015-04-13-xcode-select-error/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/15/index.html">Xcode-select Error</a>
+                <a href="/blog/2014/09/29/2014-09-29-cb-promise/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/15/index.html">细嗅Promise</a>
               
             
           </h1>
@@ -1238,184 +831,7 @@
                 
               
 
-              <time title="创建时间：2015-04-13 00:00:00" itemprop="dateCreated datePublished" datetime="2015-04-13T00:00:00+08:00">2015-04-13</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-12-12 18:10:11" itemprop="dateModified" datetime="2018-12-12T18:10:11+08:00">2018-12-12</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/工具/" itemprop="url" rel="index"><span itemprop="name">工具</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>错误信息：</p>
-<blockquote>
-<p>xcode-select: error: tool ‘xcodebuild’ requires Xcode, but active developer directory ‘/Library/Developer/CommandLineTools’ is a command line tools instance</p>
-</blockquote>
-<p>解决方案：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2015/04/13/2015-04-13-this-reference/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Lion">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="撼地神牛">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/blog/2015/04/13/2015-04-13-this-reference/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/15/index.html">this的指向</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2015-04-13 00:00:00" itemprop="dateCreated datePublished" datetime="2015-04-13T00:00:00+08:00">2015-04-13</time>
+              <time title="创建时间：2014-09-29 08:39:00" itemprop="dateCreated datePublished" datetime="2014-09-29T08:39:00+08:00">2014-09-29</time>
             
 
             
@@ -1492,193 +908,124 @@
       
         
           
-            <p>网友问题：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> name = <span class="string">"The Window"</span>;   </span><br><span class="line">　　<span class="keyword">var</span> object = &#123;  </span><br><span class="line">　　　　name : <span class="string">"My Object"</span>,  </span><br><span class="line">　　　　getNameFunc : <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;  </span><br><span class="line">　　　　　　　　<span class="keyword">return</span> <span class="keyword">this</span>.name;  </span><br><span class="line">　　　　&#125;   </span><br><span class="line">&#125;;  </span><br><span class="line"><span class="keyword">var</span> a = object.getNameFunc;</span><br><span class="line">alert(a());</span><br><span class="line">alert(object.getNameFunc());</span><br></pre></td></tr></table></figure>
-<p>原因：</p>
-<p><code>object.getNameFunc()</code> ，此时的 <code>object.getNameFunc</code> 为引用类型，其 base 为 <code>object</code>，this 指向的是 base，所以返回 <code>object.name</code> 的值</p>
-<p><code>name = object.getNameFunc</code>, <code>test</code> 作为标识符，生成了其他引用类型的值，此时 base 已经从 <code>object</code> 重置为 <code>null</code>，也就是会指向 global（window），所以返回的是 window.name 的值。</p>
-<p>问题的关键在于「引用类型（type Reference）的中间值发生改变」</p>
+            <div class="history-article">本文为归档内容,原始地址在 <a href="http://www.cnblogs.com/hustskyking/archive/2014/09/29/promise.html" target="_blank">博客园</a>.</div>
 
-          
-        
-      
-    </div>
+<p id="_1">读完这篇文章，预计会消耗你 40 分钟的时间。<a class="headeranchor-link" name="user-content-_1" href="#_1"></a></p><br><p>Ajax 出现的时候，刮来了一阵异步之风，现在 Nodejs 火爆，又一阵异步狂风刮了过来。需求是越来越苛刻，用户对性能的要求也是越来越高，随之而来的是页面异步操作指数般增长，如果不能恰当的控制代码逻辑，我们就会陷入无穷的回调地狱中。</p><br><p>ECMAScript 6 已经将异步操作纳入了规范，现代浏览器也内置了 Promise 对象供我们进行异步编程，那么此刻，还在等啥？赶紧学习学习 Promise 的内部原理吧！</p><br><h3 id="promise_1"><a class="headeranchor-link" name="user-content-promise_1" href="#promise_1"></a>第一章 了解 Promise</h3><br><h4 id="_2"><a class="headeranchor-link" name="user-content-_2" href="#_2"></a>一、场景再现</h4><br><p>由于 javascript 的单线程性质，我们必须等待上一个事件执行完成才能处理下一步，如下：</p>
 
-    
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">// DOM ready之后执行</span><br><span class="line">$(document).ready(function()&#123;</span><br><span class="line">    // 获取模板</span><br><span class="line">    $.get(url, function(tpl)&#123;</span><br><span class="line">        // 获取数据</span><br><span class="line">        $.get(url2, function(data)&#123;</span><br><span class="line">            // 构建 DOMString</span><br><span class="line">            makeHtml(tpl, data, function(str)&#123;</span><br><span class="line">                // 插入到 DOM 中</span><br><span class="line">                $(obj).html(str);</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>为了减少首屏数据的加载，我们将一些模板和所有数据都放在服务器端，当用户操作某个按钮时，需要将模板和数据拼接起来插入到 DOM 中，这个过程还必须在 DOMReady 之后才能执行。这种情况是十分常见的，如果异步操作再多一些，整个代码的缩进让人看着很不舒服，为了优雅地处理这个问题，ECMAScript 6 引入了 Promise 的概念，目前一些现代浏览器已经支持这些新东西了！</p><br><h4 id="_3"><a class="headeranchor-link" name="user-content-_3" href="#_3"></a>二、模型</h4><br><p>为了让代码流程更加清晰，我们假想着能够按照下面的流程来跑程序：</p>
 
-    
-    
-    
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">new Promise(ready).then(getTpl).then(getData).then(makeHtml).resolve();</span><br></pre></td></tr></table></figure>
+<p>先将要事务按照执行顺序依次 push 到事务队列中，push 完了之后再通过 resolve 函数启动整个流程。</p><br><p>整个流程的操作模型如下：</p>
 
-    
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">promise(ok).then(ok_1).then(ok_2).then(ok_3).reslove(value)------+</span><br><span class="line">         |         |          |          |                       |</span><br><span class="line">         |         |          |          |        +=======+      |</span><br><span class="line">         |         |          |          |        |       |      |</span><br><span class="line">         |         |          |          |        |       |      |</span><br><span class="line">         +---------|----------|----------|--------→  ok() ←------+</span><br><span class="line">                   |          |          |        |   ↓   |</span><br><span class="line">                   |          |          |        |   ↓   |</span><br><span class="line">                   +----------|----------|--------→ ok_1()|</span><br><span class="line">                              |          |        |   ↓   |</span><br><span class="line">                              |          |        |   ↓   |</span><br><span class="line">                              +----------|--------→ ok_2()|</span><br><span class="line">                                         |        |   ↓   |</span><br><span class="line">                                         |        |   ↓   |</span><br><span class="line">                                         +--------→ ok_3()-----+</span><br><span class="line">                                                  |       |    |</span><br><span class="line">                                                  |       |    ↓</span><br><span class="line">@ Created By Barret Lee                           +=======+   exit</span><br></pre></td></tr></table></figure>
+<p>在 resolve 之前，promise 的每一个 then 都会将回调函数压入队列，resolve 后，将 resolve 的值送给队列的第一个函数，第一个函数执行完毕后，将执行结果再送入下一个函数，依次执行完队列。一连串下来，一气呵成，没有丝毫间断。</p><br><h4 id="_4"><a class="headeranchor-link" name="user-content-_4" href="#_4"></a>三、简单的封装</h4><br><p>如果了解 Promise，可以移步下方，看看对 Promise 的封装：</p><br><p>Github: <a href="//github.com/barretlee/myPromise" target="_blank">//github.com/barretlee/myPromise</a>DEMO: <a href="http://barretlee.github.io/myPromise/index.html" target="_blank">http://barretlee.github.io/myPromise/index.html</a></p><br><p>如果还不是很了解，可以往下阅读全文，了解一二。</p><br><h3 id="promise_2"><a class="headeranchor-link" name="user-content-promise_2" href="#promise_2"></a>第二章 Promise 原理</h3><br><h4 id="promise_3"><a class="headeranchor-link" name="user-content-promise_3" href="#promise_3"></a>一、什么是 Promise ？</h4><br><p>那么，什么是 Promise ？</p><br><p>Promise 可以简单理解为一个事务，这个事务存在三种状态：</p><br><ol><br><li>已经完成了 resolved</li><br><li>因为某种原因被中断了 rejected</li><br><li>还在等待上一个事务结束 pending</li><br><br></ol><br><p>上文中我们举了一个栗子，获取模板和数据之后再将拼合的数据插入到 DOM 中，这里我们将整个程序分解成多个事务：</p>
 
-    
-      
-    
-    
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">事务一：     获取模板</span><br><span class="line">               ↓</span><br><span class="line">事务二：     获取数据</span><br><span class="line">               ↓</span><br><span class="line">事务三： 拼合之后插入到 DOM</span><br></pre></td></tr></table></figure>
+<p>在事务一结束之前，也就是模板代码从服务器拉取过来之前，事务二和事务三都处于 pending 状态，他们必须等待上一个事务结束。而事务一结束之后会将自身状态标记为 resolved，并把该事务中处理的结果移交给事务二继续处理（当然，这里如果没有数据返回，事务二就不会获得上一个事务的数据），依次类推，直到最后一个事务操作结束。</p><br><p>在事务操作的过程中，若遇到错误，比如事务一获取数据存在跨域问题，那事务就会操作失败，此时它会将自身的状态标记为 rejected，由于后续事务都是承接前一事务的，前一事务已经宣告工程已经玩不成了，那么后续的所有事务都会将自己标记为 rejected，其标记理由（reason）就是出错事务的报错信息（这个报错信息可以使用 try…catch 来捕获，也可以通过程序自身来捕获，如 ajax 的 onerror 事件、ajax 返回的状态码为 404 等）。</p><br><p><strong>小结：Promise 就是一个事务的管理器。他的作用就是将各种内嵌回调的事务用流水形式表达，其目的是为了简化编程，让代码逻辑更加清晰。</strong></p><br><p>由于整个程序的实现比较难理解，对于 Promise，我们将分为两部分阐述：</p><br><ul><br><li>无错误传递的 Promise，也就是事务不会因为任何原因中断，事务队列中的事项都会被依次处理，此过程中 Promise 只有 pending 和 resolved 两种状态，没有 rejected 状态。</li><br><li>包含错误的 Promise，每个事务的处理都必须使用容错机制来获取结果，一旦出错，就会将错误信息传递给下一个事务，如果错误信息会影响下一个事务，则下一个事务也会 rejected，如果不会，下一个事务可以正常执行，依次类推。</li><br></ul><br><h4 id="promise-promise"><a class="headeranchor-link" name="user-content-promise-promise" href="#promise-promise"></a>二、无错误传递的 Promise（简化版的 Promise）</h4><br><p>首先，我们需要用一个变量（status）来标记事务的状态，然后将事务（affair）也保存到 Promise 对象中。</p>
 
-    
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var Promise = function(affair)&#123;</span><br><span class="line">    this.state = &quot;pending&quot;;</span><br><span class="line">    this.affair = affair || function(o) &#123; return o; &#125;;</span><br><span class="line">    this.allAffairs = [];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>Promise 有两个重要的方法，一个是 then，另一个是 resolve：</p><br><ul><br><li>then，将事务添加到事务队列（allAffairs）中</li><br><li>resolve，开启流程，让整个操作从第一个事务开始执行</li><br></ul><br><p>在操作事务之前，我们会先把各种事务依次放入事务队列中，这里会用到 then 方法：</p>
 
-    <footer class="post-footer">
-      
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Promise.prototype.then = function (nextAffair)&#123;</span><br><span class="line">    var promise = new Promise();</span><br><span class="line">    if (this.state == &quot;resloved&quot;)&#123;</span><br><span class="line">        // 如果当前状态是已完成，则这个事务将会被立即执行</span><br><span class="line">        return this._fire(promise, nextAffair);</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        // 否则将会被加入队列中</span><br><span class="line">        return this._push(promise, nextAffair);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>如果整个操作已经完成了，那 then 方法送进的事务会被立即执行，</p>
 
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2015/04/07/2015-04-07-zhaohaiping-in-my-eye/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Lion">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="撼地神牛">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/blog/2015/04/07/2015-04-07-zhaohaiping-in-my-eye/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/15/index.html">从Facebook跑来阿里的赵海平大叔，你要干啥？</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2015-04-07 00:00:00" itemprop="dateCreated datePublished" datetime="2015-04-07T00:00:00+08:00">2015-04-07</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-12-12 18:10:11" itemprop="dateModified" datetime="2018-12-12T18:10:11+08:00">2018-12-12</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/笔记本/" itemprop="url" rel="index"><span itemprop="name">笔记本</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>赵海平在今年三月份来到阿里，听毕玄（他现任主管）说去年五六月份就跟赵海平聊上了。有人问：为啥 BAT 三大巨头，你看中了阿里巴巴？在今天现场达一千多人的分享中赵海平给出了回复：“因为百度和腾讯没找我呗~”，他笑道，“百度以搜索为核心，优化了很多年了，估计也没啥可以优化的了；而腾讯除了 QQ 和微信，也没什么大型应用（别跟人家说哦）”。这不是原话哈，赵海平还是相当谦虚并且能言的，思维很开阔，两个小时的分享内容丰富，时不时还插两个故事，起初进场的手机和电脑都很自觉的收起来了~旁边的同事侃道：“高 P 也都是能搞 PPT 的。”</p>
-<p>他分享的主题是《我眼中的Facebook的技术演进》，从 2006 年到 2014 年，Facebook 在技术上遇到的各种瓶颈和解决方案，演说过程灌输了不少自己的思考和经验，还是很有体会的，尤其是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Promise.prototype._fire = function (nextPromise, nextAffair)&#123;</span><br><span class="line">    var nextResult = nextAffair(this.result);</span><br><span class="line">    if (nextResult instanceof Promise)&#123;</span><br><span class="line">        nextResult.then(function(obj)&#123;</span><br><span class="line">            nextPromise.resolve(obj);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        nextPromise.resolve(nextResult);</span><br><span class="line">    &#125;</span><br><span class="line">    return nextPromise;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<pre><span>被立即执行之后会返回一个结果，这个结果会被传递到下一个事务中作为原料，但是这里需要考虑两种情况：</span></pre>
 <ol>
-<li>技术实践中的三件套：功能 + 测试 + 监控。很多大公司的工程师，深谙功能开发之道，测试方面也能达到 60 分的水平，但是程序的监控上，做的很差，包括 Facebook 的程序员。三件套，对一个优秀的工程师来说，缺一不可。</li>
-<li>Facebook 以前没有 QA(测试人员)，现在也没有。没有 QA ，效率会高一些，但是一定要写测试用例…这方面他说的比较多，我也比较有感触的，现在在负责淘宝首页开发，也没有测试人员…但结果就是开发效率高了不少，胆子吓大了不少，自己也谨慎了不少。</li>
+<li>异步，如果这个结果也是一个 Promise，则需要等待这个 Promise 执行完毕再将最终的结果传到下一个事务中。</li>
+<li>同步，如果这个结果不是 Promise，则直接将结果传递给下一个事务。</li>
 </ol>
-<p>估摸算算，赵海平应该也快半百了，这样大叔级别的人物，不好好在国外呆着呼吸清新的空气，跑到杭州吸啥 PM2.5。A同学道：大叔级别的人物也是有追求的好么~（不过他的颜貌就像三十出头的年轻人，帅气！）</p>
-<p>Facebook 网站刚刚搭建起来的时候，数据库就只有 <code>info</code> 一张表，这么笼统的描述，可见当时的工程师根本不会想到 FB 会发展到今天如此的壮大。随着 FB 的会员不断增长，一台服务器的数据库装不下去了，于是后来就多了很多个数据库，很多台服务器，数据容量一庞大，查询速度就慢了，接着在 07 年开始使用了 memcache，一段时间过后，CPU 不够用了，他们继续优化底层代码，用 C++ 重新实现 webServer 等等。这些事情都是大公司技术架构的演进过程中必然会经历的，根据自己的需要，把别人开发好的东西搬过来，优化and重构，在优化的过程中，甚至也会弄出一套全新的东西，比如 HipHop、HHVM 等等。</p>
-<p>有人问，现在的高 P 都是不写代码的，你会写么？赵海平盹了一下，说：过来演讲前刚仓促的 push 了一些代码。他会把房子的基层建设做好，不让后来添砖加瓦的人走偏路，代码还是会写的。</p>
-<p>我看到的是一个年轻有活力有底蕴的大叔，希望阿里巴巴因为这位技术大牛的加入而更加丰满！</p>
+<p>第一种情况还是比较常见的，比如我们在一个事务中有一个子事务队列需要处理，此时必须等待子事务完成才能回到主事务队列中。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Promise.prototype.resolve = function (obj)&#123;</span><br><span class="line">    if (this.state != &quot;pending&quot;) &#123;</span><br><span class="line">        throw &quot;流程已完成，不能再次开启流程！&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">    this.state = &quot;resloved&quot;;</span><br><span class="line">    // 执行该事务，并将执行结果寄存到 Promise 管理器上</span><br><span class="line">    this.result = this.affair(obj);</span><br><span class="line">    for (var i = 0, len = this.allAffairs.length; i &lt; len; ++i)&#123;</span><br><span class="line">        // 往后执行事务</span><br><span class="line">        var affair = this.allAffairs[i];</span><br><span class="line">        this._fire(affair.promise, affair.affair);</span><br><span class="line">    &#125;</span><br><span class="line">    return this;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>resolve 接受一个参数，这个数据是交给第一个事务来处理的，因为第一个事务的启动可能需要点原料，这个数据就是原料，它也可以是空。该事物处理完毕之后，将操作结果（result）寄存在 Promise 对象上，方便引用，然后将结果（result）作为原料送入下一个事务。依次类推。</p>
+<p>我们看到 then 方法中还调用了一个 _push ，这个方法的作用是将事务推进事务管理器（Promise）。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Promise.prototype._push = function (nextPromise, nextAffair)&#123;</span><br><span class="line">    this.allAffairs.push(&#123;</span><br><span class="line">        promise: nextPromise,</span><br><span class="line">        affair: nextAffair</span><br><span class="line">    &#125;);</span><br><span class="line">    return nextPromise;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>以上操作，我们就实现了一个简单的事务管理器，可以测试下下面的代码：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">// 初始化事务管理器</span><br><span class="line">var promise = new Promise(function(data)&#123;</span><br><span class="line">    console.log(data);</span><br><span class="line">    return 1;</span><br><span class="line">&#125;);</span><br><span class="line">// 添加事务</span><br><span class="line">promise.then(function(data)&#123;</span><br><span class="line">    console.log(data);</span><br><span class="line">    return 2;</span><br><span class="line">&#125;).then(function(data)&#123;</span><br><span class="line">    console.log(data);</span><br><span class="line">    return 3;</span><br><span class="line">&#125;).then(function(data)&#123;</span><br><span class="line">    console.log(data);</span><br><span class="line">    console.log(&quot;end&quot;);</span><br><span class="line">&#125;);</span><br><span class="line">// 启动事务</span><br><span class="line">promise.resolve(&quot;start&quot;);</span><br></pre></td></tr></table></figure>
+
+<p>可以看到依次输出的结果为：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt; start</span><br><span class="line">&gt; 1</span><br><span class="line">&gt; 2</span><br><span class="line">&gt; 3</span><br><span class="line">&gt; end</span><br></pre></td></tr></table></figure>
+
+<p>由于上述实现十分简陋，链式调用没做太好的处理，请读者自行完善：）</p>
+<p>下面是一个异步操作演示：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">var promise = new Promise(function(data)&#123;</span><br><span class="line">    console.log(data);</span><br><span class="line">    return &quot;end&quot;;</span><br><span class="line">&#125;);</span><br><span class="line">promise.then(function(data)&#123;</span><br><span class="line">    // 这里需要返回一个 Promise，让主事务切换到子事务处理</span><br><span class="line">    return (function(data)&#123;</span><br><span class="line">        // 创建一个子事务</span><br><span class="line">        var promise = new Promise();</span><br><span class="line">        setTimeout(function()&#123;</span><br><span class="line">            console.log(data);</span><br><span class="line">            // 一秒之后才启动子事务，模拟异步延时</span><br><span class="line">            promise.resolve();</span><br><span class="line">        &#125;, 1000);</span><br><span class="line">        return promise;</span><br><span class="line">    &#125;)(data);</span><br><span class="line">&#125;);</span><br><span class="line">promise.resolve(&quot;start&quot;);</span><br></pre></td></tr></table></figure>
+
+<pre><span>可以看到依次输出的结果为：</span></pre>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; start</span><br><span class="line">&gt; end （1s之后输出）</span><br></pre></td></tr></table></figure>
+<p>将函数写的稍微好看点：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">function delay(data)&#123;</span><br><span class="line">    // 创建一个子事务</span><br><span class="line">    var promise = new Promise();</span><br><span class="line">    setTimeout(function()&#123;</span><br><span class="line">        console.log(data);</span><br><span class="line">        // 一秒之后才启动子事务，模拟异步延时</span><br><span class="line">        promise.resolve();</span><br><span class="line">    &#125;, 1000);</span><br><span class="line">    return promise;</span><br><span class="line">&#125;</span><br><span class="line">// 主事务</span><br><span class="line">var promise = new Promise(function(data)&#123;</span><br><span class="line">    console.log(data);</span><br><span class="line">    return &quot;end&quot;;</span><br><span class="line">&#125;);</span><br><span class="line">promise.then(delay);</span><br><span class="line">promise.resolve(&quot;start&quot;);</span><br></pre></td></tr></table></figure>
+<p></p><h4><span>三、包含错误传递的 Promise</span></h4><p></p>
+<p>真的很羡慕你能看到这么详细的文章，当然，后面会更加精彩！</p><br><p>没有错误处理的 Promise 只能算是一个半成品，虽说可以通过在最外层加一个 try..catch 来捕获错误，但没法具体定位是哪个事务发生的错误。并且这里的错误不仅仅包含 JavaScript Error，还有诸如 ajax 返回的 data code 不是 200 的情况等。</p><br><p>先看一个浏览器内置 Promise 的实例（该代码可在现代浏览器下运行）：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">new Promise(function(resolve, reject)&#123;</span><br><span class="line">    resolve(&quot;start&quot;);</span><br><span class="line">&#125;).then(function(data)&#123;</span><br><span class="line">    console.log(data);</span><br><span class="line">    throw &quot;error&quot;;</span><br><span class="line">&#125;).catch(function(err)&#123;</span><br><span class="line">    console.log(err);</span><br><span class="line">    return &quot;end&quot;;</span><br><span class="line">&#125;).then(function(data)&#123;</span><br><span class="line">    console.log(data)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<pre><span>Promise 的回调和 then 方法都是接受两个参数：</span></pre>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">new Promise(function(resolve, reject)&#123;</span><br><span class="line">    // ...</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">promise.then(</span><br><span class="line">    function(value)&#123;/* code here */&#125;,</span><br><span class="line">    function(reason)&#123;/* code here */&#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>事务处理过程中，如果有值返回，则作为 value，传入到 resolve 函数中，若有错误产生，则作为 reason 传入到 reject 函数中处理。</p><br><p>在初始化 Promise 对象时，若传入的回调中没有执行 resolve 或者 reject，这需要我们主动去启动事务队列。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">promise.resolve();</span><br><span class="line">promise.reject();</span><br></pre></td></tr></table></figure>
+<p>上面两种都是可以启动一个队列的。这里跟第二章第二节的 resolve 函数用法类似。Promise 对象还提供了 catch 函数，起用法等价于下面所示：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">promise.catch();</span><br><span class="line">// 等价于</span><br><span class="line">promise.then(null, function(reason)&#123;&#125;);</span><br></pre></td></tr></table></figure>
+<p>还有两个 API：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">promise.all();</span><br><span class="line">promise.race();</span><br></pre></td></tr></table></figure>
+<p>后续再讲。先看看这个有错误处理的 Promise 是如何实现的。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">function Promise(resolver)&#123;</span><br><span class="line">    this.status = &quot;pending&quot;;</span><br><span class="line">    this.value = null;</span><br><span class="line">    this.handlers = [];</span><br><span class="line">    this._doPromise.call(this, resolver);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>_doPromise 方法在实例化 Promise 函数时就执行。如果送入的回调函数 resolver 中已经 resolve 或者 reject 了，程序就已经启动了，所以在实例化的时候就开始判断。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">_doPromise: function(resolver)&#123;</span><br><span class="line">    var called = false, self = this;</span><br><span class="line">    try&#123;</span><br><span class="line">        resolver(function(value)&#123;</span><br><span class="line">            // 如果没有 call 则继续，并标记 called 为 true</span><br><span class="line">            !called &amp;&amp; (called = !0, self.resolve(value));</span><br><span class="line">        &#125;, function(reason)&#123;</span><br><span class="line">            // 同上</span><br><span class="line">            !called &amp;&amp; (called = !0, self.reject(reason));</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125; catch(e) &#123;</span><br><span class="line">        // 同上，捕获错误，传递错误到下一个 then 事务</span><br><span class="line">        !called &amp;&amp; (called = !0, self.reject(e));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>只要 resolve 或者 reject 就会标记程序 called 为 true，表示程序已经启动了。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">resolve: function(value) &#123;</span><br><span class="line">    try&#123;</span><br><span class="line">        if(this === value)&#123;</span><br><span class="line">            throw new TypeError(&quot;流程已完成，不能再次开启流程！&quot;);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            // 如果还有子事务队列，继续执行</span><br><span class="line">            value &amp;&amp; value.then &amp;&amp; this._doPromise(value.then);</span><br><span class="line">        &#125;</span><br><span class="line">        // 执行完了之后标记为完成</span><br><span class="line">        this.status = &quot;fulfilled&quot;;</span><br><span class="line">        this.value = value;</span><br><span class="line">        this._dequeue();</span><br><span class="line">    &#125; catch(e) &#123;</span><br><span class="line">        this.reject(e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;,</span><br><span class="line">reject: function(reason) &#123;</span><br><span class="line">    // 标记状态为出错</span><br><span class="line">    this.status = &quot;rejected&quot;;</span><br><span class="line">    this.value = reason;</span><br><span class="line">    this._dequeue();</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>可以看到，每次 resolve 的时候都会用一个 try..catch 包裹来捕获未知错误。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">_dequeue: function()&#123;</span><br><span class="line">    var handler;</span><br><span class="line">    // 执行事务，直到队列为空</span><br><span class="line">    while (this.handlers.length) &#123;</span><br><span class="line">        handler = this.handlers.shift();</span><br><span class="line">        this._handle(handler.thenPromise, handler.onFulfilled, handler.onRejected);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>无论是 resolve 还是 reject 都会让程序往后奔流，直到结束所有事务，所以这两个方法中都有 _dequeue 函数。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">_handle: function(thenPromise, onFulfilled, onRejected)&#123;</span><br><span class="line">    var self = this;</span><br><span class="line"></span><br><span class="line">    setTimeout(function() &#123;</span><br><span class="line">        // 判断下次操作采用哪个函数，reject 还是 resolve</span><br><span class="line">        var callback = self.status == &quot;fulfilled&quot;</span><br><span class="line">                       ? onFulfilled</span><br><span class="line">                       : onRejected;</span><br><span class="line">        // 只有是函数才会继续回调</span><br><span class="line">        if (typeof callback === &quot;function&quot;) &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                self.resolve.call(thenPromise, callback(self.value));</span><br><span class="line">            &#125; catch(e) &#123;</span><br><span class="line">                self.reject.call(thenPromise, e);</span><br><span class="line">            &#125;</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        // 否则就将 value 传递给下一个事务了</span><br><span class="line">        self.status == &quot;fulfilled&quot;</span><br><span class="line">                        ? self.resolve.call(thenPromise, self.value)</span><br><span class="line">                        : self.reject.call(thenPromise, self.value);</span><br><span class="line">    &#125;, 1);</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>这个函数跟上一节提到的 _fire 类似，如果 callback 是 function，就会进入子事务队列，处理完了之后退回到主事务队列。最后一个 then 方法，将事务推进队列。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">then: function(onFulfilled, onRejected)&#123;</span><br><span class="line">    var thenPromise = new Promise(function() &#123;&#125;);</span><br><span class="line"></span><br><span class="line">    if (this.status == &quot;pending&quot;) &#123;</span><br><span class="line">        this.handlers.push(&#123;</span><br><span class="line">            thenPromise: thenPromise,</span><br><span class="line">            onFulfilled: onFulfilled,</span><br><span class="line">            onRejected: onRejected</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        this._handle(thenPromise, onFulfilled, onRejected);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return thenPromise;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果第二节没有理解清楚，这一节也会让人头疼，这一部分讲的比较粗糙。</p><br><h3 id="_5"><a class="headeranchor-link" name="user-content-_5" href="#_5"></a>第三章 异步编程</h3><br><h4 id="jquery-defferred"><a class="headeranchor-link" name="user-content-jquery-defferred" href="#jquery-defferred"></a>一、jQuery 中的 Defferred 对象</h4><br><p>或许你在面试的时候，有面试官问你：</p><br><blockquote><br><p><code>$.ajax()</code> 执行后返回的结果是什么？</p><br></blockquote><br><p>在 jQuery1.5 版本就已经引入了 Defferred 对象，当时为了引入这个东西，整个 jQuery 都被重构了。Defferred 跟 Promise 类似，它表示一个还未完成任务的对象，而 Promise 确切的说，是一个代表未知值的对象。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$.ajax(&#123;</span><br><span class="line">    url: url</span><br><span class="line">&#125;).done(function(data, status, xhr)&#123;</span><br><span class="line">    //...</span><br><span class="line">&#125;).fail(function()&#123;</span><br><span class="line">    //...</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>回忆下第二章第一节中的 Promise，是不是如出一辙，只是 jQuery 还提供了更多的语法糖：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$.ajax(&#123;</span><br><span class="line">    url: url,</span><br><span class="line">    success: function(data)&#123;</span><br><span class="line">        //...</span><br><span class="line">    &#125;,</span><br><span class="line">    error: funtion()&#123;</span><br><span class="line">        //...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>他允许将 done 和 fail 两个函数的回调放在 ajax 初始化的参数 success 和 fail 上，其原理还是一样的，同样，还有这样的东西：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$.when(taskOne, taskTwo).done(function () &#123;</span><br><span class="line">    console.log(&quot;都执行完毕后才会输出我！&quot;);</span><br><span class="line">&#125;).fail(function()&#123;</span><br><span class="line">    console.log(&quot;只要有一个失败，就会输出我！&quot;)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><span>当 taskOne 和 taskTwo 都完成之后才执行 done 回调，这个浏览器内置的 Promise 也有对应的函数：</span></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Promise.all([true, Promise.resolve(1), ...]).then(function(value)&#123;</span><br><span class="line">    //....</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>浏览器内置的 Promise 还提供了一个 API：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Promise.race([true, Promise.resolve(1), ...]).then(function(value)&#123;</span><br><span class="line">    //....</span><br><span class="line">&#125;, function(reason)&#123;</span><br><span class="line">    //...</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>只要 race 参数中有一个 resolve 或者 reject，then 回调就会出发。</p><br><h4 id="_6"><a class="headeranchor-link" name="user-content-_6" href="#_6"></a>二、基于事件响应的异步模型</h4><br><p><a href="http://weibo.com/shyvo" target="_blank" rel="noopener">@朴灵</a> 写的 <a href="//github.com/JacksonTian/eventproxy">EventProxy</a> 就是基于事件响应的异步模型，按理说，这个实现的逻辑是最清晰的，不过代码量稍微多一点。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">function taskA()&#123;</span><br><span class="line">    setTimeout(function()&#123;</span><br><span class="line">        var result = &quot;A&quot;;</span><br><span class="line">        E.emit(&quot;taskA&quot;, result);</span><br><span class="line">    &#125;, 1000);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function taskB()&#123;</span><br><span class="line">    setTimeout(function()&#123;</span><br><span class="line">        var result = &quot;B&quot;;</span><br><span class="line">        E.emit(&quot;taskB&quot;, result);</span><br><span class="line">    &#125;, 1000);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">E.all([&quot;taskA&quot;, &quot;taskB&quot;], function(A, B)&#123;</span><br><span class="line">    return A + B;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p></p><p>我没有看他的源码，但是想想，应该是这个逻辑。只需要在消息中心管理各个 emit 以及消息注册。这里的错误处理值得思考下。</p><p></p>
+<p></p><p>在半年前，也写过一篇关于异步编程的文章：<a href="http://www.cnblogs.com/hustskyking/p/javascript-asynchronous-programming.html" target="_blank" rel="noopener">JavaScript异步编程原理</a>，感兴趣的可以去读一读。</p><p></p>
+<p></p><h3 id="_7"><a class="headeranchor-link" name="user-content-_7" href="#_7"></a>第四章 小结</h3><p></p>
+<p></p><h4 id="_8"><a class="headeranchor-link" name="user-content-_8" href="#_8"></a>一、小结</h4><p></p>
+<p></p><p>文章比较长，阅读了好几天别人写的东西，自己提笔还是比较轻松的，本文大概花费了 6 个小时撰写。</p><p></p>
+<p></p><p>本文主要解说了 Promise 的应用场景和实现原理，如果你能够顺畅的读完全文并且之处文中的一些错误，说明你已经悟到了：）</p><p></p>
+<p></p><p>Promise 使用起来不难，但是理解其原理还是有点偏头痛的，所以下面列举的几篇相关阅读也建议读者点进去看看。</p><p></p>
+<p></p><h4 id="_9"><a class="headeranchor-link" name="user-content-_9" href="#_9"></a>二、相关阅读</h4><p></p>
+<ul><br><li><a href="http://www.html5rocks.com/zh/tutorials/es6/promises/" target="_blank" rel="noopener">JavaScript Promises</a></li><br><li><a href="http://mweb.baidu.com/p/promise-introduction.html" target="_blank" rel="noopener">Promise 初探</a></li><br><li><a href="http://mweb.baidu.com/p/javascript-async-0.html" target="_blank" rel="noopener">JavaScript中的异步梳理（0）</a></li><br><li><a href="http://mweb.baidu.com/p/javascript-async-2-promises-a.html" target="_blank" rel="noopener">JavaScript中的异步梳理（2）&mdash;&mdash;使用Promises/A</a></li><br><li><a href="http://www.web-tinker.com/article/20154.html" target="_blank" rel="noopener">jQuery的Deferred对象</a></li><br><li><a href="http://blog.qivhou.com/translation/2013/08/20/promise-deferred-objects-in-javascript-pt2-practical-use/" target="_blank" rel="noopener">JavaScript中的Promise和Deferred对象 第二部分：实战</a></li><br><li><a href="//developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">MDN</a></li><br><li><a href="http://www.cnblogs.com/hustskyking/p/javascript-asynchronous-programming.html" target="_blank" rel="noopener">JavaScript异步编程原理</a></li><br></ul>
+
 
           
         
@@ -1735,7 +1082,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2015/04/03/2015-04-03-input-bug-in-safari/">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2014/09/28/2014-09-28-why-we-behind-the-world/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lion">
@@ -1755,7 +1102,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/blog/2015/04/03/2015-04-03-input-bug-in-safari/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/15/index.html">Safari不认识type为search的input</a>
+                <a href="/blog/2014/09/28/2014-09-28-why-we-behind-the-world/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/15/index.html">为什么我们的技术“落后”于国外？</a>
               
             
           </h1>
@@ -1780,7 +1127,7 @@
                 
               
 
-              <time title="创建时间：2015-04-03 00:00:00" itemprop="dateCreated datePublished" datetime="2015-04-03T00:00:00+08:00">2015-04-03</time>
+              <time title="创建时间：2014-09-28 00:00:00" itemprop="dateCreated datePublished" datetime="2014-09-28T00:00:00+08:00">2014-09-28</time>
             
 
             
@@ -1814,7 +1161,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/前端杂烩/" itemprop="url" rel="index"><span itemprop="name">前端杂烩</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/观点和感想/" itemprop="url" rel="index"><span itemprop="name">观点和感想</span></a></span>
 
                 
                 
@@ -1850,11 +1197,11 @@
       
         
           
-            <p>我平时很少测试 safari 和 firefox，系统默认的浏览器被我设置成 chrome.</p>
-<p>昨天切图看到个表单，没用人家写好的组件，那一层套一层的 div 看了就怕，因为不需要做什么扩展，就自己写了个。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"search"</span> <span class="attr">name</span>=<span class="string">"q"</span> <span class="attr">id</span>=<span class="string">"J_Query"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>给 <code>J_Query</code> 写了一些样式，可是…Safari很任性的不认，左改右改搞了五六分钟没反应，火了！</p>
-<p>把 type 改成 text 就好了。</p>
+            <p>淘宝将 XTemplate 从 KISSY 中分离出来，作为单独的模板工具以迎合阿里巴巴各种 前端/node端 需求，今天在群里看到一个老外介绍 XTemplate 的<a href="http://dailyjs.com/2014/09/24/node-roundup/" target="_blank" rel="noopener">文章链接</a>，顿生感慨。</p>
+<p>英语是世界语，中国人懂英文是比较正常的事情，但是很少会有国人使用英文撰写博客，这就直接锐减了我们的信息出口，从而减少了老外主动跟我们交流的机会。</p>
+<p>技术的进步不仅需要有一堆人埋头苦干，更重要的环节是将埋头苦干的研究成果分享出来，老外们的分享，我们很容易获取到，不仅仅是我们，全世界都能获取并且方便理解，可是中文内容的分享不以为然，所以今天在老外的博客中看到国人的研究成果，让我感慨万千。</p>
+<p>国内的技术氛围相当浓烈，经常能在圈子里看到优秀的文章产出，很多文章也是同步于最新技术的，从这个角度来看，国内的技术并没有落后国外，或者说并没有落后多少。上次也看到裕波邀请国外的技术大牛来华演讲，这足以说明国内技术向外扩展的渴望和趋势。</p>
+<p>现在我们应该静下心来思考，如何让国外的技术圈子更加了解中国的技术发展，如何创建一个与国外程序员交流的平台！</p>
 
           
         
@@ -1911,7 +1258,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2015/04/03/2015-04-03-detect-first-visit-usr/">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2014/09/07/2014-09-07-onclick-in-javascript/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lion">
@@ -1931,7 +1278,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/blog/2015/04/03/2015-04-03-detect-first-visit-usr/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/15/index.html">根据访问属性进行差异化数据加载</a>
+                <a href="/blog/2014/09/07/2014-09-07-onclick-in-javascript/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/15/index.html">window.open被浏览器拦截</a>
               
             
           </h1>
@@ -1956,7 +1303,216 @@
                 
               
 
-              <time title="创建时间：2015-04-03 00:00:00" itemprop="dateCreated datePublished" datetime="2015-04-03T00:00:00+08:00">2015-04-03</time>
+              <time title="创建时间：2014-09-07 00:00:00" itemprop="dateCreated datePublished" datetime="2014-09-07T00:00:00+08:00">2014-09-07</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-12 18:10:11" itemprop="dateModified" datetime="2018-12-12T18:10:11+08:00">2018-12-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/JavaScript/前端杂烩/" itemprop="url" rel="index"><span itemprop="name">前端杂烩</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>我们都知道浏览器会拦截非鼠标触发的 window.open 事件，不同浏览器的处理不统一，如 chrome 还支持键盘触发 open，而 firefox 只允许鼠标左键触发，etc.</p>
+<p>在低版本 IE 下，我们可以使用 ActiveXObject 或者 Object 新开一个页面，如：</p>
+<pre><code>// IE Only
+var o=new ActiveXObject(&quot;WMPlayer.OCX&quot;);
+o.launchURL(&quot;http://barretlee.com&quot;);
+</code></pre><p>如果用户禁用了 WMP 对象，自然也是弹不出来的，值得注意的是，此处打开页面的是系统默认浏览器，而不是正在执行该脚本的浏览器，因为 WMP 使用的是自己的方法开打页面，跟浏览器没有任何关系。</p>
+<p>我也尝试在页面中插入一个空的 iframe ，然后在 iframe 中打开链接，不通。<br>也尝试过模拟事件来触发 click，依然不行。</p>
+<p>open 页面，浏览器会跟踪事件源，如果不是外部设备输入的而是 javascript 执行的信号，此次 open 将被浏览器拦截（浏览器设置了允许某个 URL 弹窗除外）。</p>
+<p>根据这个问题，我也测试了下，浏览器的反应时间：</p>
+<pre><code>// 点击页面后，出现弹窗
+document.onclick = function(){
+  setTimeout(function(){
+    open(&quot;http://barretlee.com&quot;)
+  }, 1000);
+}
+// 点击页面后，出现未弹窗
+document.onclick = function(){
+  setTimeout(function(){
+    open(&quot;http://barretlee.com&quot;)
+  }, 1001);
+}
+</code></pre><p>根据上面的测试，可以知道浏览器对外部设备信号的感知允许 1s 的延迟，为了排除进程阻塞的干扰，加了个 while 循环 1s：</p>
+<pre><code>document.onclick = function(){
+  var t = new Date*1; 
+  while(new Date*1 - t &lt; 1000){} 
+  setTimeout(function(){
+    open(&quot;http://barretlee.com&quot;)
+  }, 1000)
+}
+</code></pre><p>上面代码并没有弹窗。</p>
+<p>由此可以确定用户操作，浏览器允许的响应时间就是 1s 了。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2014/08/29/2014-08-29-cb-remote-debug-in-mobile-development/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lion">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="撼地神牛">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/blog/2014/08/29/2014-08-29-cb-remote-debug-in-mobile-development/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/15/index.html">PC远程调试移动设备</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2014-08-29 12:15:00" itemprop="dateCreated datePublished" datetime="2014-08-29T12:15:00+08:00">2014-08-29</time>
             
 
             
@@ -2040,26 +1596,16 @@
       
         
           
-            <p>判断用户是否第一次访问页面，先不说怎么做，想想什么场景下会用到？</p>
-<p>如果我们页面的体积过大，用户第一次访问，会消耗大量的时间(2-5s)去下载页面所需要的资源，给用户带来的体验是很不好的，尤其是移动端的用户。如果我们可以在用户第一次访问的时候只加载主要内容，在这个主要内容中引导用户做更多的加载资源的操作，一方面可以让用户熟悉系统，一方面也给页面加载资源争取了巨量的时间，何乐而不为？！</p>
-<p>我们能最快想到的方案是，使用 cookie ，服务器根据 cookie 的属性（如某个 Tag 的值为 1 或者 0）来判断要给用户呈现什么样的内容，这样做有几点不好：</p>
-<ol>
-<li>需要服务器协助，而很多时候前端对服务器的控制为 0</li>
-<li>cookie在每次网页请求的时候都会附带，浪费 （当然，可以在用户访问一次之后清理这个 cookie，比如服务器端设置 session 值，不过又增加了后端的逻辑负担，而且不靠谱）</li>
-<li>如果用户禁用了 cookie 呢？</li>
-</ol>
-<p>问题有很多，解决问题的方案也不少，针对这个问题，HTML5规范也提供了相应的事件和属性支持。</p>
-<h3 id="如何判断用户是否为第一次访问页面"><a href="#如何判断用户是否为第一次访问页面" class="headerlink" title="如何判断用户是否为第一次访问页面"></a>如何判断用户是否为第一次访问页面</h3><p>当页面加载的时候会触发 onload 事件，完了之后触发 pageShow 事件，pageShow 事件是页面每次加载都会触发的，而 onload 不然。默认情况下，浏览器会缓存当前访问的页面（隐私模式除外，特殊处理，也会缓存，退出隐私模式时，缓存的所有内容全部删除），当用户点击前进或者后退按钮时，浏览器会从缓存中获取内容，这个时候 onload 事件是不会触发的。</p>
-<p>可以这么说：</p>
-<ul>
-<li>如果待加载的页面不存在于缓存中，会触发 onload ，再触发 pageShow</li>
-<li>如果待加载的页面存在于缓存中，不触发 onload，只触发 pageShow</li>
-</ul>
-<p>pageShow 事件对象 event 中有一个属性值，叫做 persisted，如果这个值为 true，则为缓存数据，false，则为第一次加载。</p>
-<h3 id="差异化加载"><a href="#差异化加载" class="headerlink" title="差异化加载"></a>差异化加载</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> body = <span class="built_in">document</span>.body;</span><br><span class="line">body.onpageshow = <span class="function"><span class="keyword">function</span>(<span class="params">evt</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(evt.persisted)&#123;</span><br><span class="line">    <span class="comment">// 如果从缓存加载，该干啥干啥</span></span><br><span class="line">    doSomething();</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 如果用户第一次访问（没有缓存），只加载主体框架</span></span><br><span class="line">    loadMainContent();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>在 <code>loadMainContent()</code> 我们可以这样干：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">funtion loadMainContent()&#123;</span><br><span class="line">  <span class="comment">// 引导用户执行操作，操作一次加载点东西</span></span><br><span class="line">  leadUserDoSomething();</span><br><span class="line">  <span class="comment">// 或者悄悄地缓慢的加载需要的数据</span></span><br><span class="line">  loadDataInQuickMode();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>当然，通过 cookie 或者 pageshow 事件属性判断用户浏览器是否有缓存数据不是最终的解决方案，但这是一种思考模式，可以发散思维~</p>
+            <div class="history-article">本文为归档内容,原始地址在 <a href="http://www.cnblogs.com/hustskyking/archive/2014/08/29/remote-debug-in-mobile-development.html" target="_blank">博客园</a>.</div>
+
+<p>我们在移动端进行前端开发时，会遇到一个让人头痛但不得不面对的问题&mdash;&mdash;调试。</p><br><p>在 PC 机器上，我们有功能强大的 Chrome DevTools、Firebug，即便是老版本的 IE ，我们也可以安装微软提供的插件，对网页样式和请求信息轻松进行调试。但在手机、平板上，很多人就无招可施了，一个劲的 alert 查看调试信息。如果你已经厌倦了可爱又可恨的 alert 弹窗，请继续往下阅读。</p><br><h3>一、先说说调试的原理</h3><br><p>设备浏览器中输入一个 URL，它会向 URL 所在的 server 请求资源：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">+-------------+         +---------------+</span><br><span class="line">|    client   |--------→|    Internet   |</span><br><span class="line">+-------------+         +---------------+</span><br></pre></td></tr></table></figure>
+<p>此时，数据是从 client 和 目标 server 之间的隐秘交互，除非 server 端的代码是由我们自己控制，否则很难了解他们之间都做了什么信息传递。如果 server 传过来的代码存在 bug，此时我们就相当纠结了。比较常见的情景是，该 server 就是我们的测试机器，我们在测试机器上开发，通过一个移动设备 client 来实施调试代码，常用的调试方式就是修改 server 代码，再实时查看 client 的响应。</p><br><p>但是，问题来了。某天，Barret 发现 client 端页面显示有 bug，由于 client 请求的目标 server 是线上，不像平时的测试机器，我们可以随意修改代码然后查看效果，并且线上的代码都是经过压缩和打包了的，很难阅读，怎么办？</p><br><p>于是，我想到了使用代理：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">+-------------+    \ /   +---------------+</span><br><span class="line">|    client   |-----×---→|    Internet   |</span><br><span class="line">+-------------+    / \   +---------------+</span><br><span class="line">       |                         ↑</span><br><span class="line">       |                         |</span><br><span class="line">       |     +-------------+     |</span><br><span class="line">       +----→|    proxy    |-----+</span><br><span class="line">             +-------------+</span><br></pre></td></tr></table></figure>
+<p>我们在 client 端做相应配置，让他的请求强制指向 proxy，然后 proxy 转发请求到目标 server，proxy 上的请求和响应都是透明的，通过篡改 client 到 proxy 的请求，或者篡改 server 到 proxy 的响应，就可以实时查看这些人为修改在 client 端的效果了。本文目的就是说明 proxy 是如何操作的。</p><br><h3>二、通过 Fiddler 代理</h3><br><p>windows 下著名的 http(s) 代理软件 fiddler 使用比较广泛，mac 下可以使用 charles 代理，由于使用人群相对偏少，本文就不细说，感兴趣的可以 PM 我。charles 是一个跨平台的软件，windows 下也可以使用，不过个人偏好 fiddler。OK，我们来看看 fiddler 是如何一步一步完成网络代理的。</p><br><p><strong>1. 配置客户端</strong></p><br><p>这里说的客户端包括手机、平板甚至电脑。一般的 android / IOS 设备都可以设置代理：</p><br><p>step 1. 当连接好网络之后（相信你在一个 wifi 环境下进行开发），点击右侧的箭头按钮，我使用的是 android 手机，IOS 也比较好找，在 设置&gt;Wi-Fi 中找到对应的网络，右侧有个圆圈包着的 i 图标，点击进入：</p><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2014/08/29/282333111579295.jpg" data-source="http://images.cnitblog.com/blog/387325/201408/282333111579295.jpg" alt="" width="289" height="511"></p><br><p>step 2.&nbsp;一般代理方式有两种，手动和自动，将其设置为手动，然后填写，你电脑的 IP（为啥呢？因为 proxy 是你的电脑，client 的请求要全部转发到你的电脑上，然后使用 fiddler 软件去分析/替换请求），windows 下使用 ipconfig 可以看到本机 IP，linux/unix 下使用 ifconfig 查看：</p><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2014/08/29/282339113135798.jpg" data-source="http://images.cnitblog.com/blog/387325/201408/282339113135798.jpg" alt="" width="452" height="296"></p><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2014/08/29/282333236261387.jpg" data-source="http://images.cnitblog.com/blog/387325/201408/282333236261387.jpg" alt="" width="285" height="505"></p><br><p>step 3.&nbsp;设置端口，端口可以随意设置，但最好大于 3000，数值比较小的端口可能被系统占用了。</p><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2014/08/29/282340576885734.jpg" data-source="http://images.cnitblog.com/blog/387325/201408/282340576885734.jpg" alt=""></p><br><p>这里需要注意一点，由于 client 相对我们电脑的 fiddler 来说是一个远程设备，所以要在 Allow Remote Computers to Connert 选项上打上勾勾。</p><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2014/08/29/282339362666508.jpg" data-source="http://images.cnitblog.com/blog/387325/201408/282339362666508.jpg" alt=""></p><br><p>step 4.&nbsp;进入手机浏览器，输入网址：</p><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2014/08/29/282343301106735.jpg" data-source="http://images.cnitblog.com/blog/387325/201408/282343301106735.jpg" alt="" width="258" height="458"></p><br><p>step 5.&nbsp;然后把你的眼睛挪到电脑屏幕上看看 fiddler：</p><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2014/08/29/282344162984759.jpg" data-source="http://images.cnitblog.com/blog/387325/201408/282344162984759.jpg" alt=""></p><br><p>到这里，我相信你已经看明白了整个 proxy 的原理。至于 fiddler 如何替换包，如何修改包，如果调试，不是本文叙述的重点，下面演示一个简单的替换。</p><br><p><strong>2. 调试</strong></p><br><p>请求百度的页面，我们把百度的 logo 换成博客园的：</p><br><p>step 1. 在 AutoResponder 中添加一项：</p><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2014/08/29/282352193137126.jpg" data-source="http://images.cnitblog.com/blog/387325/201408/282352193137126.jpg" alt="" width="776" height="405"></p><br><p>step 2. 进入你的浏览器（UC下清空缓存，如果缓存中有百度图片，他会使用缓存，并不发出这个请求），打开百度页面：</p><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2014/08/29/282356507983855.jpg" data-source="http://images.cnitblog.com/blog/387325/201408/282356507983855.jpg" alt="" width="284" height="506"></p><br><p>然后你就发现，貌似哪里有点不对~ 除此之外，你还可以将线上文件替换到本地，比如线上的 xyz-min.js 替换成本地的 xyz.js 然后修改 xyz.js 的内容，直接调试线上 bug，异常方便！</p><br><h3>三、其他工具</h3><br><p>有人会说，我没有实体机，那我建议你在电脑上安装虚拟机，android 和 IOS 的虚拟机都比较好安装。</p><br><p>有人会说，我电脑太卡，跑不动虚拟机，那我建议你就是用上述方式。</p><br><p>有人会说，…..，（如果没实体机也没虚拟机，那你开发个毛线呀）。</p><br><p>Fiddler 和 Charles 都是 HTTP(s) 层的抓包软件，如果你是 websocket 开发调试，建议使用 wireshark，网络七层协议，这个软件能抓除数据链路层之外的所有层信息，出于安全考虑，它抓到的包是不能篡改的。</p><br><p>还有一些比较好用的工具，如利用 pac 文件配置系统代理，weinre 调试等，这里简单介绍下 weinre：</p><br><div><br><h4>1. 安装</h4><br><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install –g weinre</span><br></pre></td></tr></table></figure><br><br><h4>2. 打开</h4><br><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">weinre -httpPort 7999 -boundHost -all-</span><br></pre></td></tr></table></figure><br><br><ul><br><li>httpPort 监听端口</li><br><li>boundHost –all- 绑定主机</li><br></ul><br><h4>3. 说明都写在图片里头，相信聪明的你可以悟到</h4><br></div><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2014/08/29/290011110635771.png" data-source="http://images.cnitblog.com/blog/387325/201408/290011110635771.png" alt="" width="675" height="710"></p><br><h3>四、小结</h3><br><p>移动端开发不比 PC 轻松，调试只是需要注意的一个小点，还有很多很多未知的东西等着我们去探索，本文也算是抛砖引玉，如果您有更好的移动端调试方案，希望可以分享出来，一起交流。</p>
+
 
           
         
@@ -2116,7 +1662,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2015/04/02/2015-04-02-cb-bugs/">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2014/08/29/2014-08-29-dollar-in-different-face/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lion">
@@ -2136,7 +1682,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/blog/2015/04/02/2015-04-02-cb-bugs/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/15/index.html">前人挖坑，后人填坑</a>
+                <a href="/blog/2014/08/29/2014-08-29-dollar-in-different-face/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/15/index.html">￥符号，少了一横</a>
               
             
           </h1>
@@ -2161,7 +1707,7 @@
                 
               
 
-              <time title="创建时间：2015-04-02 10:16:00" itemprop="dateCreated datePublished" datetime="2015-04-02T10:16:00+08:00">2015-04-02</time>
+              <time title="创建时间：2014-08-29 00:00:00" itemprop="dateCreated datePublished" datetime="2014-08-29T00:00:00+08:00">2014-08-29</time>
             
 
             
@@ -2195,7 +1741,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/笔记本/" itemprop="url" rel="index"><span itemprop="name">笔记本</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/前端杂烩/" itemprop="url" rel="index"><span itemprop="name">前端杂烩</span></a></span>
 
                 
                 
@@ -2231,11 +1777,576 @@
       
         
           
-            <div class="history-article">本文为归档内容,原始地址在 <a href="http://www.cnblogs.com/hustskyking/archive/2015/04/02/bugs.html" target="_blank">博客园</a>.</div>
+            <p>跟钱有关的问题。</p>
+<p>数值前加一个 ￥ 符号，可是视觉同学一定要使用两横的 dollar 符号。咋弄？</p>
+<p>这个符号在不同字体下呈现的效果是不一样的，微软雅黑下是两横，不过显示的并不好看，正确的处理方式应该是：</p>
+<pre><code>&lt;style&gt;i {font-family:&quot;Microsoft Yahei&quot;;}&lt;/style&gt;
+&lt;i&gt;&amp;yen;&lt;/i&gt;
+</code></pre>
+          
+        
+      
+    </div>
 
-<p>写代码不免出点 bug，没有人可以保证自己写的代码不出问题，而那些没有被挖掘出来的 bug，便成了后来者哭笑不得的坑…</p><br><p>这段时间公司全面 https 改造，涉及到域名的迁移，域名的迁移不是 nginx 做个映射就完事儿了，还有各种代码的去 schema，各种组件的搬迁，算是一个大手术！我看最近百度主站也升级到了 https，期间应该出过一次问题吧，貌似回滚了一次，他们遇到的坑应该还不算多，只是 www 域升级，而不是全网。公司最近出了不少的问题，大小问题都有，表面看是前人挖的坑，实际是整体架构思考的有欠缺。</p><br><p>当我们放下一个项目转投下一个时，手头的东西就要转交给他人处理，或者..不再有人处理，可代码还在那里，搞不好你就引用了别人的东西，保不准哪天别人的代码里就爆出了个大 bug，当然这里的”别人”也可能是 你！我们既不希望自己是受害者，更不希望自己是施害者。</p><br><h4><span><strong><a id="user-content-1-如何挖坑" class="anchor"></a><span>1. 如何挖坑</span></strong></span></h4><br><p>挖坑可不是一件简单的事情，你写出来的插件、组件、代码，很可能被很多人用到了，各种业务场景下狂奔你的代码，一堆测试人员检测你的bug，所以在项目中埋坑可不是一件容易的事情。</p><br><p>那么如何埋坑呢？可以参考以下方案：</p><br><ul class="task-list"><br><li>在一个文件中放一坨很长很长的代码，不加注释，不解耦程序</li><br><li>把判断都放在一层嵌一层深深的逻辑里头</li><br><li>程序中临时加入几个全局的标记变量，在很多地方改变变量的值，在很多地方使用变量的值</li><br><li>不考虑多变的场景，不实时容错，让他按照你脑子的轨迹跑</li><br><li>到处散播不同版本的代码，不整理统一的文档</li><br></ul><br><p>如果这些方案还不够你挖坑，我想你团队同学的技术水平也真真是太高了。</p><br><p>很多时候，我们都是不经意间留下了隐患。当自己写的东西被其他人使用后，程序需要兼顾的场景就会增多，出现的问题也会变多，这个时候我们不得不完善自己的代码逻辑。结果就是，逻辑耦合度高了不少，代码层次深了不少，出错的概率也就增加了不少。</p><br><p>所以在设计一个功能或者组件的时候，该考虑什么，不该考虑什么，一定要理清楚。并不是所有东西都适合往代码里加，我们不是在做 ExtJS 这个整体方案，也不是编织一个底层的操作库，只是用少量的逻辑整合离散化、个性化的业务，这些逻辑越少越好，与核心逻辑无关的内容就必须抽离出来！</p><br><h4><span><strong><a id="user-content-2-使劲踩坑" class="anchor"></a><span>2. 使劲踩坑</span></strong></span></h4><br><p>如果说挖坑是一件很有难度的活儿，那踩坑就更难了。其实可以说难的不是踩坑，而是发现自己踩坑了。</p><br><p>在一堆巨量的文件中找出「因把等于号写成恒等号」造成的 bug，这不是轻松的事情，可能你在 debugger 的时候进入了别人的代码领域，对着别人巨长而又没什么注释的代码，估计当场就晕了，更晕的是，自己却还在怀疑这到底是不是这堆代码里头的问题。团队合作中，我们心里默认相信队友，队友产出的代码是没有问题可以直接拿过来使用的，所以一旦出现问题，我们怀疑更多的是自己，质疑别人需要很大的勇气，尤其是质疑那些成熟的框架，用了很多年的代码。</p><br><p>那么如何踩坑呢？我们可不喜欢踩坑，有的坑踩进去就跳不出来了，最后只能选择其他方案处理。很少有前端同学写程序的测试用例，可能还有一部分同学根本就没听说过什么测试用例。而在后端中（比如nodejs）没有测试用例的代码就是一堆废代码，除了自己可以拿着用用，别人根本就不敢用的。那么测试用例会考虑做那些事情呢？简单点说：</p><br><ul class="task-list"><br><li>写出有问题的代码，让程序按照期望的出错方式出错，如果没有，程序就有bug</li><br><li>写出没问题的代码，让程序按照正常的流程返回正确的结果，如果没有，程序就有bug</li><br></ul><br><p>测试用例要覆盖到程序中所有的逻辑判断，比如 if elseif else 等判断的逻辑都要覆盖进去。当我们的测试代码覆盖了100%的逻辑，那坑位就展露无遗了。</p><br><p>埋坑人的致命弱点就是很少对程序作出异常情况判断，只要找出程序中的异常点，试图以另类的方式触发这个异常，你就顺利踩坑了！</p><br><h4><span><strong><a id="user-content-3-用力填坑" class="anchor"></a><span>3. 用力填坑</span></strong></span></h4><br><p>首先，填坑是一种责任。</p><br><p>发现问题是最难的，解决问题只是时间的问题。当我们确认了一个坑之后，第一件事情就是告诉别人这里有坑，你不要踩了。但是最好再多补一句话：你先别踩，等我填好了坑你再来。我这觉得这句话真的很暖人心，程序猿之间的关怀就应该这么赤裸裸的。尽管，有的时候，这个坑不是你挖的..</p><br><p>当我们挖好坑，踩完坑，再埋好坑之后，回头想想自己在团队中扮演什么样的角色，挖坑者还是埋坑者？这必然是有益于成长的。</p>
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
 
 
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2014/08/29/2014-08-29-be-patient/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lion">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="撼地神牛">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/blog/2014/08/29/2014-08-29-be-patient/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/15/index.html">评《别太听上司的话》</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2014-08-29 00:00:00" itemprop="dateCreated datePublished" datetime="2014-08-29T00:00:00+08:00">2014-08-29</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-12 18:10:11" itemprop="dateModified" datetime="2018-12-12T18:10:11+08:00">2018-12-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/观点和感想/" itemprop="url" rel="index"><span itemprop="name">观点和感想</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>今天早上逛博客园，看到了一篇吐槽的文章：<a href="http://www.cnblogs.com/beatless/p/3944101.html" target="_blank" rel="noopener">别太听上司的话</a>，有些感触：</p>
+<p>给你加任务的，可以称之为需求方。在需求方看来，无论你是前端开发还是后台开发，广义上讲，都是资源，有需求当然也是需要资源的。</p>
+<p>每一个需求过来都应该进行评审，需求方不提，你自己也没有提出来，他们觉得加一点东西或者改一点东西是十分轻松的事情，因为他们不懂技术，可是你懂呀，你需要把排期和难点罗列出来，给出一个相对准确的项目时间，这有啥难度么？</p>
+<p>能力强不等于无敌，有些人会说能力越强责任越重，你可以认为这是忽悠你的借口，不过这也是事实，当你的技术能力和业务能力持平之后，你的工资和职衔也就上去了。</p>
+<p>你说一两年学到的东西还不如两个月的，显然，你指的是技术方面。想必楼主是一个沉醉于技术的人，但是在工作中，技术只是一方面，或许学会做人才是最重要的。</p>
+<p>我也经常会遭遇楼主这样的经历，每每过来都是忍气吞声，但是每一次我都试着去坦然去面对，当然提高了自己跟人 PK 的能力。</p>
+<p>所以，加油吧！</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2014/08/21/2014-08-21-IE-bug-in-title-element/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lion">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="撼地神牛">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/blog/2014/08/21/2014-08-21-IE-bug-in-title-element/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/15/index.html">IE下title没有childNodes</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2014-08-21 00:00:00" itemprop="dateCreated datePublished" datetime="2014-08-21T00:00:00+08:00">2014-08-21</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-12 18:10:11" itemprop="dateModified" datetime="2018-12-12T18:10:11+08:00">2018-12-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/JavaScript/前端杂烩/" itemprop="url" rel="index"><span itemprop="name">前端杂烩</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><strong>问题：</strong></p>
+<blockquote>
+<p>IE 8下 document.getElementsByTagName(‘title’)[0].firstChild为毛是null啊 而document.getElementsByTagName(‘title’)[0].innerHTML却有值，给title赋值却报错。</p>
+</blockquote>
+<p>按照 w3c 的解释，title 元素下有且只有一个 text node，除 IE 外，其他浏览器都能正确打印 getTagName(“title”).item(0).childNodes == 1; 而 IE 他不认为 title 元素有 childNode，你可以当他是没有实现规范的 bug。IE9+ 修复了这个问题。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2014/08/20/2014-08-20-cb-javascript-semantization/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lion">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="撼地神牛">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/blog/2014/08/20/2014-08-20-cb-javascript-semantization/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/15/index.html">如何让你的JavaScript代码更加语义化</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2014-08-20 11:07:00" itemprop="dateCreated datePublished" datetime="2014-08-20T11:07:00+08:00">2014-08-20</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-12 18:10:11" itemprop="dateModified" datetime="2018-12-12T18:10:11+08:00">2018-12-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/前端杂烩/" itemprop="url" rel="index"><span itemprop="name">前端杂烩</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <div class="history-article">本文为归档内容,原始地址在 <a href="http://www.cnblogs.com/hustskyking/archive/2014/08/20/javascript-semantization.html" target="_blank">博客园</a>.</div>
+
+<p class="p1">语义化这个词在 HTML 中用的比较多，即根据内容的结构化选择合适的标签。其作用不容小觑：</p><br><ul class="ul1"><br><li class="li3">赋予标签含义，让代码结构更加清晰，虽然我们可以在标签上添加 class 来标识，但这种通过属性来表示本体的形式会显得不够直接，而且在一定程度上也有冗余。</li><br><li class="li3">优化搜索引擎（SEO），结构良好的网页对搜索引擎的亲和力是很高的，百度和 google 也给出了很多网页结构化的建议（规范），方便他们抓取网页。</li><br><li class="li3">利于设备解析，如盲人阅读器对页面的分析，目前淘宝很多网页都是支持盲人阅读的，这种体验上的优化得利于网页的良好结构和语义化表达。</li><br><li class="li3">便于开发者维护，在参加工作之前，很多程序员都是单人开发模式，单人开发无所谓代码结构，自己看得懂就差不多了，一旦走向工作岗位，会发现，以前的鄙习有点让自己捉襟见肘了。</li><br></ul><br><p class="p2">W3C Group 工作组在 web 规范上持续贡献，他们的目标也是期望整个互联网的发展态势稳定统一起来。不扯远了，回到本文需要阐述的重点：如何语义化 JavaScript 代码？</p><br><h3 class="p4"><strong>一、先看看那些不易读懂的 JavaScript 代码</strong></h3><br><p class="p2"><strong>1. 判断</strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// 数据类型判断</span><br><span class="line">if(Object.prototype.toString.call(str) === &quot;[object String]&quot;)&#123;</span><br><span class="line">    // doSomething();</span><br><span class="line">&#125;；</span><br><span class="line"></span><br><span class="line">// 文件类型判断</span><br><span class="line">if(/.*\.css(?=\?|$)/.test(\/path/to/main.css&quot;))&#123;</span><br><span class="line">    // doSomething();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p class="p2"><strong>2. 清空一个队列</strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var Queue = [&quot;test1&quot;, &quot;test2&quot;, &quot;test3&quot;];</span><br><span class="line">// 常见方式</span><br><span class="line">Queue.length = 0;</span><br><span class="line">Queue = [];</span><br></pre></td></tr></table></figure>
+<p class="p2"><strong>3. 注册一个变量</strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">// 注册</span><br><span class="line">var repos = &#123;&#125;;</span><br><span class="line"></span><br><span class="line">repos[&quot;a&quot;] = &#123;</span><br><span class="line">   name: &quot;a&quot;,</span><br><span class="line">   content: &#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">repos[&quot;b&quot;] = &#123;</span><br><span class="line">   name: &quot;b&quot;,</span><br><span class="line">   content: &#123;&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p class="p2">上面几个例子倒不至于看不懂，程序都特别简单，第一个例子中，我们通过 Object 原型链上的 toString 方法来判断一个变量是否为 string 类型，以及使用正则来判断一个文件是不是 css 文件。代码写起来比较轻松，倘若我们同时需要判断多个对象是否为多个类型中的一种呢？再比如我们需要在一串代码中提取 require 依赖关系呢，是否应该思考下如何组织自己的代码？</p><br><p class="p2">在第二个例子中，将数组的长度设置为 0，或者使用空数组来重置这个变量，都是十分常见的方式，但目前的场景是清空一个队列，我们是否可以使用更加语义化的形式来呈现？比如我们只需要清空该队列的前五个和后三个 item 呢？</p><br><p class="p2">第三个例子中，变量的注册，把一堆注册放在一起，上面的形式确实也是一目了然，如果 a b c d 等都是分隔穿插在几百行代码之间呢？突然来个 repos[“x”] 这样是否显得有些不太直观。</p><br><p class="p2">为了说明本文所倡导的思想，上面的几个解释都有些含糊和牵强，请往下看。</p><br><h3 class="p4"><strong>二、提高代码语义性</strong></h3><br><p class="p2">针对上述三个案例，用更加语义化的方式来呈现代码：</p><br><p class="p2"><strong>1. 语义化变量</strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">// 类型判断</span><br><span class="line">function isType(type)&#123;</span><br><span class="line">    return function(o)&#123;</span><br><span class="line">        return Object.prototype.toString.call(o) === &apos;[object &apos; + type + &apos;]&apos;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var isString = isType(&quot;String&quot;);</span><br><span class="line">var isObject = isType(&quot;Object&quot;);</span><br><span class="line">var isArray = isType(&quot;Array&quot;);</span><br><span class="line"></span><br><span class="line">isString(&quot;I&apos;m Barret Lee.&quot;);</span><br><span class="line">isArray([1,2,3])；</span><br><span class="line">isObject(&#123;&#125;);</span><br></pre></td></tr></table></figure>
+<p class="p2">我觉得不需要太多的解释，对比</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if(Object.prototype.toString.call(str) === &quot;[object String]&quot;)&#123;</span><br><span class="line">    // code here...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>显得清新多了吧。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// 提取常量</span><br><span class="line">var isCss = /.*\.css(?=\?|$)/;</span><br><span class="line">isCss.test(&quot;/path/to/main.css&quot;);</span><br></pre></td></tr></table></figure>
+<p class="p2">不管 isCss 这个正则代码有多长，当我们看到 isCss 这个单词就可以顾名思义。很多人写正则都不会将正则单独提取出来使用某个有意义的变量去存储，加注释还好，要是不加注释，后续开发者就只能硬着头皮看懂正则去理解代码的含义。</p><br><p class="p2">这样的处理，实际上是增加了代码量，不过从工程角度去审视，有助于提高开发效率以及代码的组织性。</p><br><p class="p2"><strong>2. 语义化行为</strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var Queue = [&quot;test1&quot;, &quot;test2&quot;, &quot;test3&quot;];</span><br><span class="line">Queue.splice(0, Queue.length);</span><br></pre></td></tr></table></figure>
+<p class="p2">上面代码具有很强的语义性，从索引为 0 的地方开始，直到队列最后，删除 Queue 中所有的 item。这种写法的扩展性也更好：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Queue.splice(2, 4); // 删除从索引为 2，往后的 4 个元素</span><br></pre></td></tr></table></figure>
+<p class="p2">这只是个小例子，有些行为是需要很多代码组合处理的，如果没有很好的组合同一行为的代码，整个结构就显得十分涣散，不利于阅读。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// 注册</span><br><span class="line">var repos = [];</span><br><span class="line"></span><br><span class="line">function register(o)&#123;</span><br><span class="line">   repos[o.name] = o;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">register(&#123;</span><br><span class="line">  name: &quot;a&quot;,</span><br><span class="line">  content: &#123;&#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p class="p2">对比我们之前</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">repos[&quot;a&quot;] = &#123;</span><br><span class="line">   name: &quot;a&quot;,</span><br><span class="line">   content: &#123;&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p class="p5"><span>语义化程度是不是有所提高~</span></p><br><h3 class="p4"><strong>三、小结</strong></h3><br><p class="p2">代码的优化，需要考虑的维度很多。但是代码的优化并不是减少代码量，有的时候我们需要增加代码来提高代码的可阅读性。</p><br><ul class="ul1"><br><li class="li3">正确标记变量</li><br><li class="li3">封装某个动作</li><br><li class="li3">注意函数的写法</li><br><li class="li3">不容易理解的东西，加注释</li><br></ul><br><p class="p2">本文为抛砖引玉，希望可以触发你对代码优化的敏感度的思考，写出一手别人竖拇指的代码~</p><br><p class="p2">&nbsp;</p>
           
         
       
@@ -2280,7 +2391,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/blog/page/14/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/blog/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/14/">14</a><span class="page-number current">15</span><a class="page-number" href="/blog/page/16/">16</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/32/">32</a><a class="extend next" rel="next" href="/blog/page/16/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/blog/page/14/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/blog/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/14/">14</a><span class="page-number current">15</span><a class="page-number" href="/blog/page/16/">16</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/28/">28</a><a class="extend next" rel="next" href="/blog/page/16/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2323,7 +2434,7 @@
                 
                   <a href="/blog/archives/">
                 
-                    <span class="site-state-item-count">311</span>
+                    <span class="site-state-item-count">272</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2502,29 +2613,7 @@
                     
                       
                     
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">94</span>
+                    <span class="site-state-item-count">83</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -2971,65 +3060,7 @@
                     
                       
                     
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">241</span>
+                    <span class="site-state-item-count">215</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

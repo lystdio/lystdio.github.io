@@ -412,7 +412,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2014/04/26/2014-04-26-gsup-error-in-atom-file/">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2013/11/26/2013-11-26-cb-authentication-in-web/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lion">
@@ -432,7 +432,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/blog/2014/04/26/2014-04-26-gsup-error-in-atom-file/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/22/index.html">jekyll中gsub未定义的错误</a>
+                <a href="/blog/2013/11/26/2013-11-26-cb-authentication-in-web/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/22/index.html">OAuth认证原理及HTTP下的密码安全传输</a>
               
             
           </h1>
@@ -457,7 +457,195 @@
                 
               
 
-              <time title="创建时间：2014-04-26 00:00:00" itemprop="dateCreated datePublished" datetime="2014-04-26T00:00:00+08:00">2014-04-26</time>
+              <time title="创建时间：2013-11-26 02:58:00" itemprop="dateCreated datePublished" datetime="2013-11-26T02:58:00+08:00">2013-11-26</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-12 18:10:11" itemprop="dateModified" datetime="2018-12-12T18:10:11+08:00">2018-12-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/前端杂烩/" itemprop="url" rel="index"><span itemprop="name">前端杂烩</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/前端杂烩/网络安全/" itemprop="url" rel="index"><span itemprop="name">网络安全</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <div class="history-article">本文为归档内容,原始地址在 <a href="http://www.cnblogs.com/hustskyking/archive/2013/11/26/authentication-in-web.html" target="_blank">博客园</a>.</div>
+
+<p>很多人都会问这样一个问题，我们在登录的时候，密码会不会泄露？随便进一个网站，登录时抓包分析，可以看到自己的密码都是明文传输的，在如此复杂的web环境下，我们没有百分的把握保证信息在传输过程中不被截获，那不使用明文如何告诉服务器自己的身份呢？</p><br><p>在一些高度通信安全的网络中，数据传输会使用HTTPS作为传输协议，但是通常情况下我们没必要使用HTTPS传输，虽说安全，但传输数据都需要加密解密，很费时。我们可以使用一些加密方式（如md5）对密码进行加密，如果仅仅只对密码加密那肯定是没有任何作用，所以可以在密码中加入一些其他的字符，合并之后使这个密码成为一个临时密码~</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;label&gt;username:&lt;/label&gt;&lt;input id=&quot;uid&quot; type=&quot;text&quot;&gt;</span><br><span class="line">&lt;label&gt;password:&lt;/label&gt;&lt;input id=&quot;pwd&quot; type=&quot;password&quot;&gt;</span><br><span class="line">&lt;input type=&quot;submit&quot;&gt;</span><br><span class="line">&lt;script type=&quot;text/javascript&quot;&gt;</span><br><span class="line">    var t = new Date*1,</span><br><span class="line">        uid = $(&quot;#uid&quot;).val(),</span><br><span class="line">        pwd = $(&quot;#pwd&quot;).val(),</span><br><span class="line">        delta = encrypt($(&quot;#pwd&quot;).val() + t);</span><br><span class="line"></span><br><span class="line">    $.post(&quot;./login.php&quot;,&#123;</span><br><span class="line">        uid: $(&quot;#uid&quot;).val(),</span><br><span class="line">        pwd: delta,</span><br><span class="line">        tid: t</span><br><span class="line">    &#125;, function(data)&#123;</span><br><span class="line">        //do something.</span><br><span class="line">    &#125;)</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>在上面，提交表单的时候，pwd并不是真实的密码，他是pwd与t混合再加密的字符串。这样的字符串即便是被人截获也是一个无效的数据，即便是截获并知道了破解方式，我们还可以在后台给他设定一个时效限制。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    define(&quot;uid&quot;, &quot;user-A&quot;);</span><br><span class="line">    define(&quot;pwd&quot;, &quot;user-A-pwd&quot;);</span><br><span class="line"></span><br><span class="line">if(time() - $_POST[&apos;tid&apos;] &gt; 60*2 ||</span><br><span class="line">    $_POST[&apos;uid&apos;] !== uid ||</span><br><span class="line">    decrypt(pwd . $_POST[&apos;tid&apos;]) !== $_POST[&apos;pwd&apos;])&#123;</span><br><span class="line">    die(&quot;error&quot;);</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>如果下面三个条件有一个不满足就报错</p><br><ul><br><li>时间超过2分钟</li><br><li>uid不匹配</li><br><li>pwd与t的组合密码不匹配</li><br></ul><br><p>当然，上面提到的encrypt和decrypt都是约定好的加密和解密方式，通常会使用md5加密。</p><br><p>这样的加密传输方式，需要客户端和服务器端的时间比较准确。如果要考虑时间不准确问题以及hacker动作迅速的问题，那就得用token来验证了。</p><br><p>所谓的token，其实就是在登录之前向服务器发送一个请求，获取准入的一个临时密码，这个临时密码是由服务器给出，所以不存在上面所说的时间不准确问题，同时这个token也是一个随机的字符串，只能单次使用，hacker很难获取，即便获取也无法使用，因为下一步登录所需的信息他没有。</p><br><p>很多童鞋都用过人人、QQ、微博的开发平台，其中OAuth认证也就是这个原理。就拿人人开发平台的认证来说，他的认证流程是这样的：&nbsp;</p><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2013/11/26/26144042-63a32b86b7574f06adb31c99a39b4316.png" data-source="http://images.cnitblog.com/blog/387325/201311/26144042-63a32b86b7574f06adb31c99a39b4316.png" alt="renren"></p><br><p>通过你在平台申请的API KEY向//graph.renren.com/oauth/authorize请求一个临时密码，也就是token code，然后利用token code向//graph.renren.com/oauth/token请求用户数据。整个流程十分简单。</p><br><p>这是一个简单的demo，获取你的头像和姓名。<a href="http://qianduannotes.duapp.com/renren/enter.html" target="_blank">人人OAuth认证demo</a></p><br><p>使用token的弊端是需要额外发送一次请求，过程稍微复杂。有些公司VPN通道就是利用token做密码，为了保证高安全性，他们使用的是一个信息与服务器同步硬件设备，和银行发的动态口令一样，每次登陆都需要输入这个口令，那这个口令也就是token，不过他不是网络传输获取，所以安全性更高。</p>
+
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2013/11/04/2013-11-04-cb-white-screen-in-chrome/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lion">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="撼地神牛">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/blog/2013/11/04/2013-11-04-cb-white-screen-in-chrome/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/22/index.html">chrome浏览器渲染白屏问题剖析</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2013-11-04 01:26:00" itemprop="dateCreated datePublished" datetime="2013-11-04T01:26:00+08:00">2013-11-04</time>
             
 
             
@@ -527,624 +715,12 @@
       
         
           
-            <p>今天被 jekyll 编译时的一个问题搞疯了。</p>
-<blockquote>
-<p>Liquid Exception: undefined method `gsub’ for nil:NilClass in atom.xml</p>
-</blockquote>
-<p>上面这个错误，开始以为时jekyll的版本问题，后来又以为时 UIT8 编码错误，再继续折腾，看了很多博客还是没有处理好。</p>
-<p>在 <code>atom.xml</code> 中我写了一句 ，以前一直是这样的啊，没报错。不知道 github pages 的后台 jekyll 编译器是不是做了版本或者其他方面的修改，定位到这个位置之后，把内容改成了</p>
-<pre><code>\{\{ post.excerpt }}
-\{\{ post.content }} # 改成这个也可以，只是内容太多，我不喜欢
-</code></pre><p>差不多整了我两个小时，这么点小错误，妹的！</p>
+            <div class="history-article">本文为归档内容,原始地址在 <a href="http://www.cnblogs.com/hustskyking/archive/2013/11/04/white-screen-in-chrome.html" target="_blank">博客园</a>.</div>
 
-          
-        
-      
-    </div>
+<p>刚截图十几次，终于捕捉到了这个白屏现象，hiahia~~</p><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2013/11/04/04131830-4cf27759a6e8428786bc2edd4fc9a479.jpg" data-source="http://images.cnitblog.com/blog/387325/201311/04131830-4cf27759a6e8428786bc2edd4fc9a479.jpg" alt="" width="855" height="445"></p><br><p>大家可以很清晰地看到下边还木有渲染完毕的透明层，这是一个十分普遍的问题，经常遇到。我的浏览器版本是</p><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2013/11/04/04131852-5b23b655bc6945fa9b44a2ec30477970.jpg" data-source="http://images.cnitblog.com/blog/387325/201311/04131852-5b23b655bc6945fa9b44a2ec30477970.jpg" alt=""></p><br><p>到目前为止应该是最新版(release版本)，之前的版本应该也存在类似的问题。只要处理好代码，这种体验相当不好的白屏问题是可以避免的，Qzone的页面貌似就没有这个现象。首先我们来聊一聊这个问题是怎么产生的，这涉及到chrome浏览器对网页的解析和渲染。</p><br><blockquote><br><p>渲染引擎首先通过网络获得所请求文档的内容，通常<strong>以8K分块的方式</strong>完成。下面是渲染引擎在取得内容之后的基本流程：解析html以<strong>构建dom树-&gt;构建render树-&gt;布局render树-&gt;绘制render树</strong></p><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2013/11/04/04131906-c540e43cdc124640987ac5c4830fbe43.png" data-source="http://images.cnitblog.com/blog/387325/201311/04131906-c540e43cdc124640987ac5c4830fbe43.png" alt=""></p>
 
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2014/04/26/2014-04-26-clip-in-sys/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Lion">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="撼地神牛">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/blog/2014/04/26/2014-04-26-clip-in-sys/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/22/index.html">clip的安装和使用</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2014-04-26 00:00:00" itemprop="dateCreated datePublished" datetime="2014-04-26T00:00:00+08:00">2014-04-26</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-12-12 18:10:11" itemprop="dateModified" datetime="2018-12-12T18:10:11+08:00">2018-12-12</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/JavaScript/前端杂烩/" itemprop="url" rel="index"><span itemprop="name">前端杂烩</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>很多情况下我们需要复制整个文件的内容，然后粘贴到其他地方，像我这种命令行控，文件操作基本都是命令行处理的，平时会用 vim 打开文件，然后</p>
-<pre><code>vim FILE # 打开文件
-ggVG # 全选内容
-&quot;+y  # 复制到系统缓冲区
-</code></pre><p>说实话，这真的很麻烦，其实我们可以这样：</p>
-<pre><code># windows用户
-clip &lt; FILE
-echo &quot;content&quot; | clip
-
-# linux用户
-xclip -sel clip &lt; FILE
-</code></pre><p>省去了打开文件复制的过程。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2014/04/25/2014-04-25-window-print/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Lion">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="撼地神牛">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/blog/2014/04/25/2014-04-25-window-print/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/22/index.html">打印</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2014-04-25 00:00:00" itemprop="dateCreated datePublished" datetime="2014-04-25T00:00:00+08:00">2014-04-25</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-12-12 18:10:11" itemprop="dateModified" datetime="2018-12-12T18:10:11+08:00">2018-12-12</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/JavaScript/前端杂烩/" itemprop="url" rel="index"><span itemprop="name">前端杂烩</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>打印的常用的几种方式：</p>
-<h3 id="1-open新页面打印"><a href="#1-open新页面打印" class="headerlink" title="1. open新页面打印"></a>1. open新页面打印</h3><pre><code>var childWin = window.open(&quot;about:blank&quot;);
-childWin.document.body.innerHTML = document.body.innerHTML;
-// code... 
-// 操作（修改/隐藏/添加）内容
-childWin.print();
-</code></pre><h3 id="2-iframe中打印"><a href="#2-iframe中打印" class="headerlink" title="2. iframe中打印"></a>2. iframe中打印</h3><pre><code>var ifr = document.createElement(&quot;iframe&quot;);
-ifr.src = &quot;about:blank&quot;;
-ifr.style.display = &quot;none&quot;;
-document.body.appendChild(ifr);
-var win = ifr.contentWindow;
-win.document.body.innerHTML = document.body.innerHTML;
-// code... 
-// 操作（修改/隐藏/添加）内容
-win.print();
-</code></pre><h3 id="3-本页打印"><a href="#3-本页打印" class="headerlink" title="3. 本页打印"></a>3. 本页打印</h3><pre><code>var oldHTML = document.body.innerHTML;
-// code... 
-// 操作（修改/隐藏/添加）内容
-window.print();
-// 完了之后
-document.body.innerHTML = oldHTML;
-</code></pre>
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2014/04/22/2014-04-22-cb-nodejs-net-module/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Lion">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="撼地神牛">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/blog/2014/04/22/2014-04-22-cb-nodejs-net-module/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/22/index.html">深入浅出NodeJS——数据通信，NET模块运行机制</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2014-04-22 02:11:00" itemprop="dateCreated datePublished" datetime="2014-04-22T02:11:00+08:00">2014-04-22</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-12-12 18:10:11" itemprop="dateModified" datetime="2018-12-12T18:10:11+08:00">2018-12-12</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/JavaScript/前端杂烩/" itemprop="url" rel="index"><span itemprop="name">前端杂烩</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/JavaScript/前端杂烩/网络交互/" itemprop="url" rel="index"><span itemprop="name">网络交互</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <div class="history-article">本文为归档内容,原始地址在 <a href="http://www.cnblogs.com/hustskyking/archive/2014/04/22/nodejs-net-module.html" target="_blank">博客园</a>.</div>
-
-<p>互联网的运作，最根本的驱动就是信息的交互，NodeJS 在数据交互这一块做的很带感，异步编程让人很惬意，关于 NodeJS 的数据通信，最基础的两个模块是 NET 和 HTTP，前者是基于 TCP 的封装，后者本质还是 TCP 层，只不过做了比较多的数据封装，我们视之为更高层。</p><br><p>本文先述说 NodeJS 的 NET 模块工作机制，下次再谈一谈 HTTP 模块。</p><br><p>本文地址：<a href="http://www.cnblogs.com/hustskyking/p/nodejs-net-module.html" target="_blank" rel="noopener">http://www.cnblogs.com/hustskyking/p/nodejs-net-module.html</a>，转载请注明源地址。</p><br><h3>一、服务器和客户端之间的交互</h3><br><p>NodeJS 底层支撑是 <a href="http://en.wikipedia.org/wiki/V8_engine" target="_blank">v8</a>，v8 是用 C++ 编写的一个编译和运行 JavaScript 代码的库，说到 TCP/UDP，写 C/C++ 的童鞋肯定不会感到陌生，在建立 socket 连接的时候，基本都会涉及到相关的知识。</p><br><p>这里先解释下服务器端和客户端之间的一些共性和差异。关于数据交互，我们可以想象成，Server 与 Client 之间建立了一个管道（pipe），这个管道有两个分支，一个是用于发送 S 到 C 的数据，一个是用于发送 C 到 S 的数据。那么这个管道是如何建立的呢？</p><br><p>首先，Server 监听本地的某个端口（所谓端口，可以理解成对外交流的摊铺），Client 很明确自己要跟谁去交流，他去访问 Server 的那个摊铺，于是两者之间就可以沟通了。所以 Server 跟 Client 之间的差异是十分明显的，Server 会监听端口，而 Client 去访问端口。</p><br><p>Unix/Linux 系统跟 windows 有些不同，他可以去监听端口，也可以去监听文件，也就是说他可以把端口和文件都当做对外交流的摊铺。那么 Client 可以通过访问一个文件与 Server 建立起 pipe。</p><br><h3>二、Node 如何开启一个 TCP 服务器</h3><br><p>在电脑上安装好了 Node 之后，我们就可以引用 Node 提供的模块，Node 内置了很多模块，如文件处理（FireSystem）、控制台（Console）、数据流（Stream）等等，这些我会在以后的文章中提到。建立 TCP 连接需要用到的是 Node 的 NET 模块。使用一个模块十分简单：</p>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var net = require(&apos;net&apos;);</span><br></pre></td></tr></table></figure>
-<p><code>net</code> 是一个系统模块，也就是安装 Node 之后自带的模块，没必要对他感到畏惧，其实他的内部也是十分简单的：</p>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">var Net = function()&#123;&#125;;</span><br><span class="line"></span><br><span class="line">Net.methodA = function ()&#123;&#125;;</span><br><span class="line">Net.methodB = function ()&#123;&#125;;</span><br><span class="line"></span><br><span class="line">module.exports = Net;</span><br></pre></td></tr></table></figure>
-<p>我们可以简单理解 net 模块的内部实现，他就是一个 Net 类，上面绑定了很多的 methods，require 之后，相当于返回一个 Net 类，此时我们就可以尽情使用 Net 中定义的所有方法和属性了。</p><br><p>Node 中开启一个 TCP 服务器：</p>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">// server.js</span><br><span class="line">var net = require(&apos;net&apos;);</span><br><span class="line">var server = net.createServer(function(socket) &#123; //&apos;connection&apos; listener</span><br><span class="line">    console.log(&apos;server connected&apos;);</span><br><span class="line">    socket.on(&apos;end&apos;, function() &#123;</span><br><span class="line">        console.log(&apos;server disconnected&apos;);</span><br><span class="line">    &#125;);</span><br><span class="line">    socket.on(&apos;data&apos;, function()&#123;</span><br><span class="line">        socket.end(&apos;hello\r\n&apos;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br><span class="line">server.listen(8124, function() &#123; //&apos;listening&apos; listener</span><br><span class="line">    console.log(&apos;server bound&apos;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>上面这段代码应该很好理解，首先 <code>net.createServer</code> 创建一个 TCP 服务，这个服务绑定（server.listen）在 8124 这个端口上，创建 Server 后我们看到有一个回调函数，这个回调函数的实现方式是怎么样的呢？</p>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">net.createServer = function(callback)&#123;</span><br><span class="line">    // 每次客户端连接都会新建一个 socket</span><br><span class="line">    var socket = new Socket();</span><br><span class="line">    callback &amp;&amp; callback(socket);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>在调用上面函数的时候传入一个参数，这个参数也是函数，并且接受了 socket ，这个由其他方法构造的一个管道（pipe），他的作用就是用来数据交互的。第一节中我们说到了，pipe 是需要 Client 跟 Server 打招呼才能建立的，如果此刻没有客户端访问 Server，这个 socket 就不会存在了。</p><br><h3>三、写一个客户端程序与服务器交互</h3><br><p>既然 Socket ，也就是管道（pipe）还没有存在，那肯定是不会存在通讯的，下面来写一个客户端程序：</p>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">// client.js</span><br><span class="line">var net = require(&quot;net&quot;);</span><br><span class="line">var client = net.connect(&#123;port: 8124&#125;, function()&#123;</span><br><span class="line">    console.log(&apos;client connected&apos;);</span><br><span class="line">    client.write(&apos;world!\r\n&apos;);</span><br><span class="line">&#125;);</span><br><span class="line">client.on(&apos;data&apos;, function(data) &#123;</span><br><span class="line">    console.log(data.toString());</span><br><span class="line">    client.end();</span><br><span class="line">&#125;);</span><br><span class="line">client.on(&apos;end&apos;, function() &#123;</span><br><span class="line">    console.log(&apos;client disconnected&apos;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p><code>net.connect</code> 顾名思义，就是连接到服务端，第一个参数是对象，设置端口（port）为 8124，也就是我们服务器监听的端口，由于没有设置 host 参数，那默认就是 localhost （本地）。在 Server 中，socket 是管道的一端，而在 client 中，client 本身就是管道的一端，如果是多个客户端连接 Server，Server 会新建多个 socket，每个 socket 对应一个 client。</p><br><p>数据的通信就十分简单了，首先运行服务器程序：</p>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node server.js</span><br></pre></td></tr></table></figure>
-<p>此时便会有一个服务器监听 8124 端口，然后打开一个客户端程序：</p>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node client.js</span><br></pre></td></tr></table></figure>
-<p>那么两者之间的信息交互就开始了。具体他们是怎么交流的呢？</p><br><h3>四、基于事件的哲学</h3><br><p>首先我们要说一说 NodeJS 的 EventEmitter 模块。这个模块就是一个事件中心，之前写过相关的内容，可以看看简介版的 EventEmitter，<a href="http://www.cnblogs.com/hustskyking/p/how-to-achieve-loading-module.html#p-2" target="_blank">戳我</a>。EventEmitter 也就是如此，可以 on 添加事件到事件池，也可以 trigger 触发事件，当然可以从事件池中删除事件 off。</p><br><p>NET 模块是继承 EventEmitter 的，所以他创建的很多对象可以：</p>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">client.on(&apos;data&apos;, function(data) &#123;</span><br><span class="line">    console.log(data.toString());</span><br><span class="line">    client.end();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>如上绑定很多自定义的事件，等到交互中需要信息交流的时候再触发。就拿上面这句代码来说，client 绑定了一个 data 事件，这个事件会在 Server 有信息传过来的时候触发，他所做的工作，先打印传过来的数据，然后 end() 关闭这个管道（pipe）。</p><br><p>JavaScript 是基于事件的一门语言，几乎所有的动作都是由事件驱动的，这个在异步编程中显得十分突出。</p><br><h3>五、相关 API 的枚举</h3><br><p>Server 除了有 listen 函数外，还有很多的接口：</p><br><ul><br><li><code>Server.close([callback])</code>，停止监听，那么之前的所有管道也就没有用了。</li><br><li><br><p><code>Server.maxConnections</code>，Server 的最大连接数，这个连接数是有上限的（跟系统有关），我们也可以自己设定连接数的最大上限（不超过系统最大连接数）。</p><br></li><br><li><br><p><code>Server.address()</code>，在 listen 之后可以通过这个函数拿到服务器的相关信息。</p>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// grab a random port. </span><br><span class="line">server.listen(function() &#123;</span><br><span class="line">    address = server.address();</span><br><span class="line">    console.log(&quot;opened server on %j&quot;, address);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p></p></li><br></ul><p></p>
-<p></p><p>还有 write、end、destroy、pause、resume 等等很多丰富的接口，可以在这里查看详情<a href="http://nodejs.org/api/net.html" target="_blank">http://nodejs.org/api/net.html</a>。</p><p></p>
-<p></p><h3>六、小结</h3><p></p>
-<p></p><p>本来打算写一个聊天室，但是这种简单的代码网络上俯拾皆是，本文目的是说清楚 TCP 连接在服务器和客户端之间的交互过程，深入的话题留到下次谈。</p><p></p>
-<p></p><h3>七、参考资料</h3><p></p>
-<ul><br><li><a href="http://nodejs.org/api/net.html" target="_blank">http://nodejs.org/api/net.html</a></li><br></ul>
+<p></p></blockquote><p></p>
+<p>　　渲染引擎开始解析html，并将标签转化为内容树中的dom节点。接着，它解析外部CSS文件及style标签中的样式信息。这些样式信息以及html中的可见性指令将被用来构建另一棵树&mdash;&mdash;render树。</p><br><p>　　Render树由一些包含有颜色和大小等属性的矩形组成，它们将被按照正确的顺序显示到屏幕上。</p><br><p>　　Render树构建好了之后，将会执行布局过程，它将确定每个节点在屏幕上的确切坐标。再下一步就是绘制，即遍历render树，并使用UI后端层绘制每个节点。</p><br><p>　　值得注意的是，这个过程是逐步完成的，为了更好的用户体验，渲染引擎将会尽可能早的将内容呈现到屏幕上，并不会等到所有的html都解析完成之后再去构建和布局render树。它是解析完一部分内容就显示一部分内容，同时，可能还在通过网络下载其余内容。</p><br><p>　　如果我们在Render树未完全绘制并渲染之前，向下快速拖动滚动条会看到上图所示的白屏现象。那这种现象可以通过什么方式来处理呢？应该说这是避免不了的，我们能做的就是：</p><br><ul><br><li>遵循XHTML编码规则，错误的标签在解析的过程中，浏览器需要花费很多时间去进行容错处理（一些push和pop操作），会在构建DOM树的时间花掉额外的时间。</li><br><li>优化HTML代码，减少代码层次（有些网站堆砌一二十层标签的做法实在是没法不让人吐槽）<img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2013/11/04/04131918-9b6922039228486a849672bbf9a64739.jpg" data-source="http://images.cnitblog.com/blog/387325/201311/04131918-9b6922039228486a849672bbf9a64739.jpg" alt=""></li><br><li>优化css，减少样式计算所需要的时间，<code>div div div div｛…｝</code>，尽量不要出现这么复杂的选择符。</li><br><li>尽量不要使用 <code>document.write</code>，html不能被自顶向下或自底向上地被解析，一种重要的原因也是因为脚本标签中含有这个所导致的，他可能会添加标签。</li><br><li>缩短第一屏的内容，后几屏的内容用js异步+判断滚动条动作载入，减少构建Render树和布局render树的时间</li><br><br></ul><br><p>关于浏览器的工作原理，有兴趣的可以上网<a href="//www.google.com.hk/search?q=%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86" target="_blank">搜搜</a>。</p>
 
 
           
@@ -1202,7 +778,7 @@ document.body.innerHTML = oldHTML;
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2014/04/21/2014-04-21-clonenode-bug-in-old-chrome/">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2013/11/01/2013-11-01-cb-let-your-page-understood-by-search-engine/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lion">
@@ -1222,7 +798,7 @@ document.body.innerHTML = oldHTML;
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/blog/2014/04/21/2014-04-21-clonenode-bug-in-old-chrome/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/22/index.html">cloneNode/importNode Bug in Old Chrome</a>
+                <a href="/blog/2013/11/01/2013-11-01-cb-let-your-page-understood-by-search-engine/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/22/index.html">SEO：让搜索引擎对你的网站更有亲和力(译)</a>
               
             
           </h1>
@@ -1247,7 +823,7 @@ document.body.innerHTML = oldHTML;
                 
               
 
-              <time title="创建时间：2014-04-21 00:00:00" itemprop="dateCreated datePublished" datetime="2014-04-21T00:00:00+08:00">2014-04-21</time>
+              <time title="创建时间：2013-11-01 03:40:00" itemprop="dateCreated datePublished" datetime="2013-11-01T03:40:00+08:00">2013-11-01</time>
             
 
             
@@ -1281,14 +857,14 @@ document.body.innerHTML = oldHTML;
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/前端杂烩/" itemprop="url" rel="index"><span itemprop="name">前端杂烩</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/JavaScript/前端杂烩/" itemprop="url" rel="index"><span itemprop="name">前端杂烩</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/前端杂烩/翻译/" itemprop="url" rel="index"><span itemprop="name">翻译</span></a></span>
 
                 
                 
@@ -1324,16 +900,293 @@ document.body.innerHTML = oldHTML;
       
         
           
-            <pre><code>support.checkClone = div.cloneNode(true).cloneNode(true).lastChild.checked;
-</code></pre><p>有人问：为什么需要 cloneNode 两次呀？</p>
-<p>这是老版 chrome 内部实现的一个 bug，这个 bug 在四年前就提出来了，cloneNode 和 importNode 没法保存片段代码中表单元素诸如 value/checked 之类的属性。</p>
-<p>解决方案是：将 cloneNode 拿到的代码片段在 clone 一次。如同 IE6 下浮动元素 margin 的渲染，是 IE6 的 bug，通过设置 inline 可以解决。</p>
+            <div class="history-article">本文为归档内容,原始地址在 <a href="http://www.cnblogs.com/hustskyking/archive/2013/11/01/let-your-page-understood-by-search-engine.html" target="_blank">博客园</a>.</div>
+
+<p><span>人可以通过查看网站信息了解网站的内容，但是搜索引擎只对标签感兴趣，对内容的识别能力是很低的，如何让蜘蛛通过标签认识你的文章内容呢~</span></p><br><blockquote><br><p>原文网址：<a href="http://schema.org/docs/gs.html" target="_blank" rel="noopener">http://schema.org/docs/gs.html</a>本文地址：<a href="http://www.cnblogs.com/hustskyking/p/let-your-page-understood-by-search-engine.html" target="_blank" rel="noopener">http://www.cnblogs.com/hustskyking/p/let-your-page-understood-by-search-engine.html</a>译者：<a href="http://www.cnblogs.com/hustskyking/" target="_blank">Barret Lee</a>日期：2013-11-01</p>
+
+<p></p></blockquote><p></p>
+<p>许多站长应该对HTML标签十分熟悉，HTML标签告诉浏览器如何去呈现标签的内容，比如<code>&lt;h1&gt;阿凡达&lt;/h1&gt;</code>，告诉浏览器用大标题的形式显示\阿凡达”。但是，HTML标签本身并没有给出任何信息标识其中的内容，因此搜索引擎也无法智能地将相关的信息呈现给用户。</p><br><p><a href="http://schema.org" target="_blank">Schema.org</a>提供了一些相关的词汇，开发者可以用这些词汇嵌入到HTML内容中来强化内容，以便更容易被Google、Microsoft、Yandex以及Yahoo等搜索引擎识别。</p>
+
+
+<p></p><h3>一、如何使用元数据(microdata)来表示内容</h3><p></p>
+<h4>1.为什么使用元数据</h4><br><p>人去阅读文章可以马上理解网页的相关内容，但是机器理解能力是十分有限的，给你的网页HTML添加一些额外的标签，让这些标签去告诉搜索引擎，\嘿，我描述的是一部电影，一个景点，一位名人或者一首音乐”，这样你就能让搜索引擎理解文章内容，并且让他在搜索结果中可以显示更多相关的内容。<strong>元数据</strong>是HTML5中的一些标签，他可以让你实现上述功能。</p><br><h4>2.itemscope和itemtype</h4><br><p>先举个简单的例子，比如你要显示\阿凡达”这部电影，包括这部电影的导演、类型，介绍，你的HTML代码可能会写成这样：</p><br><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;div&gt;</span><br><span class="line">    &lt;h1&gt;阿凡达&lt;/h1&gt;</span><br><span class="line">    &lt;span&gt;导演: James Cameron (生于16-08-1954)&lt;/span&gt;</span><br><span class="line">    &lt;span&gt;科幻电影&lt;/span&gt;</span><br><span class="line">    &lt;a href=&quot;/path/to/obj.html&quot;&gt;Trailer&lt;/a&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure><br><br><p>刚开始我们来表示这一块是一个关于电影阿凡达的章节，我们需要给HTML添加itemscope属性</p><br><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;div itemscope=&quot;&quot;&gt;</span><br><span class="line">    &lt;h1&gt;阿凡达&lt;/h1&gt;</span><br><span class="line">    &lt;span&gt;导演: James Cameron (生于16-08-1954)&lt;/span&gt;</span><br><span class="line">    &lt;span&gt;科幻电影&lt;/span&gt;</span><br><span class="line">    &lt;a href=&quot;/path/to/obj.html&quot;&gt;Trailer&lt;/a&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure><br><br><p>通过添加itemscope属性，搜索引擎就知道了这个div块表示的是一个特定的内容。为了让这个内容更加具体，我们可以继续添加一个itemtype属性</p><br><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;div itemscope=&quot;&quot; itemtype=&quot;http://schema.org/Movie&quot;&gt;</span><br><span class="line">    &lt;h1&gt;阿凡达&lt;/h1&gt;</span><br><span class="line">    &lt;span&gt;导演: James Cameron (生于16-08-1954)&lt;/span&gt;</span><br><span class="line">    &lt;span&gt;科幻电影&lt;/span&gt;</span><br><span class="line">    &lt;a href=&quot;/path/to/obj.html&quot;&gt;Trailer&lt;/a&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure><br><br><p>这样蜘蛛就知道了这块的内容是介绍一部电影了。</p><br><h4>3.itemprop</h4><br><p>我们还能为搜索引擎提供什么其他的信息？电影有一些属性，如主演，导演，评分等。为了表示这些属性，我们可以使用itemprop：</p><br><div class="highlight"><br><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;div itemscope=&quot;&quot; itemtype=&quot;http://schema.org/Movie&quot;&gt;</span><br><span class="line">    &lt;h1 itemprop=&quot;name&quot;&gt;阿凡达&lt;/h1&gt;</span><br><span class="line">    &lt;span&gt;导演: &lt;span itemprop=&quot;director&quot;&gt;James Cameron&lt;/span&gt; (生于16-08-1954)&lt;/span&gt;</span><br><span class="line">    &lt;span itemprop=&quot;genre&quot;&gt;科幻电影&lt;/span&gt;</span><br><span class="line">    &lt;a href=&quot;/path/to/obj.html&quot; itemprop=&quot;trailer&quot;&gt;Trailer&lt;/a&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure><br><br></div><br><h4>4.内嵌一个itemscope</h4><br><p>有时候作为一个itemprop的属性也可以单独出来成为itemscope，比如导演，他是属于Person，Person也有很多诸如名字，生日等属性。</p><br><div class="highlight"><br><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;div itemscope=&quot;&quot; itemtype=&quot;http://schema.org/Movie&quot;&gt;</span><br><span class="line">    &lt;h1 itemprop=&quot;name&quot;&gt;阿凡达&lt;/h1&gt;</span><br><span class="line">    &lt;div itemprop=&quot;director&quot; itemscope=&quot;&quot; itemtype=&quot;http://schema.org/Person&quot;&gt;</span><br><span class="line">        导演: &lt;span itemprop=&quot;name&quot;&gt;James Cameron&lt;/span&gt; (生于 &lt;span itemprop=&quot;birthDate&quot;&gt;16-08-1954&lt;/span&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;span itemprop=&quot;genre&quot;&gt;科幻电影&lt;/span&gt;</span><br><span class="line">    &lt;a href=&quot;/path/to/obj.html&quot; itemprop=&quot;trailer&quot;&gt;Trailer&lt;/a&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure><br><br></div><br><br><br><h3>二、使用 schema.org 提供的属性</h3><br><h4>1.schema.org 提供的类型和属性</h4><br><p>并不是所有的网页都是关于电影和人物介绍的，除了上面我们说到的Movies和Person之外，<a href="http://schema.org" target="_blank" rel="noopener">schema.org</a>还提供了一系列的类型，以及这些类型对应的属性。</p><br><p>用的最多的是Thing这个类型，他有四个属性，name、description、url、image。这个类型对很多内容都实用。下面是一些常用的类型和属性：</p><br><ul><br><li>Creative works: <a href="http://schema.org/CreativeWork" target="_blank">CreativeWork</a>, <a href="http://schema.org/Book" target="_blank">Book</a>, <a href="http://schema.org/Movie" target="_blank">Movie</a>, <a href="http://schema.org/MusicRecording" target="_blank">MusicRecording</a>, <a href="http://schema.org/Recipe" target="_blank">Recipe</a>, <a href="http://schema.org/TVSeries" target="_blank">TVSeries</a> …</li><br><li>Embedded non-text objects: <a href="http://schema.org/AudioObject" target="_blank">AudioObject</a>, <a href="http://schema.org/ImageObject" target="_blank">ImageObject</a>, <a href="http://schema.org/VideoObject" target="_blank">VideoObject</a></li><br><li><a href="http://schema.org/Event" target="_blank">Event</a></li><br><li><a href="http://schema.org/Organization" target="_blank">Organization</a></li><br><li><a href="http://schema.org/Person" target="_blank">Person</a></li><br><li><a href="http://schema.org/Place" target="_blank">Place</a>, <a href="http://schema.org/LocalBusiness" target="_blank">LocalBusiness</a>, <a href="http://schema.org/Restaurant" target="_blank">Restaurant</a> …</li><br><li><a href="http://schema.org/Product" target="_blank">Product</a>, <a href="http://schema.org/Offer" target="_blank">Offer</a>, <a href="http://schema.org/AggregateOffer" target="_blank">AggregateOffer</a></li><br><li><a href="http://schema.org/Review" target="_blank">Review</a>, <a href="http://schema.org/AggregateRating" target="_blank">AggregateRating</a></li><br></ul><br><p>这里有一个对类型的列表，<a href="http://schema.org/docs/full.html" target="_blank">戳我</a>。//<span class="barretSay"><strong>Barret Say</strong>：schema给出的列表是规范统一的，对于你要用到的类，他基本上都有定义，不要自己构造他没有提到的类型。试想一下，如果每个人都给自己的内容定义多个类型，那搜索引擎该根据哪个标准来分类了，其结果就跟没有分类是一样的。</span></p><br><h4>2.期望的类型，文字和URL地址</h4><br><p>使用schema.org来标记你的网页时，有几点要注意：</p><br><ul><br><li><strong>除了隐藏的文字，标记越多越好</strong>， 一般来说，给你的文章做越多这样的标记，搜索引擎就越对你的文字有亲和力。但是一定要注意，只标记那些人们看得见的文字，不要标记那些隐藏的文字。</li><br><li><strong>使用类型标注而不是文字</strong>，很多地方我们可以使用itemscope去标注他的内容，尽量少让那些干巴巴的文字放置在哪里。</li><br><li><strong>使用URL属性</strong>，比如我的博客首页有很多文章列表，对列表中的每一篇文章都应用URL的itemscope标记，这样效果会比较好</li><br></ul><br><h4>3.测试你的标记</h4><br><p>Google提供了许多相关的测试工具来测试这些schema标记语法，比如这个：<a href="//support.google.com/webmasters/answer/146645?hl=zh-Hans" target="_blank">google webmasters</a>，你可以用这些工具来检测格式是不是正确。</p><br><br><br><h3>三、进阶话题：机器可理解的版本信息</h3><br><p>许多页面可以用itemscope，itemtype以及itemprop来定义，但是有的时候，如果不加另外的注释，搜索引擎是很难理解某些属性的：</p><br><ul><br><li>日期, 时间等: 使用时间标签 datetime</li><br><li>枚举以及引用等: 使用链接标签 href</li><br><li>缺失以及隐含的信息: 使用meta标签 content.</li><br></ul><br><h4>1.时间，日期</h4>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;time datetime=&quot;2011-04-01&quot;&gt;04/01/11&lt;/time&gt;</span><br><span class="line">&lt;time datetime=&quot;2011-05-08T19:30&quot;&gt;May 8, 7:30pm&lt;/time&gt;</span><br><span class="line">&lt;time itemprop=&quot;cookTime&quot; datetime=&quot;PT1H30M&quot;&gt;1 1/2 hrs&lt;/time&gt;</span><br></pre></td></tr></table></figure>
+<p>关于这些时间日期格式化的规范，请参看：<a href="http://en.wikipedia.org/wiki/ISO_8601" target="_blank" rel="noopener">ISO 8601 date/time standard</a>。</p><br><h4>2.枚举以及引用等</h4><br><br><br><h4>3.缺失以及隐含的信息</h4><br><p>因后面几个用的比较少，如果要做具体了解，请移步<a href="http://schema.org/docs/gs.html" target="_blank">原网页</a>。</p>
+
+
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2013/10/31/2013-10-31-cb-learning-in-front-end/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lion">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="撼地神牛">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/blog/2013/10/31/2013-10-31-cb-learning-in-front-end/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/22/index.html">前端学习的那些往事</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2013-10-31 05:00:00" itemprop="dateCreated datePublished" datetime="2013-10-31T05:00:00+08:00">2013-10-31</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-12 18:10:11" itemprop="dateModified" datetime="2018-12-12T18:10:11+08:00">2018-12-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/前端杂烩/" itemprop="url" rel="index"><span itemprop="name">前端杂烩</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/前端杂烩/观点和感想/" itemprop="url" rel="index"><span itemprop="name">观点和感想</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <div class="history-article">本文为归档内容,原始地址在 <a href="http://www.cnblogs.com/hustskyking/archive/2013/10/31/learning-in-front-end.html" target="_blank">博客园</a>.</div>
+
+<p><span>　　上次</span><a title="如何培育新人" href="http://barretlee.github.com/freshmen-in-our-team/" target="_blank">如何培育新人</a><span>一文中也提到了自己学习前端的一些事儿，这两天几个新人问我当初是如何逐步学习前端的，因为以前也没做过什么记录，时间虽不长，记忆却开始模糊了，趁着还有些感觉，把这些往事都写下来。</span></p><br><p>　　之前看<a title="聂微东" href="http://www.cnblogs.com/Darren_code/" target="_blank">聂微东</a>大哥的文章，有一篇说到了他学习前端的经历(<a href="http://www.cnblogs.com/Darren_code/archive/2011/06/29/javascript-learn.html" target="_blank">说说我的web前端之路,分享些前端的好书</a>)，主要是推荐几本前端学习的书籍，童鞋们可以去瞅一瞅。我想分享的并不是这些书籍，而是学习前端技术的一些经历，当然，也包括一些书籍。</p>
+
+
+<p></p><h3>初识前端</h3><p></p>
+<p>　　第一次和前端打交道，是大一的时候。那时我的一个舍友加入了学校很有名誉的一个技术团队&mdash;&mdash;联创团队，在design组做美工设计和简单的网页开发。一天晚上，宿舍熄灯了，他从团队赶回来，拿着笔记本继续写着代码，我凑过去看了看，觉得好神奇，他竟然可以把一张图片变成网页！那个时候对前端还没有太大的感觉，加上舍友经常呆在团队，也很少回来，所以这种隐约的神奇感一直保留到大二。</p><br><p>　　一次，我吃完午饭，在学校操场附近溜达，看见韵苑路口搭起了几顶帐篷，一群人围在一起很hign的样子。于是，我也凑了过去…看着那群人正在玩XBox，突然觉得她应该是一个很有爱的团队，于是写了申请书，就这样我加入了<a title="网络应用研发中心" href="http://nadc.org.cn/" target="_blank">网络应用研发中心</a>（Network Application Development Center, NADC），那年我大二。</p><br><p>第一次新人任务，我认识了前端。</p><br><blockquote><br><p>　　我是大二加入NADC的，那时我是个新人，很新很新的人，连<code>HTML</code>、<code>CSS</code>是个什么东西我都不知道。我也不知道自己是否喜欢前端这块，后来团队给新人们布置了一些练习任务，任务内容是从四张psd图中任选一张，将其制作成HTML页面。任务到手，我十分迷茫，根本不知道该做哪些东西，记得那个星期我是常驻团队办公室。　　学长让我先看看 <strong>w3school</strong> 上HTML和CSS的相关内容，我埋着头看了两天，记得那两天，我坐着的时候是对着电脑，躺着的时候是拿着手机，一直在看网址上的内容，觉得很神奇，很好玩。大概是第三天开始，我动手写起了代码，代码写了差不多四天，没怎么休息，遇到了很多奇怪的问题。一个星期之后，我完成了人生的第一个页面<a title="第一次尝试做网页" href="http://qianduannotes.duapp.com/first/index.html" target="_blank">戳我</a>。</p>
+
+<p></p></blockquote><p></p>
+<p></p><h3>了解前端</h3><p></p>
+<p>　　很多人问我是做什么的，我回答，前端，大多数人听着会一头雾水，你要问我前端是什么，我现在还是不好给出一个明确的回答。前端要学的东西太多了，在给新人的第一培训中，我说了这些：</p><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2013/10/31/31164537-58d37feb00254a4681b66f541d858856.jpg" data-source="http://images.cnitblog.com/blog/387325/201310/31164537-58d37feb00254a4681b66f541d858856.jpg" alt=""></p><br><p>　　但是前端远不止这些东西，在这里我想说说看书的重要性。</p><br><p>　　我看过很多书，上面聂微东大哥说的书我在大三的时候就读过好几遍了，尤其是<code>《javascript权威指南》</code>，这本书第四版我看过四遍，第五版看过两遍，淘宝前端团队的第六版我看过一遍，现在还在读。我读书的目的是为了去了解整个前端以及他所用到的技术，这个很重要。我们学校有两个图书馆，我住在东边，所以经常会跑到东校区图书馆借阅一些书籍，去一趟图书馆就会带回来七八本书，两年下来，图书馆第四层前端相关的一百多本书籍基本被我一览无余，我不敢说自己对看到的那些知识都掌握了，但是我至少知道整个前端的发展历程，也学会了前端编码的基本技能。</p><br><p>　　一本书写下来，作者需要花很大的功夫去查阅文献，即便写得再烂，也是一个人思想的精华，也有很多值得借鉴的地方，所有开始你的阅览群书之旅吧！这是我在图书馆看过的部分书籍的<strong>书单</strong>：<a title="豆瓣书籍" href="http://book.douban.com/people/hustskyking/collect" target="_blank">豆瓣读书</a>，这里只是一部分，后来看过的书名也都忘记了，没有继续补上。</p><br><p>读书绝不是唯一了解前端的途径。因为这个网络信息太多太复杂，不好把握，如果没有目标地去搜索，很有得到令人满意的结果。我们可以先从书中找到自己的兴趣，再去网络上学习，这样会更加有效率。</p>
+
+
+<p></p><h3>社区交流</h3><p></p>
+<p>　　学习CSS，我印象最深的就是不停的写，不知道写了多少个DEMO，也记不清写了多少个网站的页面（包括学校的，班级的，外面小公司的，仿站的，学习任务中的…），每次都写到吐，每次都是起床开始写、晚上熄灯了还在写，好多次都是熬到第二天七八点。<code>或许你会我说太拼命，但我觉得成长是伴随着痛苦的！</code>这些任务很多情况下都是团队主管安排给我的，我这个人好胜心和展示欲比较强，不管他给我的是一个页面还是一个网站的所有页面，我都会在三天之内完成，然后交给他，让他对我做一些评价，提一些学习意见，然后重构代码，然后提交给他看，直到他满意为止。</p><br><p>　　那段时间基本上没有白天黑夜，总感觉一天24个小时太少，现在想来，我收获的真是太多了！现在看到一个页面，扫一眼，基本知道整个结构，该用哪些标签哪些属性，也约摸着可以比较准确的说出完成这个页面要多长时间。这是我学习CSS的经历。</p><br><p>　　学习Javascript就不像上面那样通过无数的练习提高技能，JS的内容太多，覆盖面太广，有时候一个bug可以让你调试几天（对初学者）。看过很多相关的JS书籍之后，对一些基本的东西有了比较全面的了解，但是可以实践的场景却不是很多，至少不能发挥所学，JS涉及的面太广。也不知道是什么时候，我喜欢上了帮人解决问题，去百度贴吧，百度知道，论坛，社区，QQ群等等，每天多进程的去找问题。</p><br><p>　　帮人解决问题是一件非常愉快而且有收益的事情，看到了自己会的东西，把想法说出来，说给大家听，比你\牛B”的人会指出你回答中的错误，这是已经互动学习。其实更多的情况是你对别人提出的问题也想不出解决方案，这个时候也正是一次学习的大好机会，我一般是这样做的：搜索相关内容，阅读别人写的博客内容（你想到的问题，网络上已经有人想到过，并且已经给出了解答，这也是知识共享的好处），如果在阅读时遇到了不懂的生词或者技术，继续去搜索，要把一个问题涉及到的周边问题都搞清楚，这才算是深入学习！</p><br><p>解答问题的过程中，你还可以去结实一些朋友，有些朋友的技术水平已经相当高了，比如<a title="张鑫旭新浪微博" href="http://weibo.com/zhangxinxu" target="_blank">@张鑫旭</a>，<a title="薛端阳新浪微博" href="http://weibo.com/u/1467730620" target="_blank">薛端阳</a>，<a title="玉伯也叫神雕的新浪微博" href="http://weibo.com/lifesinger" target="_blank">@玉伯</a>等等，你可以去结实他们，向他们请教问题，跟他们去交流。</p>
+
+
+<p></p><h3>吃透一个知识点</h3><p></p>
+<p>　　上面也说了怎么去解决一个问题，如何吃透一个知识点，这个也需要拿出来谈一谈。有些网站的内容是比较有权威性质的，比如<a href="http://www.whatwg.org/" target="_blank">http://www.whatwg.org/</a>、<a href="//developer.mozilla.org/" target="_blank">//developer.mozilla.org/</a>、<a href="http://www.w3.org/" target="_blank">http://www.w3.org/</a>等，如果你对这些网站比较熟悉而且英文水平还行的话，建议直接去查找你要的答案，一定可以找到（不过很难找）。</p><br><p>　　要弄清楚这个知识点包含哪些关键词，这样在网络上搜到的结果才是靠谱的，很多人真的不会搜索！大学有一门课程叫做<code>文件情报检索</code>，感兴趣的童鞋可以去选修这门课，我这里也有这门课程的相关PPT，可以给我邮件(<a href="mailto:barret.china@gmail.com" target="_blank">barret.china@gmail.com</a>)。</p>
+
+
+<p></p><h3>博客</h3><p></p>
+<p>　　我写了两年博客了，刚开始主要是摘录、收藏、转载，看到自己觉得不错的东西，拿过来当做是笔记。最开始我是在Qzone上写，后来，发现有点傻，Qzone根本不是写博客的地儿，后来改到了点点网，再接着是博客园，再接着是github，以后可能还会换。为什么会有这么一个转变，阮一峰老师<a title="喜欢写Blog的人，会经历三个阶段" href="http://www.ruanyifeng.com/blog/2012/08/blogging_with_jekyll.html" target="_blank">一篇文章</a>说了这样的话：</p><br><blockquote><br><p>喜欢写Blog的人，会经历三个阶段。</p>
+
 <ul>
-<li>Bug 地址：<a href="http://bugs.webkit.org/show_bug.cgi?id=6617" target="_blank" rel="noopener">http://bugs.webkit.org/show_bug.cgi?id=6617</a></li>
-<li>Bug 测试源码：<a href="//webkit.googlesource.com/WebKit/+/a847461eedf68a16e2d2491447608ea3bf9d7890/LayoutTests/fast/dom/clone-node-form-elements-with-attr.html">link</a></li>
-<li>JQ中对这个 bug 的阐述：<a href="http://bugs.jquery.com/ticket/5832" target="_blank" rel="noopener">http://bugs.jquery.com/ticket/5832</a></li>
-<li>JQ对这个bug 的处理：<a href="http://bugs.jquery.com/ticket/5929" target="_blank" rel="noopener">http://bugs.jquery.com/ticket/5929</a></li>
+<li>第一阶段，刚接触Blog，觉得很新鲜，试着选择一个免费空间来写。</li>
+<li>第二阶段，发现免费空间限制太多，就自己购买域名和空间，搭建独立博客。</li>
+<li>第三阶段，觉得独立博客的管理太麻烦，最好在保留控制权的前提下，让别人来管，自己只负责写文章。</li>
 </ul>
+<p></p></blockquote><p></p>
+<p>　喜欢分享的人都会找到一种途径去分享自己觉得不错的东西，博客一种很直观的方式。我曾经写过的东西：</p><br><ul><br><li>Qzone</li><br><li>点点网 <a href="http://qianduan-notes.diandian.com/" target="_blank">http://qianduan-notes.diandian.com/</a></li><br><li>博客园 <a href="http://hustskyking.cnblogs.com/" target="_blank">http://hustskyking.cnblogs.com/</a></li><br><li>现在的&nbsp;<a title="github pages" href="http://barretlee.github.io" target="_blank">github pages</a></li><br><br></ul><br><p>我现在就是通过博客在分享自己的东西，网络上成千上万的人都在干同样的事情，关于<a title="为什么要写技术博客" href="http://www.cnblogs.com/vamei/archive/2012/11/17/2774208.html" target="_blank">为什么要写技术博客</a>，<a title="技术文章是怎样炼成的？" href="http://www.cnblogs.com/baochuan/archive/2012/04/13/2445140.html" target="_blank">如何写技术博客</a>，很多前辈们都写了相关的文章，可以去看一看。</p>
+
+
+<p></p><h3>瞄准公司</h3><p></p>
+<p>　　对学生来说，学技术只是一种兴趣。我一直对团队新成员灌输这样的思想，要把你们的技术发展成一门特长，兴趣停留的层次太低了，你很难接触到你所热衷的东西的最有趣的的部分。但对于那些想从事这方面工作的人来说，你不仅要把这个兴趣发展为特长，更重要的是发展成你的职业特长，全方位地了解这个行业。</p><br><p>　　因为自己团队很多学长学姐都进了很多不错的互联网大公司，所以最开始我就给自己定下了一个目标，我也要去这些大公司！（有点像高三时候的性格，我也要进好学校！） 所以当自己对前端有一定程度的了解之后，我开始去网上查看各公司对人才的招聘要求。刚从百度上面扒过来的（Web前端研发工程师【校招】）：</p><br><blockquote><br><p><strong>工作职责：</strong></p>
+
+<ul>
+<li>百度各产品Web前端研发</li>
+<li>百度各产品易用性改进和界面技术优化</li>
+<li><p>Web前沿技术研究和新技术调研</p>
+<p><strong>职位要求：</strong></p>
+</li>
+<li><p>精通JavaScript、Ajax等Web开发技术</p>
+</li>
+<li>精通HTML/XHTML、CSS等网页制作技术，熟悉页面架构和布局 </li>
+<li>熟悉W3C标准，对表现与数据分离、Web语义化等有深刻理解 </li>
+<li>对互联网产品和Web技术有强烈兴趣，有优秀的学习能力和强烈的进取心 </li>
+<li><p>具有良好的沟通能力和团队合作精神、优秀的分析问题和解决问题的能力</p>
+<p><strong> 具有以下能力者优先考虑： </strong></p>
+</li>
+<li><p>具有Mobile WEB/WAP、HTML5/CSS3、nodejs、Flash开发经验 </p>
+</li>
+<li>精通一种模板语言（Smarty、Velocity、Django等） </li>
+<li>熟悉Linux平台，掌握一种后端开发语言（PHP/Java/C/C++/python等） </li>
+<li>有前端性能优化经验</li>
+<li><p>具有一定的软件工程意识，对数据结构和算法设计有充分理解<br></p></li></ul></blockquote><p></p>
+<p>　　对着这些要求，睁大眼睛看看自己，还缺那些，那些还做的不够，我相信你很快就有了前进的方向了！我以前也是对着这些点学习的，所以很容易得到那些公司的认可。后来也去看了下facebook的一些要求（Software Engineer- Front End）：</p><br><blockquote><br><p>Are you passionate about building UI to help those around you be more effective? What about building UI that your peers use daily and can1t wait for your next feature to be released? Facebook is seeking an experienced Front End Engineer to build the next generation UI for our infrastructure layer, to control hundreds of thousands of services and help our engineers digest the Terabytes of stored data. This is a full-time position based in our office in Palo Alto.</p><br><p><strong>Responsibilities</strong></p>
+
+<li><p>Design and build user interface and data visualization for engineers to control and monitor services and servers</p>
+</li>
+<li>Code primarily in PHP, JavaScript and CSS</li>
+<li>Understand engineer requests and come up with designs for the user workflow</li>
+<li>Participate in design and code reviews</li>
+<li><p>Interact with other team members to incorporate their innovations and vice versa</p>
+<p><strong>Requirements</strong></p>
+</li>
+<li><p>Over 3+ year experience with PHP and JavaScript</p>
+</li>
+<li>Experience with web technologies (HTML/CSS/JS)</li>
+<li>2+ years of building interactive web applications</li>
+<li>Passion for elegant and intuitive user interfaces</li>
+<li>BS or MS degree in Computer Science or a related technical field</li>
+
+<p></p></blockquote><p></p>
+<p>　　这些东西不仅是给你学习的方向，还给你学习的东西，对照着可以看到你离公司的门槛还有多少<sup>_^</sup></p>
+
+
+<p></p><h3>细节和态度</h3><p></p>
+<p>　　有段时间，自己很浮躁，觉得很多东西都会了。书看多了，你会发现很多书籍的内容都是差不多的，也没有太多吸引人的地方，于是怎么也看不下去了，走马观花，稍微撇两眼就把书扔了。这种状态我很可以理解！因为我也是经常处于这种状态。</p><br><p><code>　　有些东西需要去平品味，去思考</code>，以前的学习几乎就是把知识强硬灌输到脑海中，过了一段时间快要忘记了，再去看一遍，多看几遍印象就什么，但是这样学习方式是很痛苦的，而且效率也很低。现在的话，我会想，为什么他要这样设计，这样设计是否欠妥，是不是还有更优的解决方案… 尝试着去否定所谓的权威，这些理念都是人提出来的，谁都不能保证一个人的逻辑思维是十分完善和全面的，我们也是人，对他们提出质疑这是完全合理的，不要有任何觉得不妥的地方！</p>
+
+
+<p></p><h3>前端资讯</h3><p></p>
+<p>　　说说关注互联网的重要性。前面说我看过很多书，就目前来看，我对前端的认识依然是远远不够的，你要知道，一本稍微有内容的优秀的书籍写出来至少要一到两年时间，而且搞技术的人也不会全身心投入到著作中，他们也需要工作。所以你在书中，即便是最新出版的书中，看到的技术不会特别新了，至少落后了两到三年时间。</p><br><p>看老外们写的博客，每每看到博客日期的时候，都不禁感叹，我没见过的东西，人家在三年前就已经很熟练了。这就是我们跟那些技术先驱的差距，所以如果要了解这个行业的动向，一定要多关注前端资讯！</p>
+
+
+<p></p><h3>前端构架</h3><p></p>
+<p>　　很多公司都在研究一套属于自己的前端集成解决方案，如百度的<a title="FIS" href="http://fis.baidu.com/" target="_blank">FIS</a>，阿里的<a title="seajs" href="//github.com/seajs/seajs" target="_blank">seajs</a>等，也有很多牛人在研究自己的前端库、框架，如司徒正美的<a title="avalon" href="//github.com/RubyLouvre/avalon" target="_blank">avalon</a>，老赵的<a title="wind.js" href="//github.com/JeffreyZhao/jscex" target="_blank">wind.js</a>，cujojs的<a title="when.js" href="//github.com/cujojs/when" target="_blank">when.js</a>等等，看看这些人的博客，也会感叹，人家两三年前也开始搞起来了，代码写的也是相当出色的！</p><br><p>说这些东西，是为了说明，前端方面水很深，如果发现自己没啥事干了，这些东西一定会让你有所触动，也算是学到一定水平之后会主动去学习的东西。</p>
+
+
+<p></p><h3>小结</h3><p></p>
+<p>　　敲了一下午，手都敲疼了。</p><br><p>　　本文就当是对自己的一个自我介绍吧，谈了下我对前端学习的一些感受，每次面试都会被问到是如何学习前端的，回答多了感觉也忒无聊的- -</p>
+
+
+
 
           
         
@@ -1390,7 +1243,7 @@ document.body.innerHTML = oldHTML;
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2014/04/20/2014-04-20-valueof-and-tostring/">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2013/10/07/2013-10-07-cb-javascript-regexp/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lion">
@@ -1410,7 +1263,7 @@ document.body.innerHTML = oldHTML;
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/blog/2014/04/20/2014-04-20-valueof-and-tostring/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/22/index.html">array 不等于 array</a>
+                <a href="/blog/2013/10/07/2013-10-07-cb-javascript-regexp/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/22/index.html">玩转正则之highlight高亮</a>
               
             
           </h1>
@@ -1435,7 +1288,7 @@ document.body.innerHTML = oldHTML;
                 
               
 
-              <time title="创建时间：2014-04-20 00:00:00" itemprop="dateCreated datePublished" datetime="2014-04-20T00:00:00+08:00">2014-04-20</time>
+              <time title="创建时间：2013-10-07 05:16:00" itemprop="dateCreated datePublished" datetime="2013-10-07T05:16:00+08:00">2013-10-07</time>
             
 
             
@@ -1512,12 +1365,37 @@ document.body.innerHTML = oldHTML;
       
         
           
-            <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[] == ![] // true</span><br></pre></td></tr></table></figure>
-<p>其实这个问题没啥好讨论的，ECMA-262看看就知道了。不过很多人问，就做个笔记。</p>
-<p>前面那个 [] 在解析的时候调用的是 valueOf 返回的结果是 ‘’<br>后面那个取反运算，对 NAN undefined null “” 0 取反结果才会是true，所以 ![] 的结果是 false</p>
-<p>左边是 ‘’ ，右边是 false，答案是什么一目了然了。</p>
-<p>具体可以看看：<a href="http://barretlee.com/demo/ST/ES5.1/#sec-11.9.3" target="_blank" rel="noopener">http://barretlee.com/demo/ST/ES5.1/#sec-11.9.3</a></p>
+            <div class="history-article">本文为归档内容,原始地址在 <a href="http://www.cnblogs.com/hustskyking/archive/2013/10/07/javascript-regexp.html" target="_blank">博客园</a>.</div>
 
+<p>　　程序员在编写代码的时候少不了和字符串以及\查询”打交道，两者的交集中有一个叫做正则表达式的的东西，这家伙用好了可以提高编程效率，用不好的话…你可以先去好好学一学。</p><br><p>　　关于正则的使用，举个简单的例子：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">var m = location.href.match(/(\w+:)\/&#123;0,3&#125;([^\/]+)(?:(\/[^\?#]*))?(?:(\?[^#]+|.+))?(?:(#.*))?/);</span><br><span class="line">var res = &#123;</span><br><span class="line">    protocol: m[1],</span><br><span class="line">    host: m[2],</span><br><span class="line">    path: m[3],</span><br><span class="line">    search: m[4],</span><br><span class="line">    hash: m[5]</span><br><span class="line">&#125;;</span><br><span class="line">console.log(res);</span><br></pre></td></tr></table></figure>
+<p>　　憋了几分钟= =||，我也觉得这个正则不是特别好理解（红黑相间了，应该稍微清晰点），有些朋友可能不知道（?:content）是什么意思，还有类似（?!content）和(?=content)分组和前瞻的知识，建议去问问<a title="javascript 正则" href="http://www.baidu.com/s?wd=javascript+%E6%AD%A3%E5%88%99" target="_blank">度哥</a>和<a title="javascript 正则" href="//www.google.com.hk/search?q=javascript+%E6%AD%A3%E5%88%99" target="_blank">谷娘</a>。</p>
+
+
+<h3><strong>一. 正则应用<strong>小</strong>DEMO示例</strong></h3><br><p>下面是一串随手写的代码，放在textarea中：</p><br><p><textarea id="barret-codes" readonly="readonly">/<strong><br><em> @author barret lee
+</em> @date   2013-10-06<br><em> @email  <a href="mailto:barret.china@gmail.com" target="_blank" rel="noopener">barret.china@gmail.com</a>
+</em>/<br><br>//outer var<br>var a = “this id outer string”;<br><br>//closure<br>function b() {<br>  //inner var<br>  var a = “this is inner string”;<br>  var g = a.replace(/this is inner string/g, function() {<br>    return new Function(“/<em>clousure</em>/this.a”)();<br>  });<br><br>  /</strong><br>  <em> @description closure - regExp test
+  </em> @author barret lee<br>  */<br>  function c() {<br>    return {<br>      a: a,<br>      g: g<br>    }<br>  }<br><br>  return c;<br>}<br><br>var s = b()(); //s.a, s.g<br></textarea></p><br><br><br><p>正则匹配，处理上面那堆字符串的小DEMO：</p><br><div><br><div id="barret-container">&nbsp;</div><br><div id="barret-note"><a onclick="showBtn.autorun();return false;" href="javascript:void(0);" target="_blank" rel="noopener">点击开始演示</a></div><br></div><br><br><br><br><br><p><strong>博客园引入个js文件还真罗嗦，有时候会报XSS（跨站脚本攻击）相关的错误，（如果木有正常显示，刷新下试试）。</strong></p><br><p><strong>如果还是没有，可以看另外一个demo：<a href="http://qianduannotes.sinaapp.com/highlight/" target="_blank">SAE/highlight</a></strong></p><br><p>跟着提示，下一步下一步多点几下，可以看出效果还是可以滴。主要是这里的正则略微的麻烦，处理一个色变得琢磨老半天。</p><br><p><em>P.S：上面这玩意儿只是一个小测试，代码相当不健壮，拿着学习正则练手～</em></p><br><br><br><h3><strong>二. 需要注意的地方</strong></h3>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//step config</span><br><span class="line">var config = &#123;</span><br><span class="line">    regs: [</span><br><span class="line">        /^\s+|\s+$/g,</span><br><span class="line">        /([&quot;&apos;])(?:\\.|[^\\\n])*?\1/g,</span><br><span class="line">        /\/(?!\*|span).+\/(?!span)[gim]*/g,</span><br><span class="line">        /(\/\/.*|\/\*[\S\s]+?\*\/)/g,</span><br><span class="line">        /(\*\s*)(@\w+)(?=\s*)/g,</span><br><span class="line">        /\b...\b/g</span><br><span class="line">    ],　　//...&#125;;</span><br></pre></td></tr></table></figure>
+<p>这些正则我是分开来写的，主要是为了做上面那个demo，方便单步显示。但是把这些正则分开写是相当不合理的，放在textarea中的是一串没有任何标签的字符串，为了着色，每处理一个正则都会在codes中插入一些标签（我这里用的是span），当我们处理下一个正则的时候就必须得考虑上一步加入的标签，这样会很大程度提高开发难度，最好的做法是把这些正则都放到一坨，然后用|隔开：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var reg = (/^\s+|\s+$/)|(/([&quot;&apos;])(?:\\.|[^\\\n])*?\1/)|(/\/(?!\*|span).+\/(?!span)[gim]*/)|(/(\/\/.*|\/\*[\S\s]+?\*\/)/)|(/(\*\s*)(@\w+)(?=\s*)/)|(/\b(break|continue|do|for|in|function|if|else|return|switch|throw|try|catch|finally|var|while|with|case|new|typeof|instance|delete|void|Object|Array|String|Number|Boolean|Function|RegExp|Date|Math|window|document|navigator|location|true|false|null|undefined|NaN)\b)</span><br></pre></td></tr></table></figure>
+<p>这样放的好处是可以直接</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">codes.replace(reg, function()&#123;</span><br><span class="line">    var args = arguments;</span><br><span class="line">    //...</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>一次性处理，不用担心插入标签影响最后的结果，因为标签是同一时间插入的，不会有干扰。</p><br><p>代码高亮插件highlight的基本原理也差不多，只不过他的容错机制和代码健壮性这块做的更加完善，我在代码里头加了一个配置文件，</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var colors = &#123;</span><br><span class="line">    string: &quot;#FFA0A0&quot;,</span><br><span class="line">    reg: &quot;#16E916&quot;,</span><br><span class="line">    note: &quot;#888&quot;,</span><br><span class="line">    tag: &quot;orange&quot;,</span><br><span class="line">    keywords: &quot;#B0B0FF&quot;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>按照自己的喜好，也可以加以修改，类似这样的扩展，我们在写代码的时候稍微注意下，多留几个接口就好了。（不过这些活儿干起来都还挺辛苦的～）</p><br><p>没有做成插件，也没这个必要，知道基本原理然后动手实践下就差不多了。</p>
+
+
+<p></p><h3><strong>三. 小结</strong></h3><p></p>
+<p>类似很多的前端模板，<a href="//github.com/aui/artTemplate/blob/master/template.js" target="_blank">artTemplate</a>，<a href="//github.com/wangxiao/BaiduTemplate/blob/master/baiduTemplate.js" target="_blank">baiduTemplate</a>等都是对正则表达式的绝伦应用，很值得去看看源码，好好钻研人家都考虑了那些容易出错的点，源码都不长，两三百行。了解一个大概比较容易，但是当自己动手的时候总会发现很多细节问题处理不好，我那上面几个正则就倒弄了半天= =</p><br><p>另外一个配色方案，随便弄的，戳这里<a href="http://qianduannotes.sinaapp.com/highlight/" target="_blank">SAE/highlight</a>。</p><br><p>正则表达式，用起来还是挺方便的。正则技能，你值得拥有～</p>
+
+
+<script type="text/javascript" src="http://files.cnblogs.com/hustskyking/reg-demo.js?v=1"></script>
           
         
       
@@ -1573,7 +1451,7 @@ document.body.innerHTML = oldHTML;
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2014/04/13/2014-04-13-cb-javascript-template-tag/">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2013/09/23/2013-09-23-cb-javascript-closure/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lion">
@@ -1593,7 +1471,7 @@ document.body.innerHTML = oldHTML;
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/blog/2014/04/13/2014-04-13-cb-javascript-template-tag/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/22/index.html">换个标签写前端模板</a>
+                <a href="/blog/2013/09/23/2013-09-23-cb-javascript-closure/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/22/index.html">对闭包机制的深入理解</a>
               
             
           </h1>
@@ -1618,7 +1496,7 @@ document.body.innerHTML = oldHTML;
                 
               
 
-              <time title="创建时间：2014-04-13 02:21:00" itemprop="dateCreated datePublished" datetime="2014-04-13T02:21:00+08:00">2014-04-13</time>
+              <time title="创建时间：2013-09-23 09:17:00" itemprop="dateCreated datePublished" datetime="2013-09-23T09:17:00+08:00">2013-09-23</time>
             
 
             
@@ -1695,33 +1573,290 @@ document.body.innerHTML = oldHTML;
       
         
           
-            <div class="history-article">本文为归档内容,原始地址在 <a href="http://www.cnblogs.com/hustskyking/archive/2014/04/13/javascript-template-tag.html" target="_blank">博客园</a>.</div>
+            <div class="history-article">本文为归档内容,原始地址在 <a href="http://www.cnblogs.com/hustskyking/archive/2013/09/23/javascript-closure.html" target="_blank">博客园</a>.</div>
 
-<p>前端模板中，我们通常使用 script/textarea 来存放模板代码，然后使用 innerHTML/value 属性来获取模板内容进行解析和拼装。</p>
+<p>　　对于JavaScript初学者来说，闭包是一个很神秘的东西，不管看多少遍，依旧搞不清楚闭包是什么，更不明白其内部是什么样的处理机制（更可恶的是每次面试都会被问到）。</p><br><p>　　说的含糊一点，闭包就是代码块和该代码块上下文（context）相互作用的产物。看一个例子：</p>
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;script type=&quot;text/x-template&quot; id=&quot;tpl&quot;&gt;</span><br><span class="line">    &lt;h1&gt;&lt;%=data.title%&gt;&lt;/h1&gt;</span><br><span class="line">    &lt;p&gt;&lt;%=data.content%&gt;&lt;/p&gt;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">    var htmlTpl = document.getElementById(&quot;tpl&quot;).innerHTML;</span><br><span class="line">    tplEngine(htmlTpl, &#123;</span><br><span class="line">        title: &quot;This is title&quot;,</span><br><span class="line">        content: &quot;This is content&quot;</span><br><span class="line">    &#125;);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
-<p>关于 tplEngine 这个 Javascript 模板引擎，之前也写了篇 <a href="http://www.cnblogs.com/hustskyking/p/principle-of-javascript-template.html" target="_blank">文章</a> 介绍过，这里就不赘述了。除了使用 script 标签，textarea 也可以达到同样的效果，但是本文叙述的重点并不是如何去解析一个 JavaScript 模板。</p><br><p>W3C工作组在 HTML 中加入了一个新的标签 &mdash;&mdash;TEMPLATE。他提供了一个可以定义 HTML 代码片段的机制，下面就来详细说说这个 TEMPLATE 标签。</p><br><p>本文地址：<a href="http://www.cnblogs.com/hustskyking/p/javascript-template-tag.html，转载请注明源地址。" target="_blank" rel="noopener">http://www.cnblogs.com/hustskyking/p/javascript-template-tag.html，转载请注明源地址。</a></p><br><h3>一、先看 DEMO</h3><br><p>运行下面的 demo，或许你已经知道了一些东西了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">function foo()&#123;</span><br><span class="line">    var x = 1;</span><br><span class="line"></span><br><span class="line">    return function ()&#123;</span><br><span class="line">        alert(++x); //2</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var bar = foo();</span><br><span class="line">bar();</span><br></pre></td></tr></table></figure>
+<p>　　先问一个问题，这里到底谁是闭包？是foo还是那个匿名函数？</p>
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&lt;ul id=&quot;list&quot;&gt;</span><br><span class="line">    &lt;!-- TEMPLATE 模板 --&gt;</span><br><span class="line">    &lt;template id=&quot;tpl&quot;&gt;</span><br><span class="line">        &lt;li&gt;&lt;span&gt;&lt;/span&gt; - &lt;span&gt;&lt;/span&gt;&lt;/li&gt;</span><br><span class="line">    &lt;/template&gt;</span><br><span class="line">&lt;/ul&gt;</span><br><span class="line">&lt;button id=&quot;btn&quot;&gt;见证奇迹的时刻→&lt;/button&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">    var datas = [</span><br><span class="line">        &#123;name:&quot;李靖&quot;, age:&quot;21&quot;&#125;,</span><br><span class="line">        &#123;name:&quot;Barret Lee&quot;, age:&quot;21&quot;&#125;</span><br><span class="line">    ];</span><br><span class="line">    btn.onclick = function()&#123;</span><br><span class="line">        for(var i = 0, len = datas.length; i &lt; len; i++)&#123;</span><br><span class="line">            var data = datas[i];</span><br><span class="line">            // 获取模板代码</span><br><span class="line">            var htmlTpl = tpl.content.cloneNode(true);</span><br><span class="line">            // 插入数据</span><br><span class="line">            var spans = htmlTpl.querySelectorAll(&quot;span&quot;);</span><br><span class="line">            spans[0].textContent = data.name;</span><br><span class="line">            spans[1].textContent = data.age;</span><br><span class="line">            // 插入到 DOM 中</span><br><span class="line">            list.appendChild(htmlTpl);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
-<p>这里使用的 template 标签，标签的内容没有被解析，我们并没有也使用 innerHTML 这种暴力手段获取模板内容。</p><br><h3>二、template 标签特性</h3><br><ol><br><li>这个标签可以被定义在任何位置：head 中、body中、甚至是一个 frame 中。</li><br><li>标签内容不会显示出来</li><br><li>Template 标签不被当做 document 的一部分，你可以去试试弹出 <code>document.getElementById(“tpl”).length</code>, 或者看看他其他的属性，得到的结果都是 undefined。</li><br><li>标签内容在被应用之前，都是 inactive 状态，也就是说模板中的 img、audio、script 标签都不会执行（加载）</li><br></ol><br><h3>三、浏览器对 template 标签的解析</h3><br><p>每一个 template 元素都会和一个 DocumentFragment 对象关联，当一个 template 元素被创建时，浏览器会运行如下操作：</p><br><ol><br><li><span class="translator" title="Let doc be the template element's ownerDocument's appropriate template contents owner document.">让文档（doc）是模板元素的ownerDocument的相应的模板内容拥有者文档（owerDocument）。</span></li><br><li><span class="translator" title="Create a DocumentFragment object whose ownerDocument is doc.">创建一个 DocumentFragment 对象，这个对象的拥有者文档（owerDocument）为 doc</span></li><br><li><span class="translator" title="Set the template element's template contents to the newly created DocumentFragment object.">将模板文档的 content 内容放到上述新创建的 DocumentFragment 中</span></li><br></ol><br><p>上面的过程我是翻译 w3c 的规范文档，读起来相当晦涩，如果你了解 <a href="http://www.zhihu.com/question/22326250/answer/21686102" target="_blank">shadowDOM</a>,那理解起来就轻松了，template 在解析是，其内容被解析成一个 shadowDOM，我们只能使用 content 属性来获取到这个 shadowDOM 的内容。</p><br><h3>四、兼容性与需要注意的地方</h3><br><p>很可惜，这玩意儿虽然好用，但 IE 目前还不支持，当然 Chrome 32+ | Firefox 25+ 都提供了支持。</p><br><h4>1. 克隆节点而不是直接使用</h4><br><p>从上面的 demo 中，可以发现，获取 template 标签的内容，其方式是：</p>
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">document.getElementById(&quot;tpl&quot;).content</span><br></pre></td></tr></table></figure>
-<p>但是我并不是直接将 content 赋值给 htmlTpl，而是：</p>
+<p></p><h3>闭包的产生原理</h3><p></p>
+<p>　　在JavaScript中，函数可以用来分隔作用域，当foo执行（activation）的时候，产生了一个foo的动态作用域，然后这个动态作用域把变量x和那个return的匿名函数装（push到栈）了进去，一般情况下，当函数执行完毕时，它会自动销毁（pop出栈）内部产生的变量和函数，跳出这个作用域环境，返回到上一层（context）。但是在这里，由于foo作用域内部的变量和函数与它作用域外部的变量bar存在暧昧关系（bar引用了foo()的返回值），所以变量x和匿名函数没法从foo作用域中被销毁，于是也就产生了我们平时所说的闭包。刚才说的push到栈和pop出栈很已经显然不适用于闭包，这和栈的结构是相悖的，那么闭包是怎样的内存分配方式呢？这个我们后面再说。<strong>闭包既不是foo函数，也不是那个匿名函数，而是变量x、匿名函数、上下文环境三者一起同时存在的结果。</strong></p><br><p>　　闭包存在有这么<strong>两个条件</strong>：</p><br><ul><br><li>没有被创建它的上下文销毁</li><br><li>引用了自由变量（没有在函数块中定义，也没有从arguments中送入，如上匿名函数中的变量x，就是一个自由变量）</li><br></ul><br><p>　　说了这么多，再看看下面这个例子：</p>
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">htmlTpl = tpl.content.cloneNode(true);</span><br></pre></td></tr></table></figure>
-<p>为什么要这么做呢？如果你不是用 cloneNode，而是直接将内容 appendChild 到 DOM 树中，documentFragment 内的内容就会被清空，上面我们说了 template 标签内容就是一个 documentFragment 的 shadowDOM，所以应该使用 cloneNode 或者 importNode 方法将内容复制到 DOM 中，这样才能保证这个 shadowDOM 内容不被清空，从而可以复用（你可以把上面 demo 的 cloneNode 函数去掉，看看结果如何）。</p><br><h4>2. 不支持 template 标签的降级处理</h4><br><p>其实也没有比较好的降级处理方案，如果你在 template 中放了 script 或者 img 节点，这些内容都会被解析出来，你阻止不了，所以如果你的程序要兼容所有的浏览器，暂时就不要用了。当然，你可以做这样的判断：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">var x = 1;</span><br><span class="line">function foo()&#123;</span><br><span class="line">    alert(x);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">~function()&#123;</span><br><span class="line">    var x = 2;</span><br><span class="line"></span><br><span class="line">    foo(); //1</span><br><span class="line">&#125;();</span><br></pre></td></tr></table></figure>
+<p>　　你可能又不解了，这里怎么会弹出1呢？<span>先说明下，下面三种写法效果是等价的（但解析方式并不一样，A、C是一类，B是另一类，这里就不多说了）：</span></p>
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if (!&quot;content&quot; in document.createElement(&quot;template&quot;))&#123;</span><br><span class="line">    // code here..</span><br><span class="line">    return;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p></p><h4>3. 模板中嵌入模板</h4><p></p>
-<p>在 script 标签中嵌入一个 script 标签，这个几乎是不可能的事情吧，但是 template 可以：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">~function()&#123;</span><br><span class="line">    var x = 2;</span><br><span class="line"></span><br><span class="line">    foo();</span><br><span class="line">&#125;(); //A</span><br><span class="line"></span><br><span class="line">(function()&#123;</span><br><span class="line">    var x = 2;</span><br><span class="line"></span><br><span class="line">    foo();</span><br><span class="line">&#125;()); //B</span><br><span class="line"></span><br><span class="line">(function()&#123;</span><br><span class="line">    var x = 2;</span><br><span class="line"></span><br><span class="line">    foo();</span><br><span class="line">&#125;)(); //C</span><br></pre></td></tr></table></figure>
+<p></p><h3>闭包的内存分配方式</h3><p></p>
+<p>　　回归正题，上面为什么会弹出1，这个闭包的情况和上面所述的闭包有些不太相同，上面的闭包是因为作用域中的东西没有被销毁，并与上下文存在暧昧关系，而这里并不存在销毁什么的问题，但是它依旧是一个闭包。在foo中，x是一个自由变量，当foo这个闭包产生的时候，foo的上下文会被保存，而foo处于Activation状态的时候，它会先从他所处的Activation Object（foo内部声明的变量、函数等非自由变量）中查找需要的对象，如果没有找到，便会从它开始保存的上下文中查找对象，如果还没找到，才会跑到他的上一层作用域链中取那个值为2的x。</p><br><p>　　再回到之前说的那个问题，闭包的内存分配方式。很明显，如果闭包的内存分配是利用栈的结构实现的，那进入foo运行状态的时候，应该会push一个\全局\的x，也就是向上找到那个var x = 2，接着alert(2)；但事实并非如此，上层作用域的闭包数据是动态分配的内存，也就是保存在堆里，解析器会记录这个闭包数据被引用的次数，当引用次数为0的时候，垃圾回收机制（GC）会自动处理这些垃圾。</p>
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;template id=&quot;ulList&quot;&gt;</span><br><span class="line">    &lt;li&gt;</span><br><span class="line">        &lt;strong&gt;&lt;%=content%&gt;&lt;/%=content%&gt;&lt;/strong&gt;</span><br><span class="line">        &lt;template&gt;</span><br><span class="line">            &lt;div&gt;</span><br><span class="line">                &lt;p&gt;&lt;%=detail%&gt;&lt;/%=detail%&gt;&lt;/p&gt;</span><br><span class="line">            &lt;/div&gt;</span><br><span class="line">        &lt;/template&gt;</span><br><span class="line">    &lt;/li&gt;</span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure>
-<p>至于插入之后是个什么效果，读者可以自己去浏览器中查看。这种插入方式是有使用场景的，很多时候我们都是给需要应用模板的元素设置一个 id 或者 class ，方便找到他们，而这种直接插入的方式，我们可以利用模板代码直接找到需要应用模板的元素，如：</p>
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var tpl = ulList.getElementsByTagName(&quot;template&quot;)[0]; // 获取模板</span><br><span class="line">var toBox = tpl.parentNode; // 直接定位要插入的位置</span><br><span class="line">toBox.appendChild(tpl.content.cloneNode(true)); // 插入</span><br></pre></td></tr></table></figure>
-<p></p><h3>五、拓展 web components</h3><p></p>
-<p></p><p>Web Components 是一些规范，旨在以浏览器原生的方式向外提供组件，它的规范如下:</p><p></p>
-<ul><br><li>模板（Templates）可以将不必立即渲染的元素，不必立即执行的脚本放入这里。</li><br><li>装饰器（Decorators）</li><br><li>Shadow DOM</li><br><li>自定义元素（Custom Elements），实现自定义html标签，及属性。拥有同原生组件一样的生命周期</li><br><li>Imports, 指定引入的组件文档及类型</li><br></ul><br><p>其实本文提到的内容就是 web components 的冰山一角，感兴趣的童鞋可以去读一读相关的内容。</p><br><ul><br><li><a href="http://www.html5rocks.com/zh/tutorials/webcomponents/imports/" target="_blank">http://www.html5rocks.com/zh/tutorials/webcomponents/imports/</a> HTML Imports</li><br><li><a href="http://www.w3.org/TR/components-intro/" target="_blank">http://www.w3.org/TR/components-intro/</a> w3c components</li><br><li><a href="http://www.html5rocks.com/zh/search?q=web+components" target="_blank">http://www.html5rocks.com/zh/search?q=web+components</a> search</li><br></ul><br><h3>六、小结</h3><br><p>本文稀里哗啦说了一大串，主要是简单介绍 web components 中的 template 标签，用以替换模板代码容器 script/textarea，web components 肯定是 web 发展的一个大头，尤其是移动开发上，很有必要深入研究。</p><br><h3>七、参考资料</h3><br><ul><br><li><a href="http://www.whatwg.org/specs/web-apps/current-work/multipage//scripting-1.html#the-template-element" target="_blank">http://www.whatwg.org/specs/web-apps/current-work/multipage//scripting-1.html#the-template-element</a> W3C</li><br><li><a href="//developer.mozilla.org/en-US/docs/Web/HTML/Element/template" target="_blank">//developer.mozilla.org/en-US/docs/Web/HTML/Element/template</a> MDN</li><br><li><a href="http://www.c-sharpcorner.com/UploadFile/370e35/template-tag-in-html5/" target="_blank">http://www.c-sharpcorner.com/UploadFile/370e35/template-tag-in-html5/</a> Sunny Kumar</li><br></ul>
+<p></p><h3>闭包是如何霸占内存的</h3><p></p>
+<p>　　IE经常会因为闭包的存在而导致内存居高不下。第一个例子中：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">window &lt;=&gt; foo &lt;=&gt; 匿名函数 &lt;=&gt; bar &lt;=&gt; window</span><br></pre></td></tr></table></figure>
+<p>&lt;/=&gt;&lt;/=&gt;&lt;/=&gt;&lt;/=&gt;</p>
+<p>　　形成了一个引用循环，即便是</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bar = null;</span><br></pre></td></tr></table></figure>
+<p>　　这个匿名函数的引用次数依旧大于0。需要注意的即便是是delete一个变量并不是删除这个变量的引用对象，而是断开这个引用，其作用就是让引用对象的引用次数减1. 这样一来，这个闭包就死在内存里了，于是它也就一直占用着内存= =</p>
+
+
+<p></p><h3>小结</h3><p></p>
+<p>　　原型链、闭包、作用域链的学习，除了对这些基本知识有一定了解之外，还需要比较多的尝试和实践才能理解透彻。很多次想说说闭包的含义，但是每次提笔又觉得自己没有想明白，只好作罢。这一次对闭包的浅析，肯定也存在很多不到位或者描述错误的地方，如果有不同的见解，请提出来，大家相互学习！！！</p>
+
+
+<p><span>&nbsp;</span></p>
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2013/09/22/2013-09-22-cb-javascript-attention/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lion">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="撼地神牛">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/blog/2013/09/22/2013-09-22-cb-javascript-attention/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/22/index.html">JavaScript中需要注意的几个问题</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2013-09-22 03:40:00" itemprop="dateCreated datePublished" datetime="2013-09-22T03:40:00+08:00">2013-09-22</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-12 18:10:11" itemprop="dateModified" datetime="2018-12-12T18:10:11+08:00">2018-12-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/JavaScript/前端杂烩/" itemprop="url" rel="index"><span itemprop="name">前端杂烩</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <div class="history-article">本文为归档内容,原始地址在 <a href="http://www.cnblogs.com/hustskyking/archive/2013/09/22/javascript-attention.html" target="_blank">博客园</a>.</div>
+
+<p>　　JavaScript是一门弱语言，她使用起来不像C/C++那样有十分繁琐的内存管理、类型定义等，所以学习JavaScript的门槛相对来说也比较低。门槛低并不意味着这门语言很简单，我们在使用的时候会遇到各种千奇百怪的问题，有些是因为浏览器的兼容性引起的，有些是因为JS语法本身所引起的，还有些是因为ECMAScript标准的改变而引起的，总之，这样的问题很多，下面列举</p><br><h3>几个比较容易忽略的点</h3><br><p>　　<strong>1. switch的case判断</strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">var t = event.keyCode;</span><br><span class="line">switch (t) &#123;</span><br><span class="line">   case &apos;65&apos;:</span><br><span class="line">      alert(&quot;Yay!&quot;);</span><br><span class="line">      break;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>　　当keycode为65时，你会发现，咦？怎么木有alert！ 这里需要明确的是，switch在判断的时候使用的是全等号\===”，全等号在比较的时候首先看数据类型是不是一样的，而在这里，t是Number类型，而’65’是String。</p>
+
+
+<p>　　<strong>2. 严格模式下this&ne;window</strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&quot;use strict&quot;;</span><br><span class="line">var global = (function() &#123;</span><br><span class="line">    console.log(this); //undefined</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+<p>　　有时候我们需要用global来缓存this这个全局环境（可能是window，也可能是其他的，比如在Worker中没有window对象，用self代表Global），但是在严格模式下函数作用域返回的this为undefined，一般，我们可以采用如下方式获取到Global对象：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&quot;use strict&quot;;</span><br><span class="line">var global = (function() &#123;</span><br><span class="line">    var t = new Function(&quot;return this&quot;)();</span><br><span class="line">    console.log(t);</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+<p>或者：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&quot;use strict&quot;;</span><br><span class="line">var global = (function() &#123;</span><br><span class="line">    var t = window.eval(&quot;this&quot;);</span><br><span class="line">    console.log(t);</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+<p>　　因为new Function是在全局作用域上执行的，所以返回的是Global对象，下面的eval需要一起注意，eval前如果不交window，那它便处于function作用域中（javascript利用function里分隔作用域），自然不会返回window或者全局对象。使用Function要注意一点：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(function () &#123;</span><br><span class="line">   var local = 1;</span><br><span class="line">   new Function(&quot;console.log(typeof local);&quot;)(); // logs undefined</span><br><span class="line">&#125;());</span><br></pre></td></tr></table></figure>
+<p>　　new Function工作在Global作用域链下，所以是访问不到匿名函数中local的~</p>
+
+
+<p>　　<strong>3. 变量提升（Hoisting）</strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var t = &quot;global&quot;;</span><br><span class="line">function foo()&#123;</span><br><span class="line">    console.log(t); //undefined</span><br><span class="line">    return; 　　 var t = &quot;local&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>　　这是一个老生常谈的问题，var最好不好到处散布。所谓的变量提升，在这里存在两个作用域，一个是Global作用域，他下面有t和foo这两个变量，而foo指向的是foo作用域，foo作用域下有一个t变量，画个图演示下吧</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[Global Scope]</span><br><span class="line">    |----- t   [String] undefined -&gt; &quot;global&quot;</span><br><span class="line">    |----- foo [Reference] [foo Scope]</span><br><span class="line"></span><br><span class="line">[foo Scope]</span><br><span class="line">    |----- t   [String] undefined -&gt; &quot;local&quot;</span><br></pre></td></tr></table></figure>
+<p>　　刚进入全局作用域链的时候，程序扫描到t和foo两个变量，于是给这个t赋值为undefined，扫面完了之后，看到t有值，于是给赋值”global\，foo指向[foo Scope]，于是进入[foo Scope]，继续扫描函数作用域链下的变量，发现目标t之后，赋值为undefined，在console.log时，是这样的：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var t = &quot;global&quot;;</span><br><span class="line">function foo()&#123;</span><br><span class="line">    var t; // 等同于 -&gt; var t = undefined;</span><br><span class="line">    console.log(t); //undefined     return; 　     var t = &quot;local&quot;; &#125;</span><br></pre></td></tr></table></figure>
+<p>　　上面的例子写不写return结果都是一样的，加return，只是为了更好的表达变量提升这个动作的存在。一般比较推荐的变量定义方式：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">function foo(a, b, c) &#123;</span><br><span class="line">    var x = 1,</span><br><span class="line">        bar,</span><br><span class="line">        baz = &quot;something&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>　　一个var，后边连着一串变量的定义。</p>
+
+
+<p></p><h3>附：javascript严格模式下要注意的地方（转自<a href="http://www.web-tinker.com/article/20125.html" target="_blank">次碳酸钴</a>）</h3><p></p>
+<p>&nbsp;<strong>1. 变量必须声明才能使用</strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&quot;use strict&quot;;</span><br><span class="line">a=1; //缺少var语句做声明，因此报错</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&quot;use strict&quot;;</span><br><span class="line">var a=b=1; //错误 b未声明</span><br></pre></td></tr></table></figure>
+<p>&nbsp;<strong>2. 函数声明语句（不包括表达式）不允许在普通代码块（不包括闭包）中使用</strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&quot;use strict&quot;;</span><br><span class="line">(function()&#123;</span><br><span class="line">  //闭包中是允许使用函数声明语句的</span><br><span class="line">  function func()&#123;&#125;;</span><br><span class="line">&#125;)();</span><br><span class="line">&#123;</span><br><span class="line">  var f=function()&#123;&#125;; //函数声明表达式允许</span><br><span class="line">  function func()&#123;&#125;; //函数声明语句在普通闭包中，错误</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><strong>3. 闭包内的this不指向Global对象</strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&quot;use strict&quot;;</span><br><span class="line">(function()&#123;</span><br><span class="line">  alert(this); //输出undefined</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+<p><strong>4. 对象属性和函数形参不能重复声明</strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&quot;use strict&quot;;</span><br><span class="line">var o=&#123;a:1,a:1&#125;;</span><br><span class="line">//这个对象定义了两个a属性，因此报错</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&quot;use strict&quot;;</span><br><span class="line">function func(a,a)&#123;&#125;;</span><br><span class="line">//这个函数的两个形参都是a，因此报错</span><br></pre></td></tr></table></figure>
+<p><strong>5. eval拥有类似闭包的作用域</strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&quot;use strict&quot;;</span><br><span class="line">var a=1,b=1;</span><br><span class="line">eval(&quot;var a=2&quot;);</span><br><span class="line">window.eval(&quot;var b=2&quot;);</span><br><span class="line">alert(a); //输出1 因为运行的a变成了eval作用域的局部变量</span><br><span class="line">alert(b); //输出2 window.eval依然是全局作用域</span><br></pre></td></tr></table></figure>
+<p><strong>6. callee和caller属性无法使用</strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&quot;use strict&quot;;</span><br><span class="line">function func()&#123;</span><br><span class="line">  return arguments.callee; //错误 callee无法使用</span><br><span class="line">&#125;;</span><br><span class="line">func();</span><br></pre></td></tr></table></figure>
+<p><strong>7. with语句无法使用</strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&quot;use strict&quot;;</span><br><span class="line">with(&#123;&#125;);</span><br></pre></td></tr></table></figure>
+<p><strong>8. 八进制数字常量无法使用</strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&quot;use strict&quot;;</span><br><span class="line">var a=0999; //十进制，可以使用</span><br><span class="line">var b=0123; //八禁止，无法使用</span><br></pre></td></tr></table></figure>
+<p><strong>9. 普通模式下的一些无效操作变成错误</strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&quot;use strict&quot;;</span><br><span class="line">var a=1;</span><br><span class="line">delete a;</span><br><span class="line">//错误 无法删除var声明的变量</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&quot;use strict&quot;;</span><br><span class="line">var o=&#123;get a()&#123;&#125;&#125;;</span><br><span class="line">o.a=1;</span><br><span class="line">//错误 给只读属性赋值</span><br></pre></td></tr></table></figure>
+<p>简单总结这么多，推荐\<a title="次碳酸钴" href="http://www.web-tinker.com/" target="_blank">次碳酸钴</a>“童鞋的博客，细致入微、内容深刻，博客入口：<a title="次碳酸钴" href="http://www.web-tinker.com/" target="_blank">http://www.web-tinker.com</a></p><br><p>关于JavaScript strict mode的详细介绍，请移步：<a href="//developer.mozilla.org/en-US/docs/JavaScript/Reference/Functions_and_function_scope/Strict_mode" rel="nofollow" target="_blank">MDN Strict_mode</a></p>
+
+
 
 
           
@@ -1779,7 +1914,7 @@ document.body.innerHTML = oldHTML;
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2014/03/31/2014-03-31-tap-highlight-in-webview/">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2013/08/14/2013-08-14-cb-javascript-spec/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lion">
@@ -1799,7 +1934,7 @@ document.body.innerHTML = oldHTML;
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/blog/2014/03/31/2014-03-31-tap-highlight-in-webview/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/22/index.html">webview中的点击高亮问题</a>
+                <a href="/blog/2013/08/14/2013-08-14-cb-javascript-spec/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/22/index.html">前端编码规范之JavaScript</a>
               
             
           </h1>
@@ -1824,7 +1959,7 @@ document.body.innerHTML = oldHTML;
                 
               
 
-              <time title="创建时间：2014-03-31 00:00:00" itemprop="dateCreated datePublished" datetime="2014-03-31T00:00:00+08:00">2014-03-31</time>
+              <time title="创建时间：2013-08-14 11:55:00" itemprop="dateCreated datePublished" datetime="2013-08-14T11:55:00+08:00">2013-08-14</time>
             
 
             
@@ -1858,7 +1993,14 @@ document.body.innerHTML = oldHTML;
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/前端杂烩/" itemprop="url" rel="index"><span itemprop="name">前端杂烩</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/JavaScript/前端杂烩/" itemprop="url" rel="index"><span itemprop="name">前端杂烩</span></a></span>
 
                 
                 
@@ -1894,18 +2036,112 @@ document.body.innerHTML = oldHTML;
       
         
           
-            <p>这两天在做一个淘金币的小游戏，测试页面的时候还挺正常的，放到webview（嵌入诸如微信、微博等客户端的网页容器）中就出问题了。</p>
-<p>给元素绑定了一个 tap 事件，点击元素，该元素周边会出现点东西，IOS 中是个半透明的灰色背景，在 android 中出现红色的边框，不仅影响美感，貌似还会影响性能（这点东西渲染出来需要时间，会阻塞 JS 中控制的元素渲染）。</p>
-<p>开始本以为使用 user-select 可以干掉这玩意儿，结果无效，网上寻觅半天之后，找到了问题。</p>
-<p>css 中有个属性叫做 -webkit-tap-highlight-color ，顾名思义，就是点击元素的时候会有一个高亮的效果。当然不能把他称之为 bug，这也是浏览器为了让用户知道你点中了某个东西，给他醒目的提示，算是增强体验，但是在一些场景中，这不仅没有增强体验，还会影响体验。</p>
-<p>解决方案：</p>
-<pre><code>.obj {-webkit-tap-highlight-color:rgba(0,0,0,0);}
-</code></pre><p>有些机子可能比较坑爹，rgba 这种方式支持的不是很好，我们可以用 transparent 来给他透明化。</p>
-<pre><code>.obj {
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
-  -webkit-tap-highlight-color: transparent; /* For some Androids */
-}
-</code></pre><p>小小分享。</p>
+            <div class="history-article">本文为归档内容,原始地址在 <a href="http://www.cnblogs.com/hustskyking/archive/2013/08/14/javascript-spec.html" target="_blank">博客园</a>.</div>
+
+<p>　　上次浅谈了下<a href="http://www.cnblogs.com/hustskyking/p/css-spec.html" target="_blank">关于CSS的编码规范</a>，大部分童鞋持赞同意见，仍存在一些童鞋不太理解这些规范的意义。</p><br><p>　　如果是个人或者小作坊开发，其实这些所谓的编码规范也没啥意思，因为大家写好的代码直接就给扔到网上去了，很少有打包、压缩、校检等过程，别人来修改你代码的情况也比较少。但是，对于一定规模的团队来说，这些东西还是挺有必要的！<strong><span>一个是保持代码的整洁美观，同时良好的代码编写格式和注释方式可以让后来者很快地了解你代码的大概思路，提高开发效率。</span></strong></p><br><p>　　那么这次，继续<span><strong>抛砖引玉</strong></span>，说说Javascript一些需要引起注意的地方（这些东西也是团队开发的时候大家集思广益总结出来的）。</p><br><h3>不规范写法举例</h3><br><p><strong>1.&nbsp;句尾<span>没有分号</span></strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var isHotel = json.type == &quot;hotel&quot; ? true : false</span><br></pre></td></tr></table></figure>
+<p><strong>2.<span>&nbsp;变量命名</span>各种各样</strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var is_hotel;</span><br><span class="line">var isHotel;</span><br><span class="line">var ishotel;</span><br></pre></td></tr></table></figure>
+<p><strong>3.&nbsp;<span>if</span> 缩写</strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if (isHotel)</span><br><span class="line">    console.log(true)</span><br><span class="line">else</span><br><span class="line">    console.log(false)</span><br></pre></td></tr></table></figure>
+<p><strong>4.&nbsp;使用<span> eval</span></strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var json = eval(jsonText);</span><br></pre></td></tr></table></figure>
+<p><strong>5.&nbsp;<span>变量未定义</span>到处都是</strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">function() &#123;</span><br><span class="line">    var isHotel = &apos;true&apos;;</span><br><span class="line">    .......</span><br><span class="line"></span><br><span class="line">    var html = isHotel ? &apos;&lt;p&gt;hotel&lt;/p&gt;&apos; : &quot;&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>6.&nbsp;<span>超长函数</span></strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">function() &#123;</span><br><span class="line">    var isHotel = &apos;true&apos;;</span><br><span class="line">    //....... 此处省略500行</span><br><span class="line">    return false;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>7.&nbsp;……….</strong></p>
+
+
+<p><span>书写不规范的代码让我们难以维护，有时候也让我们头疼。</span></p>
+
+
+<p><span><strong><span>（禁止）、（必须）<span><span>等字眼，在这里</span><span>只是表示强调，未严格要求</span>。</span></span></strong></span></p><br><h3>前端规范之JavaScript</h3><br><p><strong>&nbsp;1.&nbsp;<span>tab</span>键用<span>（必须）<span>用</span></span><span>四个空格</span>代替</strong></p><br><p>这个原因已经在<a href="http://www.cnblogs.com/hustskyking/p/css-spec.html" target="_blank">前端编码规范之CSS</a>说过了，不再赘述。</p>
+
+
+<p><strong>2. 每句代码后<span>（必须）</span>加”<span>;</span>“</strong></p><br><p>&nbsp;这个是要引起注意的，比如：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a = b        // 赋值</span><br><span class="line">(function()&#123;</span><br><span class="line">    //....</span><br><span class="line">&#125;)()         // 自执行函数</span><br></pre></td></tr></table></figure>
+<p>&nbsp;未加分号，结果被解析成</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a = b(function()&#123;//...&#125;)()  //将b()()返回的结果赋值给a</span><br></pre></td></tr></table></figure>
+<p>&nbsp;这是截然不同的两个结果，所以对于这个问题必须引起重视！！！</p>
+
+
+<p><strong>3.&nbsp;变量、常量、类的<span>命名</span>按<span>（必须）</span>以下规则执行：</strong></p><br><p>　　<strong>1）<span>&nbsp;变量</span>：<code>必须</code>采用<span><code>骆驼峰</code></span>的命名且首字母小写</strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// 正确的命名</span><br><span class="line"> var isHotel,</span><br><span class="line">     isHotelBeijing,</span><br><span class="line">     isHotelBeijingHandian;</span><br><span class="line"></span><br><span class="line"> // 不推荐的命名</span><br><span class="line"> var is_Hotel,</span><br><span class="line">     ishotelbeijing,</span><br><span class="line">     IsHotelBeiJing;</span><br></pre></td></tr></table></figure>
+<p>　　<strong>2）<span>&nbsp;常量</span>：<code>必须</code>采用<span>全大写的</span>命名，且单词以<code>_</code>分割</strong>，常量通常用于ajax请求url，和一些不会改变的数据</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// 正确的命名</span><br><span class="line">  var HOTEL_GET_URL = &apos;http://map.baidu.com/detail&apos;,</span><br><span class="line">      PLACE_TYPE = &apos;hotel&apos;;</span><br></pre></td></tr></table></figure>
+<p>　　<strong>3）<span>&nbsp;类</span>：<code>必须</code>采用<span><code>骆驼峰</code></span>的命名且<span>首字母大写</span></strong>，如：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 正确的写法</span><br><span class="line"> var FooAndToo = function(name) &#123;</span><br><span class="line">     this.name = name;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p><strong>4.&nbsp;<span>空格</span>的使用</strong></p><br><p><strong>　　1）<span><code>if</code></span><span>中的空格，先上例子</span></strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//正确的写法</span><br><span class="line"> if (isOk) &#123;</span><br><span class="line">     console.log(&quot;ok&quot;);</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> //不推荐的写法</span><br><span class="line"> if(isOk)&#123;</span><br><span class="line">     console.log(&quot;ok&quot;);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<ul><br><li><code>()</code>中的判断条件前后都<span>(<code>必须)</code></span>加空格</li><br><li><code>()</code>里的判断前后<span>(<code>禁止)</code></span>加空格，如：正确的写法:&nbsp;<code>if (isOk)</code>；不推荐的写法:&nbsp;<code>if ( isOk )</code></li><br></ul><br><p><strong>　　2）<span><code>switch</code></span><span>中的空格, 先上例子</span></strong></p><br><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">//正确的写法</span><br><span class="line">  switch(name) &#123;</span><br><span class="line">      case &quot;hotel&quot;:</span><br><span class="line">          console.log(name);</span><br><span class="line">          break;</span><br><span class="line"></span><br><span class="line">      case &quot;moive&quot;:</span><br><span class="line">          console.log(name);</span><br><span class="line">          break;</span><br><span class="line"></span><br><span class="line">      default:</span><br><span class="line">          // code</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  //不推荐的写法</span><br><span class="line">  switch (name) &#123;                     // switch 后不应该有空格, 正确的写法: switch(name) &#123; // code</span><br><span class="line">      case &quot;hotel&quot;:</span><br><span class="line">          console.log(name);</span><br><span class="line">      break;                          // break; 应该和console.log对齐</span><br><span class="line">      case &quot;movie&quot;:                   // 每个case之前需要有换行</span><br><span class="line">          console.log(name);</span><br><span class="line">      break;                          // break; 应该和console.log对齐</span><br><span class="line"></span><br><span class="line">      default:</span><br><span class="line">          // code</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure><br><br><p>&nbsp;　　<strong>3）<span><code>for</code></span>中的空格，先上例子</strong></p><br><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">// 正确的写法</span><br><span class="line"> var names = [&quot;hotel&quot;, &quot;movie&quot;],</span><br><span class="line">     i, len;</span><br><span class="line"></span><br><span class="line"> for (i=0, len=names.length; i &lt; len; i++) &#123;</span><br><span class="line">     // code</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> // 不推荐的写法</span><br><span class="line"> var names = [&quot;hotel&quot;, &quot;movie&quot;],</span><br><span class="line">     i, len;</span><br><span class="line"></span><br><span class="line"> for(i = 0, len = names.length;i &lt; len;i++) &#123;          // for后应该有空格，每个`;`号后需要有空格，变量的赋值不应该有空格</span><br><span class="line">     // code</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure><br><br><ul><br><li><strong><span><code>for</code></span></strong>后<strong><span>（<code>必须）</code></span></strong>加空格</li><br><li>每个<span><code>;</code></span>后<strong><span>（<code>必须）</code></span></strong>加空格</li><br><li><strong><span><code>()</code></span></strong>中<code>禁止</code>用<strong><span><code>var</code></span></strong>声明变量; 且变量的赋值&nbsp;<strong><span><code>=&nbsp;</code></span></strong>前后<strong><span>（<code>禁止）</code></span></strong>加空格</li><br></ul><br><p><strong>　　4）<span><code>function</code>&nbsp;</span>中的空格, 先上例子</strong></p><br><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">// 正确的写法</span><br><span class="line"> function call(name) &#123;</span><br><span class="line"></span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> var cell = function () &#123;</span><br><span class="line"></span><br><span class="line"> &#125;;</span><br><span class="line"></span><br><span class="line"> // 不推荐的写法</span><br><span class="line"> var call = function(name)&#123;</span><br><span class="line">     // code</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure><br><br><ul><br><li>参数的反括号后<span><strong>（<code>必须）</code></strong></span>加空格</li><br><li><strong><span><code>function</code>&nbsp;</span></strong>后<span><strong>（<code>必须）</code></strong></span>加空格</li><br></ul><br><p><strong>　　5）<span><code>var</code>&nbsp;</span>中空格及定义，先上例子</strong></p><br><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 一个推荐的var写法组</span><br><span class="line"> function(res) &#123;</span><br><span class="line">     var code = 1 + 1,</span><br><span class="line">         json = JSON.parse(res),</span><br><span class="line">         type, html;</span><br><span class="line"></span><br><span class="line">     // code</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure><br><br><ul><br><li>声明变量<strong><span>&nbsp;</span></strong><code><strong><span>=</span></strong>&nbsp;</code>前后<strong><span>（<code>必须）</code></span></strong>添加空格</li><br><li>每个变量的赋值声明以<code>,</code>结束后<span><strong>（<code>必须）</code></strong></span>换行进行下一个变量赋值声明</li><br><li><span><strong><code>（推荐）</code></strong></span>将所有不需要进行赋值的变量声明放置最后一行，且变量之间不需要换行</li><br><li><strong><span><code>（推荐）</code></span></strong>当一组变量声明完成后，空一行后编写其余代码</li><br></ul>
+
+
+<p><strong>5.&nbsp;在同一个函数内部，<span>局部变量的声明</span><code>必须</code>置于顶端</strong></p><br><p>因为即使放到中间，js解析器也会提升至顶部<span>（hosting）</span></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">// 正确的书写</span><br><span class="line">var clear = function(el) &#123;</span><br><span class="line">    var id = el.id,</span><br><span class="line">        name = el.getAttribute(&quot;data-name&quot;);</span><br><span class="line"></span><br><span class="line">    .........</span><br><span class="line">    return true;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 不推荐的书写</span><br><span class="line">var clear = function(el) &#123;</span><br><span class="line">    var id = el.id;</span><br><span class="line"></span><br><span class="line">    ......</span><br><span class="line"></span><br><span class="line">    var name = el.getAttribute(&quot;data-name&quot;);</span><br><span class="line"></span><br><span class="line">    .........</span><br><span class="line">    return true;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>&nbsp;推荐阅读：<a href="http://www.adequatelygood.com/JavaScript-Scoping-and-Hoisting.html" target="_blank">JavaScript-Scoping-and-Hoisting</a></p>
+
+
+<p><strong>6.&nbsp;块内函数<code>必须</code>用局部变量声明</strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">// 错误的写法</span><br><span class="line"> var call = function(name) &#123;</span><br><span class="line">     if (name == &quot;hotel&quot;) &#123;</span><br><span class="line">         function foo() &#123;</span><br><span class="line">             console.log(&quot;hotel foo&quot;);</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">     foo &amp;&amp; foo();</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> // 推荐的写法</span><br><span class="line"> var call = function(name) &#123;</span><br><span class="line">     var foo;</span><br><span class="line"></span><br><span class="line">     if (name == &quot;hotel&quot;) &#123;</span><br><span class="line">         foo = function() &#123;</span><br><span class="line">             console.log(&quot;hotel foo&quot;);</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">     foo &amp;&amp; foo();</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p><span>引起的bug：第一种写法<code>foo</code>的声明被提前了; 调用<code>call</code>时：第一种写法会调用<code>foo</code>函数，第二种写法不会调用<code>foo</code>函数</span></p><br><p><em>注：不同浏览器解析不同，具体请移步汤姆大叔<a href="http://www.cnblogs.com/TomXu/archive/2012/01/30/2326372.html" target="_blank">深入解析Javascript函数篇</a></em></p>
+
+
+<p><strong>7. <span>（<code>禁止）</code></span><span>使用<span>eval</span>，采取</span><span><code>$.parseJSON</code></span></strong></p><br><p><strong>&nbsp;三个原因：</strong></p><br><ul><br><li>有<span><strong>注入</strong></span>风险，尤其是ajax返回数据</li><br><li>不方便<span><strong>debug</strong></span></li><br><li><span><strong>效率低</strong></span>，eval是一个执行效率很低的函数</li><br></ul><br><p><strong>建议：</strong></p><br><p>　　使用<span><strong>new Function</strong></span>来代替eval的使用，最好就别用。</p>
+
+
+<p><strong>8.&nbsp;除了<span>三目运算</span>，<span><code>if</code></span>,<span><code>else</code></span>等<span>（<code>禁止）</code></span>简写</strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">// 正确的书写</span><br><span class="line">if (true) &#123;</span><br><span class="line">    alert(name);</span><br><span class="line">&#125;</span><br><span class="line">console.log(name);</span><br><span class="line">// 不推荐的书写</span><br><span class="line">if (true)</span><br><span class="line">    alert(name);</span><br><span class="line">console.log(name);</span><br><span class="line">// 不推荐的书写</span><br><span class="line">if (true)</span><br><span class="line">alert(name);</span><br><span class="line">console.log(name)</span><br></pre></td></tr></table></figure>
+<p><strong>9. <span>（<code>推荐）</code></span>在需要以<span><code>{}</code></span>闭合的代码段前增加换行，如：<span><code>for</code>&nbsp;<code>if</code></span></strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">// 没有换行，小的代码段无法区分</span><br><span class="line">if (wl &amp;&amp; wl.length) &#123;</span><br><span class="line">    for (i = 0, l = wl.length; i &lt; l; ++i) &#123;</span><br><span class="line">        p = wl[i];</span><br><span class="line">        type = Y.Lang.type(r[p]);</span><br><span class="line">        if (s.hasOwnProperty(p)) &#123;</span><br><span class="line">            if (merge &amp;&amp; type == &apos;object&apos;) &#123;</span><br><span class="line">                Y.mix(r[p], s[p]);</span><br><span class="line">            &#125; else if (ov || !(p in r)) &#123;</span><br><span class="line">                r[p] = s[p];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">// 有了换行，逻辑清楚多了</span><br><span class="line">if (wl &amp;&amp; wl.length) &#123;</span><br><span class="line"></span><br><span class="line">    for (i = 0, l = wl.length; i &lt; l; ++i) &#123;</span><br><span class="line">        p = wl[i];</span><br><span class="line">        type = Y.Lang.type(r[p]);</span><br><span class="line"></span><br><span class="line">        if (s.hasOwnProperty(p)) &#123;</span><br><span class="line">            // 处理merge逻辑</span><br><span class="line">            if (merge &amp;&amp; type == &apos;object&apos;) &#123;</span><br><span class="line">                Y.mix(r[p], s[p]);</span><br><span class="line">            &#125; else if (ov || !(p in r)) &#123;</span><br><span class="line">                r[p] = s[p];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><span>换行可以是空行，也可以是注释</span></p>
+
+
+<p><strong>10. <span>（<code>推荐）</code></span>使用<span><code>Function</code></span>进行类的定义，<span>(<code>不推荐)</code></span>继承，如需继承采用成熟的类库实现继承</strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">// 类的实现</span><br><span class="line"> function Person(name) &#123;</span><br><span class="line">     this.name = name;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> Person.prototype.sayName = function() &#123;</span><br><span class="line">     alert(this.name);</span><br><span class="line"> &#125;;</span><br><span class="line"></span><br><span class="line"> var me = new Person(&quot;Nicholas&quot;);</span><br><span class="line"></span><br><span class="line"> // 将this放到局部变量self</span><br><span class="line"> function Persion(name, sex) &#123;</span><br><span class="line">     var self = this;</span><br><span class="line"></span><br><span class="line">     self.name = name;</span><br><span class="line">     self.sex = sex;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>&nbsp;平时咱们写代码，基本都是小程序，真心用不上什么继承，而且继承并不是JS的擅长的语言特性，尽量少用。如果非要使用的话，注意一点：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">function A()&#123;</span><br><span class="line">    //...</span><br><span class="line">&#125;</span><br><span class="line">function B()&#123;</span><br><span class="line">    //...</span><br><span class="line">&#125;</span><br><span class="line">B.prototype = new A();</span><br><span class="line">B.prototype.constructor = B; //原则上，记得把这句话加上</span><br></pre></td></tr></table></figure>
+<p>&nbsp;继承从原则上来讲，别改变他的构造函数，否则这个继承就显得很别扭了~&nbsp;</p>
+
+
+<p><strong>11. <span>(<code>推荐)</code></span>使用局部变量<span>缓存反复查找的对象</span>(包括但不限于全局变量、dom查询结果、作用域链较深的对象)</strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// 缓存对象</span><br><span class="line">var getComment = function() &#123;</span><br><span class="line">    var dom = $(&quot;#common-container&quot;),               // 缓存dom</span><br><span class="line">        appendTo = $.appendTo,                      // 缓存全局变量</span><br><span class="line">        data = this.json.data;                      // 缓存作用域链较深的对象</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>&nbsp;&nbsp;</p><br><p><strong>12.&nbsp;当需要缓存<span><code>this</code></span>时必须使用<span><code>self</code></span>变量进行缓存</strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// 缓存this</span><br><span class="line"> function Row(name) &#123;</span><br><span class="line">     var self = this;</span><br><span class="line"></span><br><span class="line">     self.name = name;</span><br><span class="line">     $(&quot;.row&quot;).click(function() &#123;</span><br><span class="line">         self.getName();</span><br><span class="line">     &#125;);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>&nbsp;self是一个保留字，不过用它也没关系。在这里，看个人爱好吧，可以用<strong><span>_this</span></strong>, <span><strong>that</strong></span>, <span><strong>me</strong></span>等这些词，都行，但是团队开发的时候统一下比较好。</p>
+
+
+<p><strong>13. <span>（<code>不推荐）</code></span><span>超长函数, 当函数超过<span>100</span>行，就要想想是否能将函数拆为两个或多个函数</span></strong></p>
+
+
+<p><strong>14. <span>等你来填坑~</span></strong></p>
+
+
+<p></p><h3><span><strong>小结</strong></span></h3><p></p>
+<p><span>　　规范是死的，罗列这些东西，目的是为了让程序猿们对这些东西引起注意，平时写代码的时候注意格式，不仅仅方便了自己，也让其他阅读者看得舒服。</span></p><br><p><span>　　</span><span>可能还有一些点没有涉及到，</span><span><strong>如果你有好的建议，请提出来，我们一起打造一个良好的前端生态环境！</strong></span></p>
+
+
+<p><strong>相关阅读：</strong><a href="http://www.cnblogs.com/hustskyking/p/css-spec.html" target="_blank">前端编码规范之CSS</a></p>
 
           
         
@@ -1962,7 +2198,7 @@ document.body.innerHTML = oldHTML;
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2014/03/31/2014-03-31-old-programmer-vs-newer/">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2013/08/13/2013-08-13-cb-license/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lion">
@@ -1982,7 +2218,7 @@ document.body.innerHTML = oldHTML;
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/blog/2014/03/31/2014-03-31-old-programmer-vs-newer/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/22/index.html">老程序员Vs新程序员</a>
+                <a href="/blog/2013/08/13/2013-08-13-cb-license/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/22/index.html">五种开源协议的比较(BSD,Apache,GPL,LGPL,MIT) – 整理</a>
               
             
           </h1>
@@ -2007,7 +2243,7 @@ document.body.innerHTML = oldHTML;
                 
               
 
-              <time title="创建时间：2014-03-31 00:00:00" itemprop="dateCreated datePublished" datetime="2014-03-31T00:00:00+08:00">2014-03-31</time>
+              <time title="创建时间：2013-08-13 10:17:00" itemprop="dateCreated datePublished" datetime="2013-08-13T10:17:00+08:00">2013-08-13</time>
             
 
             
@@ -2041,7 +2277,7 @@ document.body.innerHTML = oldHTML;
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/观点和感想/" itemprop="url" rel="index"><span itemprop="name">观点和感想</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/剪贴板/" itemprop="url" rel="index"><span itemprop="name">剪贴板</span></a></span>
 
                 
                 
@@ -2077,10 +2313,12 @@ document.body.innerHTML = oldHTML;
       
         
           
-            <blockquote>
-<p><strong>经验越足、知道的越多编程越慢</strong><br><br>这就是为何不能让老程序员冲锋在一线开发岗位的原因。因为编程经验越足、知道的越多，他做项目时就会思前顾后。往往一个小功能给菜鸟开发需要一周，老鸟开发可能得两周，结果用户一个需求变更直接干趴老鸟程序员。</p>
-</blockquote>
-<p>当你成为老程序员时是否也要开始重新审视下自己？！</p>
+            <div class="history-article">本文为归档内容,原始地址在 <a href="http://www.cnblogs.com/hustskyking/archive/2013/08/13/license.html" target="_blank">博客园</a>.</div>
+
+<p>当Adobe、Microsoft、Sun等一系列巨头开始表现出对”开源”的青睐时，”开源”的时代即将到来！</p><br><p>最初来自：sinoprise.com/read.php?tid-662-page-e-fpage-1.html（遗憾的是这个链接已经打不开了），我基本未改动，只是进行了一些排版和整理。参考文献：<a href="http://www.fsf.org/licensing/licenses/" target="_blank" rel="noopener">http://www.fsf.org/licensing/licenses/</a></p><br><p>现今存在的开源协议很多，而经过Open Source Initiative组织通过批准的开源协议目前有58种（<a href="http://www.opensource.org/licenses/alphabetical" target="_blank" rel="noopener">http://www.opensource.org/licenses/alphabetical</a>）。我们在常见的开源协议如BSD, GPL, LGPL,MIT等都是OSI批准的协议。如果要开源自己的代码，最好也是选择这些被批准的开源协议。</p><br><p>这里我们来看四种最常用的开源协议及它们的适用范围，供那些准备开源或者使用开源产品的开发人员/厂家参考。</p><br><p><strong>BSD开源协议（</strong><a href="http://www.fsf.org/licensing/licenses/index_html#OriginalBSD" target="_blank" rel="noopener">original BSD license</a><strong>、</strong><a id="FreeBSD" name="FreeBSD" href="http://www.freebsd.org/copyright/freebsd-license.html" target="_blank" rel="noopener">FreeBSD license</a><strong>、</strong><a id="OriginalBSD" name="OriginalBSD" href="http://www.xfree86.org/3.3.6/COPYRIGHT2.html#6" target="_blank" rel="noopener">Original BSD license</a><strong>）</strong></p><br><p>BSD开源协议是一个给于使用者很大自由的协议。基本上使用者可以”为所欲为”,可以自由的使用，修改源代码，也可以将修改后的代码作为开源或者专有软件再发布。</p><br><p>但”为所欲为”的前提当你发布使用了BSD协议的代码，或则以BSD协议代码为基础做二次开发自己的产品时，需要满足三个条件：</p><br><ol><br><li>如果再发布的产品中包含源代码，则在源代码中必须带有原来代码中的BSD协议。</li><br><li>如果再发布的只是二进制类库/软件，则需要在类库/软件的文档和版权声明中包含原来代码中的BSD协议。</li><br><li>不可以用开源代码的作者/机构名字和原来产品的名字做市场推广。</li><br><br></ol><br><p>BSD 代码鼓励代码共享，但需要尊重代码作者的著作权。BSD由于允许使用者修改和重新发布代码，也允许使用或在BSD代码上开发商业软件发布和销售，因此是对商业集成很友好的协议。而很多的公司企业在选用开源产品的时候都首选BSD协议，因为可以完全控制这些第三方的代码，在必要的时候可以修改或者二次开发。</p><br><p><strong>Apache Licence 2.0（</strong><a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noopener">Apache License, Version 2.0</a>、<a href="http://www.apache.org/LICENSE-1.1" target="_blank" rel="noopener">Apache License, Version 1.1</a>、<a href="http://www.apache.org/LICENSE-1.0" target="_blank" rel="noopener">Apache License, Version 1.0</a><strong>）</strong></p><br><p>Apache Licence是著名的非盈利开源组织Apache采用的协议。该协议和BSD类似，同样鼓励代码共享和尊重原作者的著作权，同样允许代码修改，再发布（作为开源或商业软件）。需要满足的条件也和BSD类似：</p><br><ol><br><li>需要给代码的用户一份Apache Licence</li><br><li>如果你修改了代码，需要再被修改的文件中说明。</li><br><li>在延伸的代码中（修改和有源代码衍生的代码中）需要带有原来代码中的协议，商标，专利声明和其他原来作者规定需要包含的说明。</li><br><li>如果再发布的产品中包含一个Notice文件，则在Notice文件中需要带有Apache Licence。你可以在Notice中增加自己的许可，但不可以表现为对Apache Licence构成更改。</li><br><br></ol><br><p>Apache Licence也是对商业应用友好的许可。使用者也可以在需要的时候修改代码来满足需要并作为开源或商业产品发布/销售。</p><br><p><strong>GPL（</strong><a id="GNUGPL" name="GNUGPL" href="http://www.fsf.org/licensing/licenses/gpl.html" target="_blank" rel="noopener">GNU General Public License</a><strong>）</strong></p><br><p>我们很熟悉的Linux就是采用了GPL。GPL协议和BSD, Apache Licence等鼓励代码重用的许可很不一样。GPL的出发点是代码的开源/免费使用和引用/修改/衍生代码的开源/免费使用，但不允许修改后和衍生的代码做为闭源的商业软件发布和销售。这也就是为什么我们能用免费的各种linux，包括商业公司的linux和linux上各种各样的由个人，组织，以及商业软件公司开发的免费软件了。</p><br><p>GPL协议的主要内容是只要在一个软件中使用(\使用”指类库引用，修改后的代码或者衍生代码)GPL 协议的产品，则该软件产品必须也采用GPL协议，既必须也是开源和免费。<strong>这就是所谓的”传染性”</strong>。GPL协议的产品作为一个单独的产品使用没有任何问题，还可以享受免费的优势。</p><br><p>由于GPL严格要求使用了GPL类库的软件产品必须使用GPL协议，对于使用GPL协议的开源代码，商业软件或者对代码有保密要求的部门就不适合集成/采用作为类库和二次开发的基础。</p><br><p>其它细节如再发布的时候需要伴随GPL协议等和BSD/Apache等类似。</p><br><p><strong>LGPL（</strong><a id="LGPL" name="LGPL" href="http://www.fsf.org/licensing/licenses/lgpl.html" target="_blank" rel="noopener">GNU Lesser General Public License</a><strong>）</strong></p><br><p>LGPL是GPL的一个为主要为类库使用设计的开源协议。和GPL要求任何使用/修改/衍生之GPL类库的的软件必须采用GPL协议不同。LGPL允许商业软件通过类库引用(link)方式使用LGPL类库而不需要开源商业软件的代码。这使得采用LGPL协议的开源代码可以被商业软件作为类库引用并发布和销售。</p><br><p>但是如果修改LGPL协议的代码或者衍生，则所有修改的代码，涉及修改部分的额外代码和衍生的代码都必须采用LGPL协议。因此LGPL协议的开源代码很适合作为第三方类库被商业软件引用，但不适合希望以LGPL协议代码为基础，通过修改和衍生的方式做二次开发的商业软件采用。</p><br><p>GPL/LGPL都保障原作者的知识产权，避免有人利用开源代码复制并开发类似的产品</p><br><p><strong>MIT（<a href="http://www.opensource.org/licenses/mit-license.php" target="_blank" rel="noopener">MIT</a>）</strong></p><br><p>MIT是和BSD一样宽范的许可协议,作者只想保留版权,而无任何其他了限制.也就是说,你必须在你的发行版里包含原许可协议的声明,无论你是以二进制发布的还是以源代码发布的.</p><br><p id="gulink">本文来自：<a title="五种开源协议的比较(BSD,Apache,GPL,LGPL,MIT) – 整理" href="http://www.awflasher.com/blog/archives/939" target="_blank" rel="noopener">http://www.awflasher.com/blog/archives/939</a></p>
+
+
+
 
           
         
@@ -2137,7 +2375,7 @@ document.body.innerHTML = oldHTML;
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2014/03/31/2014-03-31-npm-cross-wall/">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2013/08/11/2013-08-11-cb-responsive-web-desigin/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lion">
@@ -2157,7 +2395,7 @@ document.body.innerHTML = oldHTML;
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/blog/2014/03/31/2014-03-31-npm-cross-wall/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/22/index.html">npm穿墙</a>
+                <a href="/blog/2013/08/11/2013-08-11-cb-responsive-web-desigin/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/22/index.html">那些年，我们一起玩过的响应式布局</a>
               
             
           </h1>
@@ -2182,7 +2420,7 @@ document.body.innerHTML = oldHTML;
                 
               
 
-              <time title="创建时间：2014-03-31 00:00:00" itemprop="dateCreated datePublished" datetime="2014-03-31T00:00:00+08:00">2014-03-31</time>
+              <time title="创建时间：2013-08-11 12:17:00" itemprop="dateCreated datePublished" datetime="2013-08-11T12:17:00+08:00">2013-08-11</time>
             
 
             
@@ -2216,7 +2454,14 @@ document.body.innerHTML = oldHTML;
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/网络交互/" itemprop="url" rel="index"><span itemprop="name">网络交互</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/JavaScript/前端杂烩/" itemprop="url" rel="index"><span itemprop="name">前端杂烩</span></a></span>
 
                 
                 
@@ -2252,34 +2497,51 @@ document.body.innerHTML = oldHTML;
       
         
           
-            <p>GWF 很给力，很多东西都能墙掉，但是把 npm 也纳入黑名单，不知道 GWFer 是怎么想的。翻墙翻了好多年了，原理其实也挺简单的，proxy 嘛！</p>
-<h3 id="»-方法一"><a href="#»-方法一" class="headerlink" title="» 方法一"></a>» 方法一</h3><p><strong>A)</strong> 国内源，<a href="http://cnpmjs.org" target="_blank" rel="noopener">http://cnpmjs.org</a></p>
-<p>使用方式，你可以在 cmd 中键入 <code>npm install -g cnpm</code>，然后出去吃个饭，如果还没有安装好，那就换个方式：</p>
-<pre><code>npm install -g cnpm --registry=http://r.cnpmjs.org
-</code></pre><p>registry 参数的作用就是指向需要 download 的仓库。 cnpm 跟国外的 npm 是同步的，只要 npm 有更新，cnpm 就会跟着一起更新。</p>
-<p>当然，你也可以简单点搞：</p>
-<pre><code>npm config set registry=&quot;http://r.cnpmjs.org&quot;
-</code></pre><p>在配置中直接指定源头，下次就没有必要使用 <code>--registry</code> 参数了。配置好了之后，npm 就指向了国内的仓库。</p>
-<p><strong>B)</strong> 当然，你也可以安装 cnpm，安装好了之后使用 cnpm 来下载文件，其实原理跟上面是一样的，于是你就可以这样了：</p>
-<pre><code>cnpm install -g package_name
-</code></pre><h3 id="»-方法二"><a href="#»-方法二" class="headerlink" title="» 方法二"></a>» 方法二</h3><p>代理，在配置中设置代理参数：</p>
-<pre><code># 全局路径，也就是 npm install -g，这里 -g 的意义
-npm config set prefix=&quot;c:\nodejs&quot;
+            <div class="history-article">本文为归档内容,原始地址在 <a href="http://www.cnblogs.com/hustskyking/archive/2013/08/11/responsive-web-desigin.html" target="_blank">博客园</a>.</div>
 
-# 一般使用 goagent 翻墙，他的默认端口是 8087
-npm config set proxy=http://127.0.0.1:8087
+<p>&nbsp;博客园的资源很丰富，也很精彩。不过这些精彩的东西放到一些移动终端上阅览就不堪入目了，<span>体验相当不好</span>。</p><br><p>&nbsp;&nbsp;<img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2013/08/11/11111006-2d09cc55663d4efaab0b4e7c9f734775.png" data-source="http://images.cnitblog.com/blog/387325/201308/11111006-2d09cc55663d4efaab0b4e7c9f734775.png" alt="" width="386" height="686"></p><br><p>&nbsp;你可以忍受每一次打开博客，还得放大屏幕阅读么？整个屏幕都挤满了很小很小的文字，反正我是受够了。</p><br><p>&nbsp;所以，我们需要改变！！！ 先看看什么是响应式布局，你所看的这篇文章就是采用响应时布局~ <span>（<strong>现代浏览器才能看到效果</strong>）</span></p>
 
-# 设置 https 的代理
-npm config set https_proxy=http://127.0.0.1:8087
 
-# 这个地方记得设置下，别搞了个代理，结果在国内源下载
-npm config set registry=http://registry.npmjs.org
-</code></pre><p>这样配置好了之后，打开你的 goagent ，记得一定要打开，不然 npm 必然报错。上面写了一堆，其实没必要跟着写这么多，一句话就可以搞定：</p>
-<pre><code>npm config set proxy=http://127.0.0.1:8087
-</code></pre><p>为啥呢，npm -g 没必要自己去配置， registry 默认就是 <code>http://registry.npmjs.org</code>，不配置 https_proxy，也走的通，所以就只剩下上面这条命令了。</p>
-<h3 id="»-方法三"><a href="#»-方法三" class="headerlink" title="» 方法三"></a>» 方法三</h3><p>直接下载到本地。</p>
-<p>实在是怕麻烦，就直接把文件 download 下来，然后放到 node_module 之中就行了。如果是全局模块，找到全局 node_module 的位置，然后解压放进去就行了。</p>
+<p></p><h3>什么是响应式布局</h3><p></p>
+<p>我的理解就是，<span>为了让用户享受更好的体验效果，给用户展现最有价值的信息，让同一个页面在不同终端上有不一样的展现效果</span>。比如你正在阅读的这篇博客，当你缩小（放大）浏览器窗口时<em>（先滚动顶部，因为顶部做了比较多的修改，效果比较明显）</em>，你会看到这些神奇的效果。</p><br><p><span><strong>正常情况下</strong></span>，顶部是这样的：</p><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2013/08/11/11111800-ae1213c1cbe34476b2d4401a788ac48d.jpg" data-source="http://images.cnitblog.com/blog/387325/201308/11111800-ae1213c1cbe34476b2d4401a788ac48d.jpg" alt="" width="691" height="362"></p><br><p><span><strong>稍微缩小一点</strong></span>，是这样的：</p><br><ul><br><li>变化一：about那个块不见了</li><br><li>变化二：浮动的推荐&lt;反对框偏移了</li><br></ul><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2013/08/11/11111900-eee34c4fac6342f585c1d91681d52e4a.jpg" data-source="http://images.cnitblog.com/blog/387325/201308/11111900-eee34c4fac6342f585c1d91681d52e4a.jpg" alt="" width="690" height="449"></p><br><p><span><strong>再缩小一点</strong></span>：</p><br><ul><br><li>变化一：背景图片不见了</li><br><li>变化二：右侧sidebar块跑到文章下面去了</li><br></ul><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2013/08/11/11112040-da39f5f2f3d04f6bb07917930be7f098.jpg" data-source="http://images.cnitblog.com/blog/387325/201308/11112040-da39f5f2f3d04f6bb07917930be7f098.jpg" alt="" width="591" height="525"></p><br><p><span><strong>还可以再小一点</strong></span>，</p><br><p>　　这个变化就相当大了，很多东西都不见了，元素的位置也改变了</p><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2013/08/11/11112203-fd25eec77a92454292437db2ca0a40a8.jpg" data-source="http://images.cnitblog.com/blog/387325/201308/11112203-fd25eec77a92454292437db2ca0a40a8.jpg" alt="" width="436" height="564"></p><br><p>　　那么，什么是响应式布局，你有了一定的理解么~</p>
 
+
+<p></p><h3>技术什么的不是关键，关键是设计</h3><p></p>
+<p>　　技术太普遍了，大家都会用，可是<span>真正让用户感到舒适的，还是好的设计</span>。<span>我是这样考虑的：</span></p><br><p><strong>1. 屏幕分类：</strong></p><br><p>　　根据移动终端的尺寸（分辨率），我大概做了这么些分类：</p><br><p>　　←480px &nbsp; 481px~700px &nbsp; 701px~960px &nbsp; 961px→</p><br><p>　　首先搞清楚你的用户群所使用的终端类型和比例，这是2012年第二季度的统计数据</p><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2013/08/11/11112952-d5d987f9fc6247a7afc34ac7d46b87ff.gif" data-source="http://images.cnitblog.com/blog/387325/201308/11112952-d5d987f9fc6247a7afc34ac7d46b87ff.gif" alt=""></p><br><p><span>　　iPhone、Nokia、HTC、Samsung和Moto 五个品牌的移动终端位居前五位，占比分别为22.13%、13.98 和11.69%、10.87% 和7.47%，其次为Huawei、Sony 和ZTE 等。</span></p><br><p><span>　　感兴趣的话，可以去搜搜这些终端的分辨率是多少，然后针对这些数据做一个分类~我不多说了。</span></p>
+
+
+<p><strong><span>2. 不同的需求</span></strong></p><br><p><strong><span>　　</span></strong><span>一个比较小的屏幕能够容纳多少数据，展现多少信息，这一点必须把握住，比如当设备宽度是480像素的时候，我们没必要展现太多的信息，因为你展现出来用户也不会看，这些<span>冗余信息只会影响用户对信息主次的判断，甚至他们会觉得这些冗余信息太多，而跳过你的内容</span>。</span></p><br><p><span>　　我的设计是这样的：</span></p><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2013/08/11/11113624-b63e08b4fa52468abde3a2c0ea331d00.jpg" data-source="http://images.cnitblog.com/blog/387325/201308/11113624-b63e08b4fa52468abde3a2c0ea331d00.jpg" alt="" width="406" height="524"></p><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2013/08/11/11113648-0fc153eca1cc433e89023b9ed037a4ac.jpg" data-source="http://images.cnitblog.com/blog/387325/201308/11113648-0fc153eca1cc433e89023b9ed037a4ac.jpg" alt="" width="405" height="575"></p><br><p>&nbsp;我的页面只包括这些内容，像随笔分类、随笔档案，友情链接，推荐链接等，<span>这些信息又多又占空间，应该去除!</span></p><br><p>&nbsp;再比如：刚开始的时候，那个推荐&lt;反对的块及贴在文章的右侧，当窗口缩小之后，我把他放到了右下角，再小些，为了展示更多的内容，直接把他给隐藏了~</p>
+
+
+<p></p><h3>关于技术</h3><p></p>
+<p>技术核心是Media Query，网上都说烂了。</p><br><p><strong>给推荐两篇博文：</strong></p><br><ul><br><li><a title="Read 'The State Of Responsive Web Design'" href="http://mobile.smashingmagazine.com/2013/05/29/the-state-of-responsive-web-design/" rel="bookmark" target="_blank">The State Of Responsive Web Design</a></li><br><li><br><p class="post_title fs24 f_w"><a title="响应式布局这件小事" href="http://www.jiawin.com/response-type-layout-design/" rel="bookmark" target="_blank">响应式布局这件小事</a></p><br></li><br></ul><br><p>这两个<span>博客的布局也是响应式布局</span>。</p>
+
+
+<p><strong>需要注意的几个点：</strong></p><br><p>　　1. head中记得加上这句话：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width; initial-scale=1.0&quot;&gt;</span><br></pre></td></tr></table></figure>
+<p>　　如果不加，效果就是本文第一章图所示，文字会很小很多的挤在一个页面上。</p>
+
+
+<p>　　2. media query虽然好用，<strong><span>但是低版本IE不支持</span></strong>，不要纠结，咱把他给忽视掉~O(&cap;_&cap;)O~</p><br><p>　　如果你太固执一定要考虑的话，推荐这个：<a href="//code.google.com/p/css3-mediaqueries-js/">//code.google.com/p/css3-mediaqueries-js/</a></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--[if lt IE 9]&gt;</span><br><span class="line">     &lt;script src=&quot;http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js&quot;&gt;</span><br><span class="line">&lt;/script&gt; &lt;![endif]--&gt;</span><br></pre></td></tr></table></figure>
+<p>　　把这句话加到你的代码顶部，我试过了，相当不好用，响应式效果甚微。</p>
+
+
+<p></p><h3>关于测试工具</h3><p></p>
+<p>　　1. 这个网站，你可以试试，戳<a href="http://dfcb.github.io/Responsivator/" target="_blank">测试工具</a></p><br><p>　　2. chrome下有一个插件，叫做Moblile/Tablet Divice Testing，下载地址：<a href="//chrome.google.com/webstore/detail/mobiletablet-device-testi/elmekokodcohlommfikpmojheggnbelo" target="_blank">戳我</a></p><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2013/08/11/11115330-20656f7059b8442b8d4443946c499ad5.jpg" data-source="http://images.cnitblog.com/blog/387325/201308/11115330-20656f7059b8442b8d4443946c499ad5.jpg" alt=""></p>
+
+
+<p></p><h3>本文响应式布局代码</h3><p></p>
+<p>说了半天，有些童鞋可能等不及想去试试了~</p><br><p>晒晒我弄的几行代码，有兴趣的可以参考下：<a href="http://files.cnblogs.com/hustskyking/media-480.css" target="_blank">../file/media-480.css</a></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">/*====================== media =========================*/</span><br><span class="line">@media screen and (max-width: 480px) &#123;</span><br><span class="line">    html, body &#123;</span><br><span class="line">        background: none;</span><br><span class="line">    &#125;</span><br><span class="line">    ul#topMnu,</span><br><span class="line">    a.minyx,</span><br><span class="line">    #rss,</span><br><span class="line">    #sideLeft,</span><br><span class="line">    #sideRight,</span><br><span class="line">    #menu,</span><br><span class="line">    #profile_block &#123;</span><br><span class="line">        display: none;</span><br><span class="line">    &#125;</span><br><span class="line">    div#container &#123;</span><br><span class="line">        width: 96%;</span><br><span class="line">        padding: 0 2%;</span><br><span class="line">        min-width: 0 !important;</span><br><span class="line">    &#125;</span><br><span class="line">    div#content &#123;</span><br><span class="line">        margin-right: 0;</span><br><span class="line">        float: none;</span><br><span class="line">        padding-top: 310px;</span><br><span class="line">    &#125;</span><br><span class="line">    div#sidebar &#123;</span><br><span class="line">        margin-left: 0;</span><br><span class="line">        width: 100%;</span><br><span class="line">        float: none;</span><br><span class="line">    &#125;</span><br><span class="line">    .commentbox_title,</span><br><span class="line">    #tbCommentBody &#123;</span><br><span class="line">        width: 96%;</span><br><span class="line">    &#125;</span><br><span class="line">    #about &#123;</span><br><span class="line">        position: absolute;</span><br><span class="line">        width: 96%;</span><br><span class="line">        top: 80px;</span><br><span class="line">    &#125;</span><br><span class="line">    #div_digg &#123;</span><br><span class="line">        position: static;</span><br><span class="line">    &#125;</span><br><span class="line">    #skyking-footer &#123;</span><br><span class="line">        margin-top: 30px;</span><br><span class="line">        padding: 15px 20px 0;</span><br><span class="line">    &#125;</span><br><span class="line">    #skyking-footer div &#123;</span><br><span class="line">        width: 100%;</span><br><span class="line">    &#125;</span><br><span class="line">    #skyking-footer span &#123;</span><br><span class="line">        float: none;</span><br><span class="line">        border: none;</span><br><span class="line">        padding: 0;</span><br><span class="line">        width: 100%;</span><br><span class="line">        display: inline-block;</span><br><span class="line">        margin-bottom: 15px;</span><br><span class="line">    &#125;</span><br><span class="line">    #skyking-footer p &#123;</span><br><span class="line">        margin: 0;</span><br><span class="line">        text-indent: 2em;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">@media screen and (min-width: 481px) and (max-width: 699px) &#123;</span><br><span class="line">    html, body &#123;</span><br><span class="line">        background: none;</span><br><span class="line">    &#125;</span><br><span class="line">    ul#topMnu,</span><br><span class="line">    a.minyx,</span><br><span class="line">    #rss &#123;</span><br><span class="line">        display: none;</span><br><span class="line">    &#125;</span><br><span class="line">    div#container &#123;</span><br><span class="line">        width: 96%;</span><br><span class="line">        padding: 0 2%;</span><br><span class="line">        min-width: 0 !important;</span><br><span class="line">    &#125;</span><br><span class="line">    div#content &#123;</span><br><span class="line">        margin-right: 0;</span><br><span class="line">        float: none;</span><br><span class="line">    &#125;</span><br><span class="line">    div#sidebar &#123;</span><br><span class="line">        margin-left: 0;</span><br><span class="line">        width: 100%;</span><br><span class="line">        float: none;</span><br><span class="line">    &#125;</span><br><span class="line">    #about &#123;</span><br><span class="line">        position: static;</span><br><span class="line">    &#125;</span><br><span class="line">    .commentbox_title,</span><br><span class="line">    #tbCommentBody &#123;</span><br><span class="line">        width: 96%;</span><br><span class="line">    &#125;</span><br><span class="line">    #skyking-footer &#123;</span><br><span class="line">        margin-top: 30px;</span><br><span class="line">        padding: 15px 20px 0;</span><br><span class="line">    &#125;</span><br><span class="line">    #skyking-footer div &#123;</span><br><span class="line">        width: 100%;</span><br><span class="line">    &#125;</span><br><span class="line">    #skyking-footer span &#123;</span><br><span class="line">        float: none;</span><br><span class="line">        border: none;</span><br><span class="line">        padding: 0;</span><br><span class="line">        width: 100%;</span><br><span class="line">        display: inline-block;</span><br><span class="line">        margin-bottom: 15px;</span><br><span class="line">    &#125;</span><br><span class="line">    #skyking-footer p &#123;</span><br><span class="line">        margin: 0;</span><br><span class="line">        text-indent: 2em;</span><br><span class="line">    &#125;</span><br><span class="line">    #div_digg &#123;</span><br><span class="line">        right: 15px;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">@media screen and (min-width: 700px) and (max-width: 960px) &#123;</span><br><span class="line">    div#container &#123;</span><br><span class="line">        width: 96%;</span><br><span class="line">        padding: 0 2%;</span><br><span class="line">        min-width: 0 !important;</span><br><span class="line">    &#125;</span><br><span class="line">    #wrapper &#123;</span><br><span class="line">        overflow-x:hidden;</span><br><span class="line">    &#125;</span><br><span class="line">    #skyking-footer div &#123;</span><br><span class="line">        width: 100%;</span><br><span class="line">    &#125;</span><br><span class="line">    #skyking-footer span &#123;</span><br><span class="line">        float: left;</span><br><span class="line">        margin-bottom: 15px;</span><br><span class="line">        margin-left: 1%;</span><br><span class="line">        width: 22%;</span><br><span class="line">        min-height: 120px;</span><br><span class="line">    &#125;</span><br><span class="line">    div#sidebar div#sideRight,</span><br><span class="line">    div#sidebar div#sideLeft &#123;</span><br><span class="line">        float: none;</span><br><span class="line">        width: auto;</span><br><span class="line">    &#125;</span><br><span class="line">    div#content &#123;</span><br><span class="line">        margin-right: 32%;</span><br><span class="line">    &#125;</span><br><span class="line">    div#sidebar &#123;</span><br><span class="line">        width: 30%;</span><br><span class="line">        margin-left: -30%;</span><br><span class="line">    &#125;</span><br><span class="line">    #about &#123;</span><br><span class="line">        position: static;</span><br><span class="line">        display:none;</span><br><span class="line">    &#125;</span><br><span class="line">    #div_digg &#123;</span><br><span class="line">        right: 15px;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">meida query</span><br></pre></td></tr></table></figure>
+<p></p><h3>小结</h3><p></p>
+<p><span>　　响应式布局是这几年很流行的一个设计理念，随着移动互联网的盛行，为解决如今各式各样的浏览器分辨率以及不同移动设备的显示效果，响应式布局显得十分重要。设计虽好，我觉得也存在诸如一下的一些<span><strong>弊端</strong></span>：</span></p><br><p><span>　　1. 页面需要加载更多额外的内容，比如我们的手机看这个页面的话，体验效果还行，但是那些次要的内容依然被加载进来了，没看看见是因为被我display:none给隐藏了。</span><span>所以，如果想得到好的用户体验，同时节省流量的话，应该在加载之前做一些判断。</span></p><br><p><span>　　<span>2. 还是存在兼容性问题，要知道，现在IE6-8所占的市场份额仍然在40%+，这么庞大的用户群我们暂时是不能忽略的，若引用其他的JS来矫正，这个太费资源，不可取，而且事实表明这些JS并不好用。</span></span></p>
+
+
+<p>P.S：本文图片都是直接截屏，没有做优化处理，整个页面体积过于庞大，看来图片的优化和lazyload很有必要啊！！！下次弄一个简洁版的lazyload用用~~</p><br><p>&nbsp;最后。。。来一张萌图，哈哈哈~</p><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2013/08/11/11124011-2bb20347825f45139a41031f0fde7b22.gif" data-source="http://images.cnitblog.com/blog/387325/201308/11124011-2bb20347825f45139a41031f0fde7b22.gif" alt=""></p>
           
         
       
@@ -2324,7 +2586,7 @@ npm config set registry=http://registry.npmjs.org
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/blog/page/21/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/blog/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/21/">21</a><span class="page-number current">22</span><a class="page-number" href="/blog/page/23/">23</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/32/">32</a><a class="extend next" rel="next" href="/blog/page/23/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/blog/page/21/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/blog/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/21/">21</a><span class="page-number current">22</span><a class="page-number" href="/blog/page/23/">23</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/28/">28</a><a class="extend next" rel="next" href="/blog/page/23/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -2367,7 +2629,7 @@ npm config set registry=http://registry.npmjs.org
                 
                   <a href="/blog/archives/">
                 
-                    <span class="site-state-item-count">311</span>
+                    <span class="site-state-item-count">272</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2546,29 +2808,7 @@ npm config set registry=http://registry.npmjs.org
                     
                       
                     
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">94</span>
+                    <span class="site-state-item-count">83</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -3015,65 +3255,7 @@ npm config set registry=http://registry.npmjs.org
                     
                       
                     
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">241</span>
+                    <span class="site-state-item-count">215</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
