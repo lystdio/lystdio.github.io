@@ -1352,193 +1352,6 @@ master
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2014/04/29/2014-04-29-useage-of-mysqldump/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Lion">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="撼地神牛">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/blog/2014/04/29/2014-04-29-useage-of-mysqldump/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/17/index.html">mysqldump的使用</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2014-04-29 00:00:00" itemprop="dateCreated datePublished" datetime="2014-04-29T00:00:00+08:00">2014-04-29</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-12-12 18:10:11" itemprop="dateModified" datetime="2018-12-12T18:10:11+08:00">2018-12-12</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/后端杂烩/" itemprop="url" rel="index"><span itemprop="name">后端杂烩</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ol>
-<li><p>导出整个数据库<br>mysqldump -u 用户名 -p 数据库名 &gt; 导出的文件名  </p>
-<pre><code>mysqldump -u wcnc -p smgp_apps_wcnc &gt; wcnc.sql
-</code></pre></li>
-<li><p>导出一个表<br>mysqldump -u 用户名 -p 数据库名 表名&gt; 导出的文件名</p>
-<pre><code>mysqldump -u wcnc -p smgp_apps_wcnc users&gt; wcnc_users.sql
-</code></pre></li>
-<li><p>导出一个数据库结构</p>
-<pre><code>mysqldump -u wcnc -p -d --add-drop-table smgp_apps_wcnc &gt;d:\wcnc_db.sql
-</code></pre><p>-d 没有数据 –add-drop-table 在每个create语句之前增加一个drop table </p>
-</li>
-<li><p>导入数据库<br>常用source 命令<br>进入mysql数据库控制台，<br>如mysql -u root -p </p>
-<p>mysql&gt;use 数据库<br>然后使用source命令，后面参数为脚本文件（如这里用到的.sql）</p>
-<pre><code>mysql&gt;source d:\wcnc_db.sql
-</code></pre></li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2014/04/29/2014-04-29-reverse-string-to-object/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1677,6 +1490,193 @@ a.split(&apos;&amp;&apos;).sort().map(function(s){
 
 console.log(root);
 </code></pre><p>以上是网友的答案，我暂时没想到更好的算法。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2014/04/29/2014-04-29-useage-of-mysqldump/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lion">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="撼地神牛">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/blog/2014/04/29/2014-04-29-useage-of-mysqldump/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/17/index.html">mysqldump的使用</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2014-04-29 00:00:00" itemprop="dateCreated datePublished" datetime="2014-04-29T00:00:00+08:00">2014-04-29</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-12 18:10:11" itemprop="dateModified" datetime="2018-12-12T18:10:11+08:00">2018-12-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/后端杂烩/" itemprop="url" rel="index"><span itemprop="name">后端杂烩</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li><p>导出整个数据库<br>mysqldump -u 用户名 -p 数据库名 &gt; 导出的文件名  </p>
+<pre><code>mysqldump -u wcnc -p smgp_apps_wcnc &gt; wcnc.sql
+</code></pre></li>
+<li><p>导出一个表<br>mysqldump -u 用户名 -p 数据库名 表名&gt; 导出的文件名</p>
+<pre><code>mysqldump -u wcnc -p smgp_apps_wcnc users&gt; wcnc_users.sql
+</code></pre></li>
+<li><p>导出一个数据库结构</p>
+<pre><code>mysqldump -u wcnc -p -d --add-drop-table smgp_apps_wcnc &gt;d:\wcnc_db.sql
+</code></pre><p>-d 没有数据 –add-drop-table 在每个create语句之前增加一个drop table </p>
+</li>
+<li><p>导入数据库<br>常用source 命令<br>进入mysql数据库控制台，<br>如mysql -u root -p </p>
+<p>mysql&gt;use 数据库<br>然后使用source命令，后面参数为脚本文件（如这里用到的.sql）</p>
+<pre><code>mysql&gt;source d:\wcnc_db.sql
+</code></pre></li>
+</ol>
 
           
         
@@ -1961,199 +1961,6 @@ console.log(root);
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2014/04/28/2014-04-28-reg-match-null/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Lion">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="撼地神牛">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/blog/2014/04/28/2014-04-28-reg-match-null/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/17/index.html">当正则匹配零个字符</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2014-04-28 00:00:00" itemprop="dateCreated datePublished" datetime="2014-04-28T00:00:00+08:00">2014-04-28</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-12-12 18:10:11" itemprop="dateModified" datetime="2018-12-12T18:10:11+08:00">2018-12-12</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/JavaScript/前端杂烩/" itemprop="url" rel="index"><span itemprop="name">前端杂烩</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <pre><code>&quot;something&quot;.match(/\s*(.*?)\s*/)
-&gt; [&apos;&apos;, &apos;&apos;]
-
-&quot;something&quot;.match(/^\s*(.*?)\s*$/)
-&gt; [&quot;something&quot;, &quot;something&quot;]
-</code></pre><p>为何前者匹配的结果为空？</p>
-<p>如果你不清楚正则的贪婪模式和非贪婪模式，请先移步<a href="http://www.cnblogs.com/hustskyking/p/how-regular-expressions-work.html#p-2.2" target="_blank" rel="noopener">这里</a>.</p>
-<p>整个匹配分为三步：</p>
-<ol>
-<li>第一个 \s*, 贪婪模式把字符全部吞掉，然后回溯，直到第一个字符任然没找到</li>
-<li>第二步是 .*? 由于是非贪婪模式匹配了一个字符就结束了，继续第三步</li>
-<li>第三步匹配失败，回溯到第二步，那第二步会继续减少吞掉的字符，于是字符数缩减到零。</li>
-</ol>
-<p>可能这么说还是不太清晰，先看看这个对比：<br><img src="/blogimgs/2014/04/28/7e6c1076-cecb-11e3-823e-640e1b53ca00.jpg" alt="qq20140428195101"><!--<source src="//cloud.githubusercontent.com/assets/2698003/2816541/7e6c1076-cecb-11e3-823e-640e1b53ca00.jpg">--></p>
-<p>关于返回结果不是 null 而是 “”，你可以理解为匹配到了零个 a。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2014/04/28/2014-04-28-git-roll-back/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -2357,7 +2164,7 @@ hint: See the &apos;Note about fast-forwards&apos; in &apos;git push --help&apos
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2014/04/27/2014-04-27-IOS-doc-scroll/">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2014/04/28/2014-04-28-reg-match-null/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lion">
@@ -2377,7 +2184,7 @@ hint: See the &apos;Note about fast-forwards&apos; in &apos;git push --help&apos
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/blog/2014/04/27/2014-04-27-IOS-doc-scroll/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/17/index.html">IOS边缘回弹的禁止</a>
+                <a href="/blog/2014/04/28/2014-04-28-reg-match-null/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/17/index.html">当正则匹配零个字符</a>
               
             
           </h1>
@@ -2402,7 +2209,7 @@ hint: See the &apos;Note about fast-forwards&apos; in &apos;git push --help&apos
                 
               
 
-              <time title="创建时间：2014-04-27 00:00:00" itemprop="dateCreated datePublished" datetime="2014-04-27T00:00:00+08:00">2014-04-27</time>
+              <time title="创建时间：2014-04-28 00:00:00" itemprop="dateCreated datePublished" datetime="2014-04-28T00:00:00+08:00">2014-04-28</time>
             
 
             
@@ -2479,14 +2286,209 @@ hint: See the &apos;Note about fast-forwards&apos; in &apos;git push --help&apos
       
         
           
-            <p>IOS的浏览器里头，文档滚到顶部或者底部，还是可以继续滚动，对于全屏的应用来说，这个多余的体验是十分不好的。如下：</p>
-<p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2014/04/27/958be2f6-cdf2-11e3-8266-4adf0ab7da7d.jpg" data-source="//cloud.githubusercontent.com/assets/2698003/2810913/958be2f6-cdf2-11e3-8266-4adf0ab7da7d.jpg"></p>
-<p>比较靠谱的方式是：</p>
-<pre><code>document.addEventListener(&quot;touchmove&quot;, function(evt){
-  evt.preventDefault();
-}, true);
-</code></pre><p>禁用 touchmove，方法很靠谱，不过还是谨慎点用。呵呵。</p>
+            <pre><code>&quot;something&quot;.match(/\s*(.*?)\s*/)
+&gt; [&apos;&apos;, &apos;&apos;]
 
+&quot;something&quot;.match(/^\s*(.*?)\s*$/)
+&gt; [&quot;something&quot;, &quot;something&quot;]
+</code></pre><p>为何前者匹配的结果为空？</p>
+<p>如果你不清楚正则的贪婪模式和非贪婪模式，请先移步<a href="http://www.cnblogs.com/hustskyking/p/how-regular-expressions-work.html#p-2.2" target="_blank" rel="noopener">这里</a>.</p>
+<p>整个匹配分为三步：</p>
+<ol>
+<li>第一个 \s*, 贪婪模式把字符全部吞掉，然后回溯，直到第一个字符任然没找到</li>
+<li>第二步是 .*? 由于是非贪婪模式匹配了一个字符就结束了，继续第三步</li>
+<li>第三步匹配失败，回溯到第二步，那第二步会继续减少吞掉的字符，于是字符数缩减到零。</li>
+</ol>
+<p>可能这么说还是不太清晰，先看看这个对比：<br><img src="/blogimgs/2014/04/28/7e6c1076-cecb-11e3-823e-640e1b53ca00.jpg" alt="qq20140428195101"><!--<source src="//cloud.githubusercontent.com/assets/2698003/2816541/7e6c1076-cecb-11e3-823e-640e1b53ca00.jpg">--></p>
+<p>关于返回结果不是 null 而是 “”，你可以理解为匹配到了零个 a。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2014/04/27/2014-04-27-gem-sources/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lion">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="撼地神牛">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/blog/2014/04/27/2014-04-27-gem-sources/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/17/index.html">gem速度慢</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2014-04-27 00:00:00" itemprop="dateCreated datePublished" datetime="2014-04-27T00:00:00+08:00">2014-04-27</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-12 18:10:11" itemprop="dateModified" datetime="2018-12-12T18:10:11+08:00">2018-12-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/杂物间/" itemprop="url" rel="index"><span itemprop="name">杂物间</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/杂物间/网络交互/" itemprop="url" rel="index"><span itemprop="name">网络交互</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>删除本来的源，添加淘宝的源。</p>
+<p>1 查看源</p>
+<pre><code>gem sources list
+</code></pre><p>2 删除list中的源</p>
+<pre><code>gem sources --remove http://rubygems.org/
+</code></pre><p>3 查看是否已经删除</p>
+<pre><code>重复1,结果为空就正确
+</code></pre><p>4 添加淘宝的源</p>
+<pre><code>gem sources -a http://ruby.taobao.org/
+</code></pre>
           
         
       
