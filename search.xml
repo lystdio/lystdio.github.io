@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title></title>
+    <url>%2Fblog%2F2019%2F02%2F15%2F2019-02-15-RegExp%2F</url>
+    <content type="text"><![CDATA[1.正则表达式是什么？​ 它是使用单个字符串来描述、匹配一系列某个语法规则的字符串。它经常可以被用来检索、替换那些某个匹配模式的文本。通俗的说就是按照某种规则去匹配符合条件的字符串。 举个栗子 ​ 2018-12-11 08:59:00 江伟哥发现我师傅还没有到公司，昨天说好的让我师傅早到给帮忙打个卡但都59分了自己都还没到。可更大的问题来了，江伟哥不知道我师傅把他的卡放在哪了。08:59:15，江伟哥慌忙之中拨通了第一个电话但却是空号，定睛一看号码1885646465，原来是慌乱中少输了一位号码。08:59:30，江伟哥拨通了第二个电话，电话那头传来一个女声：“你好，这里是和利时。”诧异之中江伟哥再次确认了一遍号码，029-96544856，原来刚才一个不小心通讯录里点到了和利时前台的电话，江伟哥气的拍起了大腿。08:59:50，再次拨通前，江伟哥一位一位的确认了号码，18856464655，没错了，赶紧拨通！随着电话那头我师傅带着倦意的一句“喂，哪位”，卡机上的时间跳到了09:00:00。2018-12-12，收到迟到罚款通知的江伟哥开始自闭。 匹配这段文字中符合规范的手机号：1[34578]\d{9} 匹配这段文字中所有的日期：\d{4}[/-]\d{2}[/-]\d{2} 对这段文字中匹配到的所有日期进行年月日的分组：(\d{4})[/-](\d{2})[/-](\d{2}) 2.正则表达式中的一些语法2.1.修饰符（g i m）​ 修饰符比较特殊，它放在表达式的最后，在构造函数声明的时候作为第二的参数被传进去的。整个表达式可以理解为匹配规则字符串+修饰符，修饰符有三个g、i、m，他们可以一起用。 g（global）：执行全局匹配 i（ignore case）：执行一个不区分大小写的匹配 m（multiple lines）：执行多行匹配 注：此处仅介绍了常用的三个，修饰符还包含s、U、X、A、D、e 2.1.1.全局匹配还是上面那段文字，如果在匹配日期的时候我使用全局匹配和不使用全局匹配的结果区别： 2.1.2.不区分大小写匹配​ 正如名字，就是在匹配的时候是否大小写敏感： 2.1.3.多行匹配​ 当使用多行匹配的时候，那么边界匹配符^和$将匹配行的开始和结束，反之则匹配整个字符串的开始和结束。如果将上面那段文字分为两段，每段使用一个&lt;p&gt;标签，那么我们尝试在多行模式开启以及不开启的时候匹配段落标签中的内容： 2.2.正则表达式字符的组成​ 正则表达式中由几种基本字符组成： 原义字符 非打印字符 元字符 2.3.原义字符​ 拿多行匹配的那个栗子来说，正则表达式中&lt;p&gt;就是原义字符，这个字符代表的就是它本身的意思。那么如果需要标记一个字符为特殊字符、或一个原义字符，那么就可以使用\符号将下一个字符标记转义。比如n将匹配一个字符n，而\n将匹配一个换行符。再比如^将作为起始边界的匹配标记，而\^将匹配^字符。 2.4.非打印字符​ 比如回车符、换行符、换页符等都属于非打印字符，它经常被用在文本文件的处理上： 字符 描述 \v 匹配一个垂直制表符，等价于 \x0b 和 \cK \f 匹配一个换页符，等价于 \x0c 和 \cL \n 匹配一个换行符，等价于 \x0a 和 \cJ \r 匹配一个回车符，等价于 \x0d 和 \cM \s 匹配任何空白字符，包括空格、制表符、换页符等等，等价于 [ \f\n\r\t\v] \S 匹配任何非空白字符，等价于 [^ \f\n\r\t\v] \t 匹配一个制表符，等价于 \x09 和 \cI 2.5.元字符2.5.1.字符类（ [ ] ）​ 比如在第一节我们匹配手机号所用的正则表达式中1[34578]\d{9}手机号的第二位可能是3、4、5、7、8中的任意一位，那[34578]就表示这些字符的一个集合。 2.5.2.字符类取反（ [ ^ ] ）​ 就是字符类的一个相反情况，表示不包含这些字符。 2.5.3.范围类（ [-] ）​ 正则表达式支持一定的范围规则，比如[a-z]表示字母a到z，[0-9]表示数字0到9。多种范围类可以写到一个字符类中，比如匹配字母a到z和数字0到9，那么就可以写成[a-z0-9]。 2.5.4.预定义类​ 有了这些预定义类，会简化正则表达式能够比较方便的书写。比如第一节举的栗子中匹配日期所使用的正则表达式\d{4}[/-]\d{2}[/-]\d{2}，\d就表示了数字字符，如果不适用预定义类，那么这个正则表达式会变得比较复杂[0-9]{4}[/-][0-9]{2}[/-][0-9]{2}： 字符 等价于 含义 . [^\n\r] 除了回车符和换行符之外的所有字符 \d [0-9] 数字字符 \D [^0-9] 非数字字符 \s [\t\n\x0B\f\r] 空白符 \S [^\t\n\x0B\f\r] 非空白符 \w [a-zA-Z_0-9] 单词字符（数字字母下划线） \W [^a-zA-Z_0-9] 非单词字符 2.5.5.边界​ 正如它的字面意思，边界就是定义匹配的边界条件。比如在2.1.3节中匹配&lt;p&gt;标签中段落所使用的^(&lt;p&gt;)就代表以&lt;p&gt;原义字符作为字符串的开始，$(&lt;/p&gt;)就代表以&lt;/p&gt;原义字符作为字符串的结尾。边界字符一共有四种： 字符 含义 ^ 以xxx开头 $ 以xxx结尾 \b 单词边界，指[a-zA-Z_0-9]之外的字符 \B 非单词边界 ​ \b和\B可能会稍微难理解一些，因为之前的元字符是匹配一个字符，而它俩匹配的是一个位置，这个位置就是单词边界位置（它的前一个字符和后一个字符不全是(一个是,一个不是或不存在) 单词字符），括号内的内容可以先不理解，继续向下看。 ​ 首先单词边界简单的来说就是单词（\w）和符号(\W)之间的位置，举一个栗子来更具体的说明：在@Hello,hollysys!这个字符串中单词边界的位置添加一个*号，那么结果就是@*Hello*,*hollysys*!。观察一下特征，我们再来理解上一段中下划线内容。单词边界前后相邻的两边一定一边是单词字符而另一边是非单词字符或者没有字符，如果符合这个规则，那么这个位置就是单词边界。\b匹配的就是这个位置，那么正则表达式\bHello就可以理解为：匹配处于单词边界位置的Hello，\B与之相反。 2.5.6.量词/重复/限定符​ 在2.5.4节中我们知道，匹配一个数字字符可以不使用范围类[0-9]而使用一个元字符\d。那如果匹配一个10位的数字需要\d\d\d\d\d\d\d\d\d\d吗？当然不用，量词简化了这种情况的书写方式： 字符 含义 ? 出现零次或一次 * 出现零次或多次(任意次) + 出现一次或多次（至少一次） {n} 对应零次或者n次 {n,m} 至少出现n次但不超过m次 {n,} 至少出现 ​ 在第一节栗子中匹配手机号所用的表达式1[34578]\d{9}最后的{9}就是一个量词，代表匹配9个数字字符。 2.5.7.贪婪与懒惰（ ? ）​ 贪婪和懒惰是描述正则表达式的两种匹配方式，正如其名贪婪就是匹配尽可能多的结果，懒惰则与之相反。默认情况下正则表达式会采用贪婪模式进行匹配，而在量词后加?则会使用懒惰匹配。在量词描述下匹配单词字符时，贪婪模式会采取上限去匹配，而懒惰模式会采取下限模式匹配。这里我们结合上一小节量词的内容举例说明：使用正则表达式\w{3,6}对字符串Hollysys进行贪婪和懒惰匹配，观察结果。 2.5.8.分支条件（ | ）​ 正则表达式中的分支条件就是几种规则，在表达式中使用|将不同的规则分开，在匹配时会对每个分支进行匹配，举个栗子： ​ 我们还是那开头那个栗子，我现在需要匹配全文中所有的江伟和师傅，那正则表达式就可以写成 江伟|师傅，提供了两种规则就可以将所有的结果匹配出来。 2.5.9.分组与反向引用 字符 含义 分类 (exp) 匹配exp，并将结果自动命名分组 捕获 (?\exp) 匹配exp，并将结果按指定名称命名分组 捕获 (?:exp) 匹配exp，但是不捕获结果也不对结果进行分组 捕获 (?=exp) 匹配exp前面的位置 断言 (?&lt;=exp) 匹配exp后面的位置 断言 (?!exp) 匹配后面不是exp的位置 断言 (?&lt;!exp) 匹配前面不是exp的位置 断言 (?#comment) 注释，不参与正则运算 注释 分组 ​ 分组又称为子表达式，干嘛用的？我又要举栗子了，首先我们看一种情况：如果我们需要将一个字符串中所有多个连续的abc替换为*号，那么我们结合2.5.6中所说的量词使用正则abc{2,}进行匹配，发现结果并不是所预期的，量词只作用到了c上而不是abc上。 ​ 这里为了使量词作用到abc上，就用到了分组的概念。正如本节开头所述，分组称为子表达式，abc就是一个只含有原义字符的表达式，使用圆括号将表达式括起来作为子表达式将子表达式匹配的结果做进一步处理，此时后面的量词就会作用在这个子表达式上。 反向引用 ​ 反向引用往往和分组一起使用，当一个表达式被分组之后，该表达式所匹配到的内容会被自动赋予一个组号。默认情况下从左到右以分组的左括号作为标志，按先后出现顺序编号1、2、3···(0对应整个正则表达式)通过组号可以获得对应表达式所匹配到的结果。如本文开头举栗中对匹配到的所有日期进行年月日的分组使用的正则表达式(\d{4})[/-](\d{2})[/-](\d{2})，我们来看下匹配的结果： ​ 当然除了默认的组号，还可以自己定义每一组的名称，我们对这个例子进一步改造，只需要在分组的子表达式前面添加?&lt;name&gt;使其这个分组有一个固定的名称。 注意：实际上组号分配过程是要从左向右扫描两遍的：第一遍只给未命名的组分配，第二遍只给命名的组分配，因此所有命名组的组号都大于未命名的组号。 ​ 这里我们再提出一个场景，需要使用正则表达式匹配并取到下面域名列表中所有域名的名称： https://www.baidu.comhttp://www.hollysys.comhttps://www.qq.commysql://www.aliyun.com:3306/device_dbhttp://www.forkbteam.comhttps://163.comhttp://google.cntcp://127.0.0.1 ​ 那么我们可以使用正则表达式(?:http|https)://w*\.?(.*)\.(?:com|cn)进行匹配，当在子表达式最前面添加?:则不会捕获该组的结果，匹配结果如下图所示： 注：2.5节中省略了平衡组、零宽断言和负零宽断言的介绍。 3.正则表达式是如何匹配的？​ 那么正则表达式是怎么匹配的？它的工作机制是什么？这也是需要有些了解的，因为这对于写一个好的正则表达式非常有帮助，能有效提高匹配文本所需消耗的性能与时间。 3.1.正则表达式的工作机制3.1.1.匹配引擎眼里的字符串​ 在说到边界时，我们知道边界匹配的是一个位置，而预定义类等匹配的是一个字符。所以被匹配的一串字符Hollysys在正则匹配引擎眼里是含有位置占位符的0H1o2l3l4s5y6s7。 3.1.2.匹配流程 ​ 正则表达式在编译之后会从头字符开始匹配，如果匹配成功，会查找是否还有其他的路径没有匹配到，如果有的话，会回退到上一次成功匹配的位置然后重复第二步操作，不过此时开始匹配的位置是上次成功位置加1。这整个匹配过程的基础环节就是回溯，回溯是驱动正则匹配的一个基本动力，也是影响匹配性能的一个关键。 3.1.3.占有字符和零宽度​ 如果一个子表达式在匹配过程中匹配到了结果，而且这个结果不是一个位置而是一个字符，那么它所匹配到的结果会被它占有并保存到匹配结果中，这种称为占有字符。而如果匹配到的是一个位置，那么这个位置是不会被它占有更不会保存到匹配结果中去，这种称为零宽度。 ​ 占有字符是互斥的，零宽度是非互斥的，也就是说一个字符同一时间只能被一个表达式匹配，而一个位置在同一时间可以被多个零宽度表达式匹配。对，我要举栗子了： ​ 第一张图可以看到两个子表达式都在匹配同一个位置，结果中可以看到这个表达式执行成功。第二张图两个子表达式都在匹配字符f，但是无法匹配成功。因为当第一个子表达式将f占有后，第二个子表达式无法再找到符合条件的匹配而使得整个表达式匹配失败。 3.1.4.控制权和传动​ 正则表达式在由左向右依次匹配时，会有一个表达式先取得控制权，从某个位置开始匹配。当这个子表达式匹配结束后，会将控制权传动给下一个子表达式。下一个子表达式会从上一个表达式匹配成功之后的位置开始匹配，但如果上一个子表达式是零宽度，那么匹配的位置还是上一个子表达式匹配的位置。 3.2.运算优先级​ 正则表达式从左到右进行计算，并遵循优先级顺序。相同优先级的从左到右进行运算，不同优先级的运算先高后低。下表从由高到最低对元字符的优先级进行了排序： 元字符 描述 \ 转义符 ()，(?:)，(?=),[] 圆括号和方括号 *，+，?，{n}，{n,}，{n,m} 量词 ^，$，\任何元字符、任何字符 位置和顺序 \ 或 3.3.回溯​ 正则表达式中分支和量词出现的次数是比较多的，量词就如2.5.6小节所述，正则表达式需要决定何时去尝试匹配更多的字符。而分支如2.5.8小节最后的栗子一样，在匹配时我需要http和https两种情况开头的URL，那么（http|https）就提供了两个分支供正则选择。对于这种模糊条件匹配，最好的办法就是穷举，将所有可能的结果匹配一遍，一旦匹配成功立即返回结果。那么这里我们就这两种情况结合回溯分析正则表达式是如何匹配的。 3.3.1.分支&amp;回溯​ 在2.5.8小节中说到了分支，分支是提供多个规则给正则表达式进行匹配，为了去匹配这些规则就需要进行回溯。这里通过描述正则表达式H(ollysys|ere)&lt;/p&gt;对Here is &lt;p&gt;Hollysys&lt;/p&gt; company的匹配过程来展示分支的回溯过程。 匹配结果 说明 H 在位置0匹配到了字符H H 选择ollsys分支进行匹配 He 位置1不是字符o，回溯 H 选择ere分支进行匹配 He 位置1上成功匹配字符e Here 位置2、3上成功匹配字符re，该分支匹配成功 Here 位置4不是字符&lt;，该路径匹配失败 Null 位置2不是字符H，匹配失败 ··· ··· H 位置11匹配到字符H H 选择ollsys分支进行匹配 Hollysys 匹配到了ollysys，该分支匹配成功 Hollysys&lt; 在位置9匹配到了字符&lt; Hollysys\ 在位置10、11、12上匹配到了/p&gt; Hollysys\ 该路径匹配成功 注：正则表达式是从左到右依次匹配，如果满足了某个分支的话它就不会再管其他分支了 3.3.1.量词&amp;回溯​ 如2.5.7小节所述，在使用量词匹配时有贪婪和懒惰两种匹配模式，该小节中我们使用正则表达式&lt;.*&gt;和&lt;.*?&gt;对字符串Here is &lt;p&gt;Hollysys&lt;/p&gt; company进行匹配。那么是如何匹配的呢？ `&lt;.*&gt; 匹配结果 说明 &lt; 先匹配&lt;字符，在位置8匹配成功 \Hollysys\ company 默认贪婪匹配，量词取上限.*一下吞噬后面的所有字符 \Hollysys\ company 后面没有字符供&gt;匹配，回溯，要求.*吐一个字符出来 \Hollysys\ compan 吐得字符不是&gt;，回溯，再给我吐一个 \Hollysys\ compa 吐得字符不是&gt;，回溯，再给我吐一个 \Hollysys\ comp 吐得字符不是&gt;，回溯，再给我吐一个 \Hollysys\ com 吐得字符不是&gt;，回溯，再给我吐一个 \Hollysys\ co 吐得字符不是&gt;，回溯，再给我吐一个 \Hollysys\ c 吐得字符不是&gt;，回溯，再给我吐一个 \Hollysys\ 吐得字符不是&gt;，回溯，再给我吐一个 \Hollysys\ 是&gt;，完成匹配 &lt;.*?&gt; 匹配结果 说明 &lt; 先匹配&lt;字符，在位置8匹配成功 \&lt; 懒惰匹配，量词取下限0，.*被忽略 \&lt;p 不是&gt;，回溯 \&lt;p .*匹配1个字符 \ 是&gt;，完成匹配 \、\ 全局匹配，未到尾部继续按上述步骤向前匹配又找到&lt;/p&gt; 3.4.分组​ 在2.5.9中我们说到了分组捕获以及对组的命名，那么我们来看一种情况： ​ 当对两个组使用相同的名称时，最终的结果只会显示最后一个，是被覆盖了么？其实每一个组都是一个堆栈，当正则从左向右匹配分组内的子表达式时，会将匹配结果捕获出来压入指定名称的栈中。而组获取的文本是栈顶的数据，所以最终取到的结果是sys。但我只想要上一个结果怎么办？那就可以使用(?&#39;-one&#39;)将顶部的栈弹出： 3.5.正则表达式优化的一些小技巧 避免重新编译，编译正则表达式的次数尽可能的少； 如果不需要括号内的子表达式匹配结果，最好使用非捕获符号?:； 不要滥用括号和字符组； 从量词中提取出来必须的元素； 提取分支条件开头或结尾必须的元素； 使用正确的边界符限定搜索区域； 尽量不适用通配符，使用具体的元字符； 使用正确的量词，并尽可能限定长度； 4.一些正则调试辅助工具4.1.Regexper​ Regexper是一款JavaScript可视化正则调试工具，它可以解析正则表达式并将匹配方式可视的显示出来，这比直接读正则表达式方便了很多，也编译找出自己写的表达式中存在哪些逻辑或者语法上的错误。 工具地址：Regexper 4.2.在线正则表达式测试​ 这个是比较简单的轻量级在线调试工具，并提供了一些常用的表达式。 工具地址：在线正则表达测试 4.3.正则表达式测试器​ 也是一个轻量级桌面版正则表达式测试工具，展示比上面那个在线版要友好很多，支持匹配数据的导出。 下载地址：正则表达测试器 4.4.RegexBuddy​ 这个工具是一款功能强大的正则表达式编辑工具，使用能够帮助用户快速自动生成正则表达式，支持自动检查和修改生成的正则表达式，可在样本字符串和文件上快速测试任何正则表达式，防止实际数据出错。通过逐步完成实际的匹配过程来进行无猜测调试。最主要的，它可以对正则表达式进行Debug，他会以树状列表显示正则匹配的每一个过程和匹配最终的步长，这对性能优化有着非常大的帮助。]]></content>
+      <categories>
+        <category>正则</category>
+      </categories>
+      <tags>
+        <tag>正则</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[2019-2-15-随笔]]></title>
     <url>%2Fblog%2F2019%2F02%2F15%2F2019-2-15-%E9%9A%8F%E7%AC%94%2F</url>
     <content type="text"><![CDATA[现在的心情无比沮丧，虽然没吃过屎，但是我敢肯定，比吃了屎还她妈难受！所以就在这里来无病呻吟一下，骂骂脏话！ 谁他妈的知道女人们咋想的？谁他妈的知道女人们想要什么？ 谁规定的要过洋节？谁规定的情人节就非得要男的给女的送礼物？ 你要过情人节，你要过三八，你要过六一，你要过七夕，你要过平安夜，你还要过年，可以！但是请你不要挑三拣四，送给你的是一片心意，满不满意是你自己良心该考虑的事情！ 俗话说得好，温饱思淫欲，一点都不假，真的狠袁隆平老爷爷，给你们吃的太饱了！才让你们有功夫来过那些有的没的乱七八糟的节日。 由于男人在生理结构上和女人的先天性差异，导致男性在农耕时代承担了最主要的劳动力，但是现在是二十一世纪的信息时代，男女平等，并不存在男尊女卑的现象，可是不知道现在的社会为什么如此畸形，男人为什么要去承受那么大的压力？过日子是两个人的事情，不是男人一个人的事情。什么男的赚钱养家，什么女的美貌如花，都他妈见鬼去吧！如果是这样的话，女人最应该呆的地方是动物园，好吃好喝伺候着，还有粉丝们来观赏。 当今社会的年轻人，浮躁，内心复杂。在以前，民风淳朴，善良，人们愁着找吃的、穿的，每天不出门干活，就会被饿死，冻死。而如今，人们衣食无忧，人们的精神已经被严重的物欲横流的社会节奏给挤压残害。因为我们不懂得明天的世界将会发生什么变化，不知道明天早上起来，世界又会变成什么样子，是不是菜价涨了，油价是不是又上升了，是不是哪儿又出了什么大新闻，每天沉浸在手机的海洋里，变化太快，生怕自己与时代脱节。 为什么要浮躁？我们害怕明年房价又涨了，孩子上不了好的学校，这个月的信用卡又刷爆了，所以我们千方百计的要谋生赚钱，人人都在为了未知的惶恐奔波劳累。我们总在跟别人比这个比那个，比房子，比车子，比存款，钞票的脚本永远跟不上面子的速度。没有什么是不能拿来比较的，没有对比就没有伤害，你争我抢，到头来无非就是你得到的可能就是比人失去的，你失去的也可能就是别人得到的，没什么值得炫耀的。人一辈子无非就是健康快乐最重要，挣再多的钱，享受再好的生活品质，到头来身体垮了，钱你一毛都带不走！读前人的事迹和诗句，总是能给人一种脱离尘世，心旷神怡的感觉。 “一身诗意千寻瀑，万古人间四月天”。金岳霖先生写给林徽因的挽联，赞美女子才华如千寻飞瀑，长流不尽，令人心旷神怡。 “粗缯大布裹生涯，腹有诗书气自华”。出自苏轼《和董传留别》，生活当中身上包裹着粗衣劣布，胸中有学问气质自然光彩夺人。 “凌云劲竹真君子，空谷幽兰绝美人”。形容女子遗世而独立，不献媚依附于人，清鲜隽永，温婉出尘。 人要有内在养，成天勾心斗角、攀比虚荣，贪得无厌，没有丝毫文化修养，涂油光鲜靓丽的外表，依旧招人厌恶！在当下物欲横流且处处充满诱惑的社会里，最大的幸福莫过于守住一颗淡定而宁静的心，丢下一切包袱，超于自己，打开心灵的窗户，听一首悠扬的乐曲，沏一壶茶凝望无尽的夜空，品读月色的凝重，稀疏性性的话语，感受万家灯火的甜蜜。或是在某个周末，阳光明媚的午后，换上一身舒适的家居服，放着轻松愉悦的歌曲，收拾一下衣柜的衣物，打扫一下房间，用心做一顿的午餐，等待与爱人分享，人生何求。 节日千万个，快乐第一个。需求不满足，情人两行泪。]]></content>
@@ -873,8 +884,8 @@
         <category>观点和感想</category>
       </categories>
       <tags>
-        <tag>个性化</tag>
         <tag>淘宝首页</tag>
+        <tag>个性化</tag>
       </tags>
   </entry>
   <entry>
@@ -1498,19 +1509,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[Safari不认识type为search的input]]></title>
-    <url>%2Fblog%2F2015%2F04%2F03%2F2015-04-03-input-bug-in-safari%2F</url>
-    <content type="text"><![CDATA[我平时很少测试 safari 和 firefox，系统默认的浏览器被我设置成 chrome. 昨天切图看到个表单，没用人家写好的组件，那一层套一层的 div 看了就怕，因为不需要做什么扩展，就自己写了个。 123&lt;div&gt; &lt;input type="search" name="q" id="J_Query" /&gt;&lt;/div&gt; 给 J_Query 写了一些样式，可是…Safari很任性的不认，左改右改搞了五六分钟没反应，火了！ 把 type 改成 text 就好了。]]></content>
-      <categories>
-        <category>前端杂烩</category>
-      </categories>
-      <tags>
-        <tag>bug</tag>
-        <tag>CSS</tag>
-        <tag>safari</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[根据访问属性进行差异化数据加载]]></title>
     <url>%2Fblog%2F2015%2F04%2F03%2F2015-04-03-detect-first-visit-usr%2F</url>
     <content type="text"><![CDATA[判断用户是否第一次访问页面，先不说怎么做，想想什么场景下会用到？ 如果我们页面的体积过大，用户第一次访问，会消耗大量的时间(2-5s)去下载页面所需要的资源，给用户带来的体验是很不好的，尤其是移动端的用户。如果我们可以在用户第一次访问的时候只加载主要内容，在这个主要内容中引导用户做更多的加载资源的操作，一方面可以让用户熟悉系统，一方面也给页面加载资源争取了巨量的时间，何乐而不为？！ 我们能最快想到的方案是，使用 cookie ，服务器根据 cookie 的属性（如某个 Tag 的值为 1 或者 0）来判断要给用户呈现什么样的内容，这样做有几点不好： 需要服务器协助，而很多时候前端对服务器的控制为 0 cookie在每次网页请求的时候都会附带，浪费 （当然，可以在用户访问一次之后清理这个 cookie，比如服务器端设置 session 值，不过又增加了后端的逻辑负担，而且不靠谱） 如果用户禁用了 cookie 呢？ 问题有很多，解决问题的方案也不少，针对这个问题，HTML5规范也提供了相应的事件和属性支持。 如何判断用户是否为第一次访问页面当页面加载的时候会触发 onload 事件，完了之后触发 pageShow 事件，pageShow 事件是页面每次加载都会触发的，而 onload 不然。默认情况下，浏览器会缓存当前访问的页面（隐私模式除外，特殊处理，也会缓存，退出隐私模式时，缓存的所有内容全部删除），当用户点击前进或者后退按钮时，浏览器会从缓存中获取内容，这个时候 onload 事件是不会触发的。 可以这么说： 如果待加载的页面不存在于缓存中，会触发 onload ，再触发 pageShow 如果待加载的页面存在于缓存中，不触发 onload，只触发 pageShow pageShow 事件对象 event 中有一个属性值，叫做 persisted，如果这个值为 true，则为缓存数据，false，则为第一次加载。 差异化加载12345678910var body = document.body;body.onpageshow = function(evt)&#123; if(evt.persisted)&#123; // 如果从缓存加载，该干啥干啥 doSomething(); &#125; else &#123; // 如果用户第一次访问（没有缓存），只加载主体框架 loadMainContent(); &#125;&#125;; 在 loadMainContent() 我们可以这样干： 123456funtion loadMainContent()&#123; // 引导用户执行操作，操作一次加载点东西 leadUserDoSomething(); // 或者悄悄地缓慢的加载需要的数据 loadDataInQuickMode();&#125; 当然，通过 cookie 或者 pageshow 事件属性判断用户浏览器是否有缓存数据不是最终的解决方案，但这是一种思考模式，可以发散思维~]]></content>
@@ -1522,6 +1520,19 @@
       <tags>
         <tag>javascript</tag>
         <tag>first-time-visit</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Safari不认识type为search的input]]></title>
+    <url>%2Fblog%2F2015%2F04%2F03%2F2015-04-03-input-bug-in-safari%2F</url>
+    <content type="text"><![CDATA[我平时很少测试 safari 和 firefox，系统默认的浏览器被我设置成 chrome. 昨天切图看到个表单，没用人家写好的组件，那一层套一层的 div 看了就怕，因为不需要做什么扩展，就自己写了个。 123&lt;div&gt; &lt;input type="search" name="q" id="J_Query" /&gt;&lt;/div&gt; 给 J_Query 写了一些样式，可是…Safari很任性的不认，左改右改搞了五六分钟没反应，火了！ 把 type 改成 text 就好了。]]></content>
+      <categories>
+        <category>前端杂烩</category>
+      </categories>
+      <tags>
+        <tag>bug</tag>
+        <tag>CSS</tag>
+        <tag>safari</tag>
       </tags>
   </entry>
   <entry>
@@ -1814,17 +1825,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[Object + Array]]></title>
-    <url>%2Fblog%2F2014%2F08%2F07%2F2014-08-07-%7B%7D%2B%5B%5D%2F</url>
-    <content type="text"><![CDATA[问题： {} + [] {} + [] 结果应该是 0 console.log({} + []) 结果应该是 object object 两个 {} 的语义不一样,前者被解析成 {}; +[]; 后者 {} 为对象. 操作符，针对非 Number 的处理内部调用 ToPrimary() 函数, {} 和 [] 都执行了自身的 toString 函数 ({} + []) ({}) + [] 这些表达式中，{}都被当做对象来解析，而不是 作用块]]></content>
-      <categories>
-        <category>前端杂烩</category>
-      </categories>
-      <tags>
-        <tag>hack</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[绝对定位，margin:0 auto，让元素竖直居中]]></title>
     <url>%2Fblog%2F2014%2F08%2F07%2F2014-08-07-position-and-margin%2F</url>
     <content type="text"><![CDATA[问题： div { margin: auto; position: absolute; top: 0; left: 0; right: 0 bottom: 0; width: 100px; height: 100px; } 是如何自适应的。 原因是，绝对定位的布局取决于三个因素，一个是元素的位置，一个是元素的尺寸，一个是元素的margin值。 没有设置尺寸和 margin 的元素会自适应剩余空间，位置固定则分配尺寸，尺寸固定边会分配 margin，都是自适应的。 IE7- 的渲染方式不同，渲染规则也不一样，他不会让定位元素去自适应。]]></content>
@@ -1833,6 +1833,17 @@
       </categories>
       <tags>
         <tag>CSS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Object + Array]]></title>
+    <url>%2Fblog%2F2014%2F08%2F07%2F2014-08-07-%7B%7D%2B%5B%5D%2F</url>
+    <content type="text"><![CDATA[问题： {} + [] {} + [] 结果应该是 0 console.log({} + []) 结果应该是 object object 两个 {} 的语义不一样,前者被解析成 {}; +[]; 后者 {} 为对象. 操作符，针对非 Number 的处理内部调用 ToPrimary() 函数, {} 和 [] 都执行了自身的 toString 函数 ({} + []) ({}) + [] 这些表达式中，{}都被当做对象来解析，而不是 作用块]]></content>
+      <categories>
+        <category>前端杂烩</category>
+      </categories>
+      <tags>
+        <tag>hack</tag>
       </tags>
   </entry>
   <entry>
@@ -1985,8 +1996,8 @@
         <category>前端杂烩</category>
       </categories>
       <tags>
-        <tag>JavaScript</tag>
         <tag>解析</tag>
+        <tag>JavaScript</tag>
       </tags>
   </entry>
   <entry>
@@ -2006,6 +2017,19 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[当正则匹配零个字符]]></title>
+    <url>%2Fblog%2F2014%2F04%2F28%2F2014-04-28-reg-match-null%2F</url>
+    <content type="text"><![CDATA[&quot;something&quot;.match(/\s*(.*?)\s*/) &gt; [&apos;&apos;, &apos;&apos;] &quot;something&quot;.match(/^\s*(.*?)\s*$/) &gt; [&quot;something&quot;, &quot;something&quot;] 为何前者匹配的结果为空？ 如果你不清楚正则的贪婪模式和非贪婪模式，请先移步这里. 整个匹配分为三步： 第一个 \s*, 贪婪模式把字符全部吞掉，然后回溯，直到第一个字符任然没找到 第二步是 .*? 由于是非贪婪模式匹配了一个字符就结束了，继续第三步 第三步匹配失败，回溯到第二步，那第二步会继续减少吞掉的字符，于是字符数缩减到零。 可能这么说还是不太清晰，先看看这个对比： 关于返回结果不是 null 而是 “”，你可以理解为匹配到了零个 a。]]></content>
+      <categories>
+        <category>JavaScript</category>
+        <category>前端杂烩</category>
+      </categories>
+      <tags>
+        <tag>正则</tag>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[git版本回退操作]]></title>
     <url>%2Fblog%2F2014%2F04%2F28%2F2014-04-28-git-roll-back%2F</url>
     <content type="text"><![CDATA[今天 github 上操作遇到了一个很头疼的问题，在某个文件中进行了误操作（有可能是加入了BOM头），diff 没看到差异，但是线上就是不正常显示。修改半天没用，只要回退版本。 通过 git log 可以查看近期 commit 的信息： commit bcdfd65ba3f16a0647e7687f92cca25d51738d2e Author: Barret Lee &lt;barret.china@gmail.com&gt; Date: Mon Apr 28 01:22:27 2014 +0800 now post commit 69eeaa60c5808c143aabce4d52feb104e2e4591b Author: Barret &lt;barret.china@gmail.com&gt; Date: Sat Apr 26 21:03:48 2014 +0800 fix bug commit b9e4b8c697d139ec35e17be7dd353f1338e9b92e Author: Jing Lee &lt;barret.china@gmail.com&gt; Date: Sat Apr 26 19:35:37 2014 +0800 Update atom.xml commit 后面的一串字符就是 SHA 字符。 git reset --hard SHA 这句命令可以回退到指定版本。不过上传的时候要注意了，如果你是： git push -u master origin 肯定会出现这样的错误提示： error: failed to push some refs to &apos;//github.com/barretlee/barretlee.github.io.git&apos; hint: Updates were rejected because the tip of your current branch is behind hint: its remote counterpart. Integrate the remote changes (e.g. hint: &apos;git pull ...&apos;) before pushing again. hint: See the &apos;Note about fast-forwards&apos; in &apos;git push --help&apos; for details. 原因是你本地版本要落后于服务器上的版本（git reset 回退了嘛），如果想覆盖服务器上版本，应该加 -f ，强制提交， git push -u master origin -f 不过这样的操作要谨慎了，先把修改的位置备份（拿出来，复制到文件夹外），完成上述操作之后再复制回来处理。]]></content>
@@ -2018,16 +2042,17 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[当正则匹配零个字符]]></title>
-    <url>%2Fblog%2F2014%2F04%2F28%2F2014-04-28-reg-match-null%2F</url>
-    <content type="text"><![CDATA[&quot;something&quot;.match(/\s*(.*?)\s*/) &gt; [&apos;&apos;, &apos;&apos;] &quot;something&quot;.match(/^\s*(.*?)\s*$/) &gt; [&quot;something&quot;, &quot;something&quot;] 为何前者匹配的结果为空？ 如果你不清楚正则的贪婪模式和非贪婪模式，请先移步这里. 整个匹配分为三步： 第一个 \s*, 贪婪模式把字符全部吞掉，然后回溯，直到第一个字符任然没找到 第二步是 .*? 由于是非贪婪模式匹配了一个字符就结束了，继续第三步 第三步匹配失败，回溯到第二步，那第二步会继续减少吞掉的字符，于是字符数缩减到零。 可能这么说还是不太清晰，先看看这个对比： 关于返回结果不是 null 而是 “”，你可以理解为匹配到了零个 a。]]></content>
+    <title><![CDATA[IOS边缘回弹的禁止]]></title>
+    <url>%2Fblog%2F2014%2F04%2F27%2F2014-04-27-IOS-doc-scroll%2F</url>
+    <content type="text"><![CDATA[IOS的浏览器里头，文档滚到顶部或者底部，还是可以继续滚动，对于全屏的应用来说，这个多余的体验是十分不好的。如下： 比较靠谱的方式是： document.addEventListener(&quot;touchmove&quot;, function(evt){ evt.preventDefault(); }, true); 禁用 touchmove，方法很靠谱，不过还是谨慎点用。呵呵。]]></content>
       <categories>
         <category>JavaScript</category>
         <category>前端杂烩</category>
       </categories>
       <tags>
-        <tag>正则</tag>
-        <tag>JavaScript</tag>
+        <tag>IOS</tag>
+        <tag>touchmove</tag>
+        <tag>scroll</tag>
       </tags>
   </entry>
   <entry>
@@ -2069,20 +2094,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[IOS边缘回弹的禁止]]></title>
-    <url>%2Fblog%2F2014%2F04%2F27%2F2014-04-27-IOS-doc-scroll%2F</url>
-    <content type="text"><![CDATA[IOS的浏览器里头，文档滚到顶部或者底部，还是可以继续滚动，对于全屏的应用来说，这个多余的体验是十分不好的。如下： 比较靠谱的方式是： document.addEventListener(&quot;touchmove&quot;, function(evt){ evt.preventDefault(); }, true); 禁用 touchmove，方法很靠谱，不过还是谨慎点用。呵呵。]]></content>
-      <categories>
-        <category>JavaScript</category>
-        <category>前端杂烩</category>
-      </categories>
-      <tags>
-        <tag>IOS</tag>
-        <tag>touchmove</tag>
-        <tag>scroll</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[巧妙交换值]]></title>
     <url>%2Fblog%2F2014%2F04%2F26%2F2014-04-26-replace-a-and-b%2F</url>
     <content type="text"><![CDATA[a = 1, b = 2; a = [b, b = a][0]; a // 2 b // 1 很巧妙的替换了 a 和 b 的值。]]></content>
@@ -2093,19 +2104,6 @@
       <tags>
         <tag>hack</tag>
         <tag>tips</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[jekyll编译时报错invalid byte sequence in GBK]]></title>
-    <url>%2Fblog%2F2014%2F04%2F26%2F2014-04-26-jekyll-error-when-compile%2F</url>
-    <content type="text"><![CDATA[找到你的Ruby安装目录，如我的是：D:\Ruby193, 在里面找到文件D:\Ruby193\lib\ruby\gems\1.9.1\gems\jekyll-0.12.0\lib\jekyll\convertible.rb在该文件中找到下面句子： # Returns nothing. def read_yaml(base, name) self.content = File.read(File.join(base, name)) 将它修改为： # Returns nothing. def read_yaml(base, name) self.content = File.read(File.join(base, name),:encoding=&gt;&quot;utf-8&quot;) 然后确保所有带中文字符的markdown文件是无BOM的UTF-8格式即可。]]></content>
-      <categories>
-        <category>前端杂烩</category>
-      </categories>
-      <tags>
-        <tag>error</tag>
-        <tag>jekyll</tag>
-        <tag>ruby</tag>
       </tags>
   </entry>
   <entry>
@@ -2131,6 +2129,19 @@
       <tags>
         <tag>tips</tag>
         <tag>clip</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[jekyll编译时报错invalid byte sequence in GBK]]></title>
+    <url>%2Fblog%2F2014%2F04%2F26%2F2014-04-26-jekyll-error-when-compile%2F</url>
+    <content type="text"><![CDATA[找到你的Ruby安装目录，如我的是：D:\Ruby193, 在里面找到文件D:\Ruby193\lib\ruby\gems\1.9.1\gems\jekyll-0.12.0\lib\jekyll\convertible.rb在该文件中找到下面句子： # Returns nothing. def read_yaml(base, name) self.content = File.read(File.join(base, name)) 将它修改为： # Returns nothing. def read_yaml(base, name) self.content = File.read(File.join(base, name),:encoding=&gt;&quot;utf-8&quot;) 然后确保所有带中文字符的markdown文件是无BOM的UTF-8格式即可。]]></content>
+      <categories>
+        <category>前端杂烩</category>
+      </categories>
+      <tags>
+        <tag>error</tag>
+        <tag>jekyll</tag>
+        <tag>ruby</tag>
       </tags>
   </entry>
   <entry>

@@ -412,6 +412,192 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2013/03/29/2013-03-29-cb-lightweight-solution-for-an-iframe-cross-domain-communication/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lion">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/blog/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="撼地神牛">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/blog/2013/03/29/2013-03-29-cb-lightweight-solution-for-an-iframe-cross-domain-communication/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/27/index.html">iframe跨域通信的通用解决方案</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2013-03-29 11:10:00" itemprop="dateCreated datePublished" datetime="2013-03-29T11:10:00+08:00">2013-03-29</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-12 18:10:11" itemprop="dateModified" datetime="2018-12-12T18:10:11+08:00">2018-12-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/JavaScript/杂物间/" itemprop="url" rel="index"><span itemprop="name">杂物间</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <div class="history-article">本文为归档内容,原始地址在 <a href="http://www.cnblogs.com/hustskyking/archive/2013/03/29/lightweight-solution-for-an-iframe-cross-domain-communication.html" target="_blank">博客园</a>.</div>
+
+<p><a href="http://www.alloyteam.com/wp-content/uploads/2012/08/two_messenger.png" rel="noopener" target="_blank"><img class="aligncenter lh_lazyimg slideshow_imgs" title="图2" src="http://www.alloyteam.com/wp-content/uploads/2012/08/two_messenger.png" alt="2个信使的情况" width="390" height="322"></a></p><br><p><strong>一、背景</strong></p><br><p>在这个Web页面越来越丰富的时代，页面通过iframe嵌入其他的页面也越来越常见。但由于浏览器同源策略的限制，不同域之间属性和操作是无法直接交互的，所以在这个时候，开发者多多少少需要一些方案来突破这些限制。跨域问题涉及的地方也很多，如文档之间的消息通信、ajax请求、Cookie等，本文讨论的是iframe和父页面的消息通信。</p>
+
+
+<p><strong>二、现状</strong></p><br><p>目前网上也可以找到各种解决方案（少说都有10+个，有兴趣的话可以<a href="http://www.woiweb.net/10-cross-domain-methods.html" target="_blank">去看看</a>），对于现代浏览器来说，原生的postMessage API一定是不二的选择，所以各种方案的不同点均在于IE 6、7中的处理（不用兼容IE6、7的同志可以去看其他文章了）。当然这么多方案有各种优缺点，甚至有些只支持单向跨域，个人觉得实际意义不大。另外一些方案需要proxy.html这样的代理页面做中转，但是涉及服务器上的部署，并且对于多方合作来说还是有些麻烦。</p><br><p><strong>三、思路</strong></p><br><p>虽然不再复述现有的各种方案，但还是想交待一点上下文。相信网上看到最多方案就是利用location.hash或是window.name进行iframe的跨域通信：</p><br><ul><br><li>location.hash会直接暴露在URL里，并且在一些浏览器里会产生历史记录，数据安全性不高也影响用户体验，所以不做考虑。另外由于URL大小的限制，支持传递的数据量也不大。</li><br><li>window.name相比来讲就好很多了，支持2M的数据量，并且当iframe的页面跳到其他地址时，其window.name值保持不变，副作用可以说是最小的。</li><br></ul><br><p>讲到这思路也比较清晰了，咱们就用window.name呗，但问题又来了：只有两个页面同域时才能访问window.name。这个问题还好，只要把iframe改为与父页面同域就可以了。这又衍生了新的问题：这不是意味着只能单向通信了吗，iframe怎么向父页面发消息（不可能去改父页面的location吧）？在暗骂坑爹的同时偶然发现了一个很神奇的方法，就是想访问一个iframe的window.name时，只要将其location改为”about:blank”即可，屡试不爽~没错这个\特性”可以视为IE6/7的一项安全性问题，但利用这个特性来进行跨域通信并没有实际的安全风险。</p><br><p>具体的实现见下图，在iframe的内部再创建一个iframe（我们称之为信使），父子页面轮询信使的window.name，父子页面各自使用变量保存window.name，轮询时发现有变化即被视为收到消息。基本原理就是这么简单，我们继续..</p><br><p><a href="http://www.alloyteam.com/wp-content/uploads/2012/08/one_messenger1.png" rel="noopener" target="_blank"><img class="aligncenter size-full wp-image-2868 lh_lazyimg slideshow_imgs" title="图1" src="http://www.alloyteam.com/wp-content/uploads/2012/08/one_messenger1.png" alt="1个信使的情况" width="487" height="403"></a></p><br><p>图1</p><br><p>作为一个通用的解决方案，我们的目标是提供一个js文件，封装通信的接口，需要通信的页面只要加载js文件就行。但在封装前，需要考虑更复杂一点的情况：当父子页面双方频率较高地双向通信时，如何进行支持？按照上述的方案，信使的window.name并没有读写锁的概念，这意味着消息很容易乱掉或被漏掉。所以更好的方案应该是：创建两个信使，分别负责”父–&gt;子”和”子–&gt;父”的消息传递，并且为了防止消息被冲掉，发送消息时会维护一个消息队列，在取消息时处理消息队列里的所有消息。见图2。</p><br><p><a href="http://www.alloyteam.com/wp-content/uploads/2012/08/two_messenger.png" rel="noopener" target="_blank"><img class="aligncenter size-full wp-image-2869 lh_lazyimg slideshow_imgs" title="图2" src="http://www.alloyteam.com/wp-content/uploads/2012/08/two_messenger.png" alt="2个信使的情况" width="488" height="402"></a></p><br><p>图2</p><br><p><strong>四、封装</strong></p><br><p>最后的封装就是加入了postMessage API的检测，另外也要判断是否为跨域，这样就满足了所有iframe通信的情况了。这里实现的信使只负责消息的监听和发送，所以在使用上是非常简单的：</p><br><div><br><div id="highlighter_724833" class="syntaxhighlighter  js"><br><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// 父页面中</span><br><span class="line">// 初始化信使, 告知与其交互的iframe引用</span><br><span class="line">var messenger = Messenger.initInParent(iframeEl);</span><br><span class="line"></span><br><span class="line">// 监听消息</span><br><span class="line">messenger.onmessage = function (data) &#123;</span><br><span class="line">          ...</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// 发送消息</span><br><span class="line">messenger.send(message);</span><br></pre></td></tr></table></figure><br><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// iframe中</span><br><span class="line">// 初始化信使</span><br><span class="line">var messenger = Messenger.initInIframe();</span><br><span class="line"></span><br><span class="line">// 监听消息</span><br><span class="line">messenger.onmessage = function (data) &#123;</span><br><span class="line">      ...</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// 发送消息</span><br><span class="line">messenger.send(message);</span><br></pre></td></tr></table></figure><br><br></div><br></div><br><p>具体使用可以参考下方的demo : )</p><br><p><strong>五、总结</strong></p><br><p>虽然国内也有人提过使用”about:blank”进行iframe通信的，但是代码的封装和可读性都不是太好，<a href="http://www.ne.jp/asahi/nanto/moon/2011/12/08/ie-post-message.html" target="_blank">本方案</a>是一日本人所提出<span>，我觉得处理的很好，所以就拿出来和大家分享下</span>。虽然尝试过优化轮询那一块，但暂时无果，有兴趣的朋友可以一起研究下~</p><br><p><strong>DEMO：<a href="http://www.alloyteam.com/wp-content/uploads/2012/08/parent.html" target="_blank">点击这里</a></strong></p><br><p><strong>脚本下载：<a href="http://biqing.alloyteam.com/lab/messenger/messenger.js" target="_blank">http://biqing.alloyteam.com/lab/messenger/messenger.js</a></strong></p><br><p><strong>GitHub：<a href="//github.com/biqing/MessengerJS" target="_blank">//github.com/biqing/MessengerJS</a></strong></p>
+
+
+<p><strong>原文链接：<a href="http://www.alloyteam.com/2012/08/lightweight-solution-for-an-iframe-cross-domain-communication" target="_blank" rel="noopener">http://www.alloyteam.com/2012/08/lightweight-solution-for-an-iframe-cross-domain-communication</a></strong></p>
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2013/03/29/2013-03-29-cb-ten-methods-cross-domain/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -2192,191 +2378,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2012/09/16/2012-09-16-平时积累的一点东西/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Lion">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="撼地神牛">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/blog/2012/09/16/2012-09-16-平时积累的一点东西/" class="post-title-link" itemprop="https://handishenniu.coding.me/blog/page/27/index.html">平时积累的一点东西</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2012-09-16 01:25:00" itemprop="dateCreated datePublished" datetime="2012-09-16T01:25:00+08:00">2012-09-16</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-12-12 18:10:11" itemprop="dateModified" datetime="2018-12-12T18:10:11+08:00">2018-12-12</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/JavaScript/杂物间/" itemprop="url" rel="index"><span itemprop="name">杂物间</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <div class="history-article">本文为归档内容,原始地址在 <a href="http://www.cnblogs.com/hustskyking/archive/2012/09/16/3049804.html" target="_blank">博客园</a>.</div>
-
-<p><strong>本文从ITeye导入</strong></p>
-
-
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br><span class="line">395</span><br><span class="line">396</span><br><span class="line">397</span><br><span class="line">398</span><br><span class="line">399</span><br><span class="line">400</span><br><span class="line">401</span><br><span class="line">402</span><br><span class="line">403</span><br><span class="line">404</span><br><span class="line">405</span><br><span class="line">406</span><br><span class="line">407</span><br><span class="line">408</span><br><span class="line">409</span><br><span class="line">410</span><br><span class="line">411</span><br><span class="line">412</span><br><span class="line">413</span><br><span class="line">414</span><br><span class="line">415</span><br><span class="line">416</span><br><span class="line">417</span><br><span class="line">418</span><br><span class="line">419</span><br><span class="line">420</span><br><span class="line">421</span><br><span class="line">422</span><br><span class="line">423</span><br><span class="line">424</span><br><span class="line">425</span><br><span class="line">426</span><br><span class="line">427</span><br><span class="line">428</span><br><span class="line">429</span><br><span class="line">430</span><br><span class="line">431</span><br><span class="line">432</span><br><span class="line">433</span><br><span class="line">434</span><br><span class="line">435</span><br><span class="line">436</span><br><span class="line">437</span><br><span class="line">438</span><br><span class="line">439</span><br><span class="line">440</span><br><span class="line">441</span><br><span class="line">442</span><br><span class="line">443</span><br><span class="line">444</span><br><span class="line">445</span><br><span class="line">446</span><br><span class="line">447</span><br><span class="line">448</span><br><span class="line">449</span><br><span class="line">450</span><br><span class="line">451</span><br><span class="line">452</span><br><span class="line">453</span><br><span class="line">454</span><br><span class="line">455</span><br><span class="line">456</span><br><span class="line">457</span><br><span class="line">458</span><br><span class="line">459</span><br><span class="line">460</span><br><span class="line">461</span><br><span class="line">462</span><br><span class="line">463</span><br><span class="line">464</span><br><span class="line">465</span><br><span class="line">466</span><br><span class="line">467</span><br><span class="line">468</span><br><span class="line">469</span><br><span class="line">470</span><br><span class="line">471</span><br><span class="line">472</span><br><span class="line">473</span><br><span class="line">474</span><br><span class="line">475</span><br><span class="line">476</span><br><span class="line">477</span><br><span class="line">478</span><br><span class="line">479</span><br><span class="line">480</span><br><span class="line">481</span><br><span class="line">482</span><br><span class="line">483</span><br><span class="line">484</span><br><span class="line">485</span><br><span class="line">486</span><br><span class="line">487</span><br><span class="line">488</span><br><span class="line">489</span><br><span class="line">490</span><br><span class="line">491</span><br><span class="line">492</span><br><span class="line">493</span><br><span class="line">494</span><br><span class="line">495</span><br><span class="line">496</span><br><span class="line">497</span><br><span class="line">498</span><br><span class="line">499</span><br><span class="line">500</span><br><span class="line">501</span><br><span class="line">502</span><br><span class="line">503</span><br><span class="line">504</span><br><span class="line">505</span><br><span class="line">506</span><br><span class="line">507</span><br><span class="line">508</span><br><span class="line">509</span><br><span class="line">510</span><br><span class="line">511</span><br><span class="line">512</span><br><span class="line">513</span><br><span class="line">514</span><br><span class="line">515</span><br><span class="line">516</span><br><span class="line">517</span><br><span class="line">518</span><br><span class="line">519</span><br><span class="line">520</span><br><span class="line">521</span><br><span class="line">522</span><br><span class="line">523</span><br><span class="line">524</span><br><span class="line">525</span><br><span class="line">526</span><br><span class="line">527</span><br><span class="line">528</span><br><span class="line">529</span><br><span class="line">530</span><br><span class="line">531</span><br><span class="line">532</span><br><span class="line">533</span><br><span class="line">534</span><br><span class="line">535</span><br><span class="line">536</span><br><span class="line">537</span><br><span class="line">538</span><br><span class="line">539</span><br><span class="line">540</span><br><span class="line">541</span><br><span class="line">542</span><br><span class="line">543</span><br><span class="line">544</span><br><span class="line">545</span><br><span class="line">546</span><br><span class="line">547</span><br><span class="line">548</span><br><span class="line">549</span><br><span class="line">550</span><br><span class="line">551</span><br><span class="line">552</span><br><span class="line">553</span><br><span class="line">554</span><br><span class="line">555</span><br><span class="line">556</span><br><span class="line">557</span><br><span class="line">558</span><br><span class="line">559</span><br><span class="line">560</span><br><span class="line">561</span><br><span class="line">562</span><br><span class="line">563</span><br><span class="line">564</span><br><span class="line">565</span><br><span class="line">566</span><br><span class="line">567</span><br><span class="line">568</span><br><span class="line">569</span><br><span class="line">570</span><br><span class="line">571</span><br><span class="line">572</span><br><span class="line">573</span><br><span class="line">574</span><br><span class="line">575</span><br><span class="line">576</span><br><span class="line">577</span><br><span class="line">578</span><br><span class="line">579</span><br><span class="line">580</span><br><span class="line">581</span><br><span class="line">582</span><br><span class="line">583</span><br><span class="line">584</span><br><span class="line">585</span><br><span class="line">586</span><br><span class="line">587</span><br><span class="line">588</span><br><span class="line">589</span><br><span class="line">590</span><br><span class="line">591</span><br><span class="line">592</span><br><span class="line">593</span><br><span class="line">594</span><br><span class="line">595</span><br><span class="line">596</span><br><span class="line">597</span><br><span class="line">598</span><br><span class="line">599</span><br><span class="line">600</span><br><span class="line">601</span><br><span class="line">602</span><br><span class="line">603</span><br><span class="line">604</span><br><span class="line">605</span><br><span class="line">606</span><br><span class="line">607</span><br><span class="line">608</span><br><span class="line">609</span><br><span class="line">610</span><br><span class="line">611</span><br><span class="line">612</span><br><span class="line">613</span><br><span class="line">614</span><br><span class="line">615</span><br><span class="line">616</span><br><span class="line">617</span><br><span class="line">618</span><br><span class="line">619</span><br><span class="line">620</span><br><span class="line">621</span><br><span class="line">622</span><br><span class="line">623</span><br><span class="line">624</span><br><span class="line">625</span><br><span class="line">626</span><br><span class="line">627</span><br><span class="line">628</span><br><span class="line">629</span><br><span class="line">630</span><br><span class="line">631</span><br><span class="line">632</span><br><span class="line">633</span><br><span class="line">634</span><br><span class="line">635</span><br><span class="line">636</span><br><span class="line">637</span><br><span class="line">638</span><br><span class="line">639</span><br><span class="line">640</span><br><span class="line">641</span><br><span class="line">642</span><br><span class="line">643</span><br><span class="line">644</span><br><span class="line">645</span><br><span class="line">646</span><br></pre></td><td class="code"><pre><span class="line">*</span><br><span class="line">*                         ☆★☆★☆★☆★☆★☆JavaScript草稿集☆★☆★☆★☆★☆★☆</span><br><span class="line">*</span><br><span class="line">*                                               By Barret Lee</span><br><span class="line"></span><br><span class="line">★JQuery★&lt;!--&lt;script type=&quot;text/javascript&quot; src=&quot;http:code.jquery.com/jquery-latest.js&quot;&gt;&lt;/script&gt;--&gt;</span><br><span class="line"></span><br><span class="line">★★★★★★★★公共部分★★★★★★★★</span><br><span class="line">    function printf(obj) &#123;</span><br><span class="line">        document.write(obj + &quot;&lt;br&gt;&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    function $(obj) &#123;</span><br><span class="line">        return document.getElementById(obj);</span><br><span class="line">    &#125;</span><br><span class="line">    function forEach(obj) &#123;</span><br><span class="line">        for (m in obj) &#123;</span><br><span class="line">            printf(m + &apos;:&apos; + obj[m]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">★★★★★★★★注释方式★★★★★★★★★</span><br><span class="line">    *</span><br><span class="line">    *    &lt;!--[CDATA[</span><br><span class="line">    *</span><br><span class="line">    *    ]]--&gt;</span><br><span class="line"></span><br><span class="line">★★★★★★★★alertBox★★★★★★★★</span><br><span class="line">    function alertBox() &#123;</span><br><span class="line">        &quot;use strict&quot;;</span><br><span class="line">        var coverLayer = document.createElement(&quot;div&quot;);</span><br><span class="line">        var contentLayer = document.createElement(&quot;div&quot;);</span><br><span class="line">        coverLayer.setAttribute(&quot;id&quot;, &quot;coverLayer&quot;);</span><br><span class="line">        contentLayer.setAttribute(&quot;id&quot;, &quot;contentLayer&quot;);</span><br><span class="line">        contentLayer.innerHTML = &quot;&lt;p&gt;Huazhong University Of Science And Technology&lt;/p&gt;&quot;;</span><br><span class="line">        document.body.appendChild(coverLayer);</span><br><span class="line">        document.body.appendChild(contentLayer);</span><br><span class="line">    &#125;</span><br><span class="line">    window.onload = alertBox;</span><br><span class="line"></span><br><span class="line">★★★★★★★★基本数据类型★★★★★★★★</span><br><span class="line">    var x = parseFloat(&quot;20.33&quot;);</span><br><span class="line">    var y = parseInt(&quot;11&quot;, 8);</span><br><span class="line">    var z = Math.sin(Math.PI / 2);</span><br><span class="line">    var s = &quot;this is a string.&quot;;</span><br><span class="line">    var a = [1, 2, 4, 3];</span><br><span class="line">    var o = &#123;first: 1, second: 2, third: 3&#125;;</span><br><span class="line">    var result = o.valueOf();</span><br><span class="line">    printf(result + &quot;&lt;br&gt;&quot;);</span><br><span class="line">    printf(1 + &quot;2&quot; + &quot;&lt;br&gt;&quot;); 12</span><br><span class="line">    printf((a instanceof Array) + &quot;&lt;br&gt;&quot;);</span><br><span class="line">    printf((a.constructor) + &quot;&lt;br&gt;&quot;);</span><br><span class="line">    printf(o.hasOwnProperty(&quot;first&quot;) + &quot;&lt;br&gt;&quot;);</span><br><span class="line"></span><br><span class="line">★★★★★★★★arguments数组★★★★★★★★</span><br><span class="line">    function plus(x, y, z) &#123;</span><br><span class="line">        &quot;use strict&quot;;</span><br><span class="line">        if (arguments.length !== 3) &#123;</span><br><span class="line">            throw new Error(arguments.callee);</span><br><span class="line">        &#125;</span><br><span class="line">        return x + y + z;</span><br><span class="line">    &#125;</span><br><span class="line">    plus(2, 3);</span><br><span class="line">    printf(plus(2, 3, 4));</span><br><span class="line">    var cal = &#123;</span><br><span class="line">        x: 1,</span><br><span class="line">        y: 2,</span><br><span class="line">        f: function () &#123;</span><br><span class="line">            &quot;use strict&quot;;</span><br><span class="line">            return this.x + this.y;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    printf(cal.f() + &quot;&lt;br&gt;&quot;);</span><br><span class="line"></span><br><span class="line">★★★★★★★★函数call和apply★★★★★★★★</span><br><span class="line">        function fCall(x, y) &#123;</span><br><span class="line">            return x + y;</span><br><span class="line">        &#125;</span><br><span class="line">        var res = fCall.call(cal, 1, 2);</span><br><span class="line">        var res1 = fCall.apply(cal,[6, 9]);</span><br><span class="line">        printf(res + &quot;&lt;br&gt;&quot;);</span><br><span class="line">        printf(res1 + &quot;&lt;br&gt;&quot;);</span><br><span class="line"></span><br><span class="line">★★★★★★★★类和继承★★★★★★★★</span><br><span class="line">    function people(name, age, sex) &#123;</span><br><span class="line">        this.name = name;</span><br><span class="line">        this.age = age;</span><br><span class="line">        this.sex = sex;</span><br><span class="line">    &#125;</span><br><span class="line">    people.prototype.info = function () &#123;</span><br><span class="line">        printf(&quot;My name is &quot; + this.name + &quot;, I&apos;m &quot; + this.age + &quot; years old.&quot; + &quot;&lt;br&gt;&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    var humen = new people(&quot;Lijing&quot;, 19, &quot;man&quot;);</span><br><span class="line">    humen.info();</span><br><span class="line"></span><br><span class="line">★★★★★★★★IE4 &amp;&amp; IE5 没有apply函数，利用prototype来构造这样的原型函数★★★★★★★★</span><br><span class="line">    if (!Function.prototype.apply) &#123;</span><br><span class="line">        Function.prototype.apply = function (object, parameters) &#123;</span><br><span class="line">            var f = this;</span><br><span class="line">            var o = object || window;</span><br><span class="line">            var args = patameters || [];</span><br><span class="line"></span><br><span class="line">            o._$_apply_$_ = f;</span><br><span class="line"></span><br><span class="line">            var stringArgs = [];</span><br><span class="line"></span><br><span class="line">            for (var i = 0; i &lt; args.length; i++) &#123;</span><br><span class="line">                stringArgs[i] = &quot;args[&quot; + i + &quot;]&quot;;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            var arglist = stringArgs.join(&quot;,&quot;);</span><br><span class="line">            var methodcall = &quot;o._$_apply_$_(&quot; + arglist + &quot;);&quot;;</span><br><span class="line">            var result = eval(methodcall);</span><br><span class="line"></span><br><span class="line">            delete o._$_apply_$_;</span><br><span class="line"></span><br><span class="line">            return result;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"> ★★★★★★★★类属性,类方法,类私有成员,子类与超类★★★★★★★★</span><br><span class="line">    function Rectangle(width, height) &#123;</span><br><span class="line">        this.width = width;</span><br><span class="line">        this.height = height;</span><br><span class="line">    &#125;</span><br><span class="line">    Rectangle.prototype.area = function () &#123;</span><br><span class="line">        return this.width * this.height;</span><br><span class="line">    &#125;</span><br><span class="line">    function PositionRectangle(x, y, w, h) &#123;</span><br><span class="line">        Rectangle.call(this, w, h);</span><br><span class="line">        this.x = x;</span><br><span class="line">        this.y = y;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    PositionRectangle.prototype = new Rectangle();</span><br><span class="line">    delete PositionRectangle.prototype.width;</span><br><span class="line">    delete PositionRectangle.prototype.height;</span><br><span class="line">    PositionRectangle.prototype.constructor = PositionRectangle;</span><br><span class="line"></span><br><span class="line">    var r = new PositionRectangle(2, 2, 2, 2);</span><br><span class="line">    printf(r.area());</span><br><span class="line">    printf(r instanceof PositionRectangle &amp;&amp; r instanceof Rectangle &amp;&amp; r instanceof Object);</span><br><span class="line"></span><br><span class="line">    注：可以使用call和apply来调用被覆盖的函数</span><br><span class="line">    such as: Circle.prototype.toString.apply(this);</span><br><span class="line"></span><br><span class="line">★★★★★★★★非继承的扩展★★★★★★★★</span><br><span class="line">    function borrowMethods(borrowFrom, addTo) &#123;</span><br><span class="line">        var from = borrowFrom.prototype;</span><br><span class="line">        var to = addTo.prototype;</span><br><span class="line">        for (m in from) &#123;</span><br><span class="line">            if (from[m] != &quot;function&quot;) continue;</span><br><span class="line">            to[m] = from[m];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">★★★★★★★★确定对象类型★★★★★★★★</span><br><span class="line"></span><br><span class="line">    △ typeof null → &quot;object&quot;;</span><br><span class="line">       typeof undefined → &quot;undefined&quot;;</span><br><span class="line">       typeof 数组 → &quot;object&quot;;</span><br><span class="line">       typeof 函数 → &quot;function&quot;</span><br><span class="line"></span><br><span class="line">    △ instanceof 和构造函数 constructor</span><br><span class="line">      【特点：他们只能允许根据已经知道的类来进行测试对象，无法用于检查未知的对象】</span><br><span class="line"></span><br><span class="line">    △ 用Object.toString()测试对象的类型</span><br><span class="line"></span><br><span class="line">    △ 鸭子类型识别（Duck Typing）</span><br><span class="line"></span><br><span class="line">★★★★★★★★渐变效果★★★★★★★★</span><br><span class="line"></span><br><span class="line">    function setOpacity(obj, val) &#123;</span><br><span class="line">        if (document.documentElement.filters)&#123;</span><br><span class="line">            obj.style.filter = &quot;alpha(opacity=&quot; + val + &quot;)&quot;;</span><br><span class="line">        &#125;else &#123;</span><br><span class="line">            obj.style.opacity = val / 100;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    function fadeIn(obj) &#123;</span><br><span class="line">        var val = 10;</span><br><span class="line">        var t = setInterval(function()&#123;</span><br><span class="line">                if (val &gt;= 100) &#123;</span><br><span class="line">                    clearInterval(t);</span><br><span class="line">                &#125;</span><br><span class="line">                setOpacity(obj, val);</span><br><span class="line">                val += 10;</span><br><span class="line">            &#125;, 250);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">        ★★  fadeIn($(&quot;changeBox&quot;));</span><br><span class="line"></span><br><span class="line">    function setWidth(obj, val) &#123;</span><br><span class="line">        obj.style.width = parseInt(val) + &quot;px&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">    function setHeight(obj, val) &#123;</span><br><span class="line">        obj.style.height = parseInt(val) + &quot;px&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">    function slide(obj) &#123;</span><br><span class="line">        var val = 0;</span><br><span class="line">        var t = setInterval(function()&#123;</span><br><span class="line">                if (val &gt;= 300) &#123;</span><br><span class="line">                    clearInterval(t);</span><br><span class="line">                &#125;</span><br><span class="line">                setWidth(obj, val);</span><br><span class="line">                setHeight(obj, val);</span><br><span class="line">                val += 10;</span><br><span class="line">            &#125;, 80);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">        ★★  slide($(&quot;changeBox&quot;));</span><br><span class="line"></span><br><span class="line">    function setTop(obj, val) &#123;</span><br><span class="line">        obj.style.top = parseInt(val) + &quot;px&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">    function setLeft(obj, val) &#123;</span><br><span class="line">        obj.style.left = parseInt(val) + &quot;px&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">    function move(obj) &#123;</span><br><span class="line">        var val = 0;</span><br><span class="line">        var t = setInterval(function()&#123;</span><br><span class="line">                if (val &gt;= 300) &#123;</span><br><span class="line">                    clearInterval(t);</span><br><span class="line">                &#125;</span><br><span class="line">                setTop(obj, val);</span><br><span class="line">                setLeft(obj, val);</span><br><span class="line">                val += 10;</span><br><span class="line">            &#125;, 80);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">        ★★  move($(&quot;changeBox&quot;));</span><br><span class="line"></span><br><span class="line">★★★★★★★★正则表达式★★★★★★★★</span><br><span class="line">    正则表达式中的特殊符号有  ^    $    .    *    +    ?    =    !    |    \    /    ()    []    &#123;&#125;</span><br><span class="line"></span><br><span class="line">    *|------------------------------------------------------------</span><br><span class="line">    *  |    [...]        括号内任意字符</span><br><span class="line">    *  |    [^...]        非上</span><br><span class="line">    *  |    .            除换行符和其他Unicode行终止符之外的任意字符</span><br><span class="line">    *  |    \w            任何ASCII单字字符</span><br><span class="line">    *  |    \W            非上</span><br><span class="line">    *  |    \s            任何Unicode空白</span><br><span class="line">    *  |    \S            非上</span><br><span class="line">    *  |    \d            任何ASCII数字，等价于[0-9]</span><br><span class="line">    *  |    \D            非上</span><br><span class="line">    *  |    \b            匹配一个词语的边界</span><br><span class="line">    *  |    \B            非上</span><br><span class="line">    *  |    &#123;n, m&#125;        匹配至少 n 至多 m 次</span><br><span class="line">    *  |    &#123;n,&#125;        匹配至少 n 次</span><br><span class="line">    *  |    &#123;n&#125;            匹配恰好 n 次</span><br><span class="line">    *  |    ?            匹配前一项0或1次</span><br><span class="line">    *  |    +            匹配前一项1次或多次</span><br><span class="line">    *  |    *            匹配前一项0次或多次</span><br><span class="line">    *  |    ^            匹配字符串开头</span><br><span class="line">    *  |    $            匹配字符串结尾</span><br><span class="line">    *  |    i            忽略大小写</span><br><span class="line">    *  |    g            全局匹配</span><br><span class="line">    *  |    m            多行匹配</span><br><span class="line">    *  |-------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">    var text = &quot;JavaScript is not Java, thanks god, that is true! Java is not Javascript!!&quot;;</span><br><span class="line">    var url = &quot;http:www.baidu.com/pic.html&quot;</span><br><span class="line">    var Reg = /java/gi;</span><br><span class="line">    var RegUrl = /(\w+):\/\/([\w.]+)\/(\S*)/;</span><br><span class="line">    var res = url.match(RegUrl);</span><br><span class="line">    var res = text.replace(/Java/gi, &quot;JAVA&quot;);</span><br><span class="line">    var res = Reg.exec(text);</span><br><span class="line">    var res = Reg.test(text);</span><br><span class="line">    printf(text);</span><br><span class="line">    printf(res);</span><br><span class="line"></span><br><span class="line">★★★★★★★★drag拖动★★★★★★★★</span><br><span class="line"></span><br><span class="line">    var box = document.getElementById(&quot;box&quot;);</span><br><span class="line">    var drag = &#123;</span><br><span class="line">        start: function(evt) &#123;</span><br><span class="line">            var e = window.event || evt;</span><br><span class="line">            box.startX = e.clientX - box.offsetLeft;</span><br><span class="line">            box.startY = e.clientY - box.offsetTop;</span><br><span class="line">            document.onmousemove = drag.ondrag;</span><br><span class="line">            document.addEventListener ? document.addEventListener(&quot;mouseup&quot;,drag.stop,false) : document.attachEvent(&quot;onmouseup&quot;,drag.stop);</span><br><span class="line">        &#125;,</span><br><span class="line">        ondrag: function(evt) &#123;</span><br><span class="line">            var e = window.event || evt;</span><br><span class="line">            with(box.style) &#123;</span><br><span class="line">                position = &quot;absolute&quot;;</span><br><span class="line">                left = e.clientX - box.startX + &quot;px&quot;;</span><br><span class="line">                top = e.clientY - box.startY + &quot;px&quot;;</span><br><span class="line">            &#125;;</span><br><span class="line">        &#125;,</span><br><span class="line">        stop: function() &#123;</span><br><span class="line">            document.onmousemove = &quot;&quot;;</span><br><span class="line">            document.detachEvent ?  document.detachEvent(&quot;onmouseup&quot;,drag.start) : document.removeEventListener(&quot;mouseup&quot;,drag.start,false);</span><br><span class="line">        &#125;,</span><br><span class="line">        init: function() &#123;</span><br><span class="line">            box.addEventListener ? box.addEventListener(&quot;mousedown&quot;,drag.start,false) : box.attachEvent(&quot;onmousedown&quot;,drag.start);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    drag.init();</span><br><span class="line"></span><br><span class="line">★★★★★★★★浏览器Location和History★★★★★★★★</span><br><span class="line">Location: protocol + host + pathname + search</span><br><span class="line">printf(document.location == document.URL); true</span><br><span class="line"></span><br><span class="line">在大多数情况下，document.location和location.href是相同的，但是，当存在服务器重定向时，</span><br><span class="line">document.location包含的是装载的URL，而location.href包含的则是原始请求的文档的URL</span><br><span class="line"></span><br><span class="line">    |-------self, window</span><br><span class="line">    |</span><br><span class="line">    |-------navigator</span><br><span class="line">    |</span><br><span class="line">    |-------frames[]        |------forms[]--------elments[]------options[]</span><br><span class="line">    |                       |</span><br><span class="line">    |-------location        |------anchors[]</span><br><span class="line">    |                       |</span><br><span class="line">    |-------document--------|------links[]</span><br><span class="line">    |                       |</span><br><span class="line">    |-------history         |------images[]</span><br><span class="line">    |                       |</span><br><span class="line">    |-------screen          |------applets[]</span><br><span class="line"></span><br><span class="line">for(m in navigator)&#123;printf(m + &quot;:&quot; + screen[m]);&#125;</span><br><span class="line"></span><br><span class="line">    printf(window.screenX);</span><br><span class="line">    printf(window.screenY);</span><br><span class="line">    printf(window.outerWidth);</span><br><span class="line">    printf(window.outerHeight);</span><br><span class="line">    printf(window.innerWidth);</span><br><span class="line">    printf(window.innerHeight);</span><br><span class="line">    以上属性IE7下没有</span><br><span class="line">    printf(&quot;&quot;);</span><br><span class="line">    printf(screen.width);</span><br><span class="line">    printf(screen.height);</span><br><span class="line">    printf(screen.availWidth);</span><br><span class="line">    printf(screen.availHeight);</span><br><span class="line"></span><br><span class="line">    子窗口和父窗口的相互控制</span><br><span class="line">    function openWin() &#123;</span><br><span class="line">        childWin = window.open(&quot;javascript:&apos;&lt;h1&gt;hello&lt;/h1&gt;&apos;&quot;, &quot;newWin&quot;, &quot;height=0,width=0&quot;);</span><br><span class="line">        var val = 0;</span><br><span class="line">        var t = setInterval(function()&#123;</span><br><span class="line">            if (val &gt; 400)&#123;</span><br><span class="line">                clearInterval(t);</span><br><span class="line">            &#125;</span><br><span class="line">            childWin.resizeTo(val,val);</span><br><span class="line">            childWin.moveTo(val,val);</span><br><span class="line">            val += 10;</span><br><span class="line">        &#125;,100);</span><br><span class="line">        childWin.opener.focus();</span><br><span class="line">        childWin.opener.close();</span><br><span class="line">    &#125;</span><br><span class="line">    function closeWin() &#123;</span><br><span class="line">        childWin.close();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    document.onclick = openWin;</span><br><span class="line">    document.onkeydown = closeWin;</span><br><span class="line"></span><br><span class="line">★★★★★★★★ERROR提示★★★★★★★★</span><br><span class="line"></span><br><span class="line">    window.onerror = function (msg, url, line) &#123;</span><br><span class="line">        alert(&quot;Wow..my gosh!!! You got an error.\n\n&quot; + &quot;【Error】: &quot; + msg + &quot;\n【url】: &quot; + url + &quot;\n【line】: &quot; + line);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">★★★★★★★★document★★★★★★★★</span><br><span class="line"></span><br><span class="line">    帧结构演示</span><br><span class="line">    &lt;html&gt;</span><br><span class="line">    &lt;frameset cols=&quot;200,*&quot;&gt;</span><br><span class="line">      &lt;frame src=&quot;./gustbook.html&quot;&gt;</span><br><span class="line">      &lt;frame src=&quot;/gustbook.html&quot; name=&quot;view_frame&quot;&gt;</span><br><span class="line">    &lt;/frameset&gt;</span><br><span class="line">    &lt;/html&gt;</span><br><span class="line"></span><br><span class="line">    function w() &#123;</span><br><span class="line">        printf(&quot;something&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    setTimeout(w,1000); 覆盖原来的文本</span><br><span class="line">    注：一个文档绝不应该从时间句柄中调用他自己的write()方法</span><br><span class="line"></span><br><span class="line">    ★document.open</span><br><span class="line">    功能：打开一个新文档，并擦除当前文档的内容。</span><br><span class="line">    语法：document.open(mimetype,replace)</span><br><span class="line">    参数：</span><br><span class="line"></span><br><span class="line">    mimetype：可选。规定正在写的文档的类型。默认值是&quot;text/html&quot;。</span><br><span class="line">    replace：可选。当此参数设置后，可引起新文档从父文档继承历史条目。</span><br><span class="line">    注1：open()方法将擦除当前HTML文档的内容，开始一个新的文档，新文档用write()方法或writeln()方法编写。</span><br><span class="line">    注2：调用open()方法打开一个新文档并且用write()方法设置文档内容后，必须记住用close()方法关闭文档，并迫使其内容显示出来。</span><br><span class="line"></span><br><span class="line">    注3：属于被覆盖的文档的一部分的脚本或事件句柄不能调用该方法，因为脚本或事件句柄自身也会被覆盖。</span><br><span class="line"></span><br><span class="line">    ★document.close</span><br><span class="line">    功能：close()方法可关闭一个由open()方法打开的输出流，并显示选定的数据。</span><br><span class="line">    语法：document.close()</span><br><span class="line">    参数：无。</span><br><span class="line"></span><br><span class="line">    注：该方法将关闭open()方法打开的文档流，并强制地显示出所有缓存的输出内容。如果您使用write()方法动态地输出一个文档，必须记住当你这么做的时候要调用close()方法，以确保所有文档内容都能显示。</span><br><span class="line"></span><br><span class="line">    ★一旦调用了close()，就不应该再次调用write()，因为这会隐式地调用open()来擦除当前文档并开始一个新的文档。</span><br><span class="line"></span><br><span class="line">★★★★★★★★节点类型★★★★★★★★</span><br><span class="line"></span><br><span class="line">    |--------------------------------|</span><br><span class="line">    |      接口            nodeType值 |</span><br><span class="line">    |--------------------------------|</span><br><span class="line">    |    Element                1    |</span><br><span class="line">    |    Text                3       |</span><br><span class="line">    |    Document            9       |</span><br><span class="line">    |    Comment                8    |</span><br><span class="line">    |    DocumentFragment    11      |</span><br><span class="line">    |    Attr                2       |</span><br><span class="line">    |--------------------------------|</span><br><span class="line"></span><br><span class="line">★★★★★★★★document.documentElement★★★★★★★★</span><br><span class="line"> 引用的是 html</span><br><span class="line">appendChild(), insetBefore(), replaceChild()</span><br><span class="line">可以用document.createDocumentFragment()来创建一个DocumentFragment</span><br><span class="line"></span><br><span class="line">    function reverse(n) &#123;</span><br><span class="line">        var f = document.createDocumentFragment();</span><br><span class="line">        while (n.lastChild) f.appendChild(n.lastChild);</span><br><span class="line">        n.appendChild(f);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">★★★★★★★★查询选定的文本★★★★★★★★</span><br><span class="line"></span><br><span class="line">    function getSelectedText() &#123;</span><br><span class="line">        if (window.getSelection) &#123;</span><br><span class="line">            return window.getSelection().toString();</span><br><span class="line">        &#125;else if (document.getSelection) &#123;</span><br><span class="line">            return document.getSelection();</span><br><span class="line">        &#125;else &#123;</span><br><span class="line">            return document.selection.createRange().text;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    function start() &#123;</span><br><span class="line">        var text = getSelectedText();</span><br><span class="line">        if (text) &#123;</span><br><span class="line">            $(&quot;changeBox&quot;).innerHTML = text;</span><br><span class="line">            window.open(&quot;http:www.baidu.com/s?wd=&quot; + encodeURIComponent(text));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    if (!document.all) &#123;</span><br><span class="line">        window.onmouseup = start;</span><br><span class="line">    &#125;else &#123;</span><br><span class="line">        document.attachEvent(&quot;onmouseup&quot;, start);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    var o = $(&quot;changeBox&quot;);</span><br><span class="line">    printf(o.offsetTop);</span><br><span class="line">    printf(o.offsetLeft);</span><br><span class="line">    printf(o.clientWidth);</span><br><span class="line">    printf(o.clientHeight);</span><br><span class="line">    printf(o.scrollTop);</span><br><span class="line">    printf(o.scrollLeft);</span><br><span class="line">    printf(o.offsetWidth);</span><br><span class="line">    printf(o.offsetHeight);</span><br><span class="line"></span><br><span class="line">★★★★★★★★Key Event and Mouse Event★★★★★★★★</span><br><span class="line">    屏蔽右键菜单,可以应用到任何一个区域</span><br><span class="line">    oncontextmenu=&quot;window.event.returnValue=false&quot;</span><br><span class="line">    document.onmousedown = function (e) &#123;</span><br><span class="line">        var e = window.event || e;</span><br><span class="line">        if (e.button == 0) &#123;</span><br><span class="line">            document.body.style.background = &quot;red&quot;;</span><br><span class="line">        &#125;else if (e.button == 1) &#123;</span><br><span class="line">            document.body.style.background = &quot;blue&quot;;</span><br><span class="line">        &#125;else &#123;</span><br><span class="line">            document.body.style.background = &quot;yellow&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    document.onkeydown = function (e) &#123;</span><br><span class="line">        var e = window.event || e;</span><br><span class="line">        if (e.shiftKey) &#123;</span><br><span class="line">            alert(&quot;shift&quot;);</span><br><span class="line">        &#125;if (e.ctrlKey) &#123;</span><br><span class="line">            alert(&quot;ctrl&quot;);</span><br><span class="line">        &#125;else if (e.altKey) &#123;</span><br><span class="line">            alert(&quot;alt&quot;);</span><br><span class="line">        &#125;else &#123;</span><br><span class="line">            alert(&quot;others&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">★★★★★★★★合成事件★★★★★★★★</span><br><span class="line">    Document.createEvent()创建, Event.initEvent(), UIEvent.initEvent(), MouseEvent.initEvent.initMouseEvent()初始化</span><br><span class="line">    dipatchEvent方法来分派事件</span><br><span class="line">    IE中，使用Document.createEventObjec来创建一个新的事件对象。然后使用目标元素的fireEvent()方法来分派他</span><br><span class="line">    var DataEvent = &#123;&#125;;</span><br><span class="line">    DataEvent.send = function (target, datatype, data) &#123;</span><br><span class="line">        if (typeof target == &quot;string&quot;) target = $(target);</span><br><span class="line">        if (document.createEvent) &#123;</span><br><span class="line">            var e = createEvent(&quot;Events&quot;);</span><br><span class="line">            e.initEvent(&quot;dataavailable&quot;, true, false);</span><br><span class="line">        &#125;else if (document.createEventObject) &#123;</span><br><span class="line">            var e = document.createEventObject();</span><br><span class="line">        &#125;else return;</span><br><span class="line">        e.datatype = datatype;</span><br><span class="line">        e.data = data;</span><br><span class="line">        if (target.dispatchEvent) target.dispatchEvent(e);</span><br><span class="line">        else if (target.fireEvent) target.fireEvent(&quot;ondataavailable&quot;, e);</span><br><span class="line">    &#125;;</span><br><span class="line">    DataEvent.receive = function (target, handler) &#123;</span><br><span class="line">        if (typeof target == &quot;string&quot;) target = $(target);</span><br><span class="line">        if (target.addEventListener) target.addEventListener(&quot;dataavailable&quot;, handler, false);</span><br><span class="line">        else if (target.attachEvent) target.attachEvent(&quot;ondataavaliable&quot;, handler);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">★★★★★★★★IE支持客户端永久性★★★★★★★★</span><br><span class="line"></span><br><span class="line">    var username = &quot;hustskyking&quot;;</span><br><span class="line">    var password = &quot;psw&quot;;</span><br><span class="line">    var memory = $(&quot;changeBox&quot;);</span><br><span class="line">    memory.style.behavior = &quot;url(&apos;#default#userData&apos;)&quot;;</span><br><span class="line">    memory.setAttribute(&quot;username&quot;, username);</span><br><span class="line">    memory.setAttribute(&quot;password&quot;, password);</span><br><span class="line">    memory.save(&apos;myPersistentData&apos;);</span><br><span class="line"></span><br><span class="line">    var now = (new Date()).getTime();</span><br><span class="line">    var expires = now + 10*24*60*60*1000;</span><br><span class="line">    memory.expires = (new Date(expires)).toUTCString();</span><br><span class="line"></span><br><span class="line">    var memory = $(&quot;changeBox&quot;);</span><br><span class="line">    memory.load(&quot;myPersistentData&quot;);</span><br><span class="line">    alert(memory.getAttribute(&quot;username&quot;));</span><br><span class="line"></span><br><span class="line">★★★★★★★★AJAX★★★★★★★★</span><br><span class="line">    function loadXMLDoc()</span><br><span class="line">    &#123;</span><br><span class="line">        var xmlhttp = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject(&quot;Microsoft.XMLHTTP&quot;);</span><br><span class="line">        xmlhttp.</span><br><span class="line">        xmlhttp.onreadystatechange = function ()</span><br><span class="line">        &#123;</span><br><span class="line">            if (xmlhttp.readyState == 4 &amp;&amp; xmlhttp.status == 200)</span><br><span class="line">            &#123;</span><br><span class="line">                $(&quot;changeBox&quot;).innerHTML = xmlhttp.responseText;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        xmlhttp.open(&quot;GET&quot;, &quot;response.php?func=&quot; + printf(&quot;Instead of origin HTML&quot;), true);</span><br><span class="line">        xmlhttp.send();</span><br><span class="line">    &#125;</span><br><span class="line">    window.onclick = loadXMLDoc;</span><br><span class="line"></span><br><span class="line">    function createXHR() &#123;</span><br><span class="line">        var aVersions = [&quot;MSXML2.XMLHttp.6.0&quot;, &quot;MSXML2.XMLHttp.3.0&quot;];</span><br><span class="line">        for (var i = 0; i &lt; aVersions; i++) &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                var oXHR = new ActiveXObject(aVersions[i]);</span><br><span class="line">                return oXHR;</span><br><span class="line">            &#125;catch(oError)&#123;</span><br><span class="line">                不执行任何操作</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        throw new Error(&quot;MSXML is not installed.&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">在给src特性复制的同时会下载一个图像，这意味着甚至无需将该图像添加到页面中</span><br><span class="line">基于图像实现跨域通信</span><br><span class="line">*</span><br><span class="line">*       启动并连续向服务器发送骑牛的最佳方式是什么？在有些情况下，最好是从服务器与载入一些信息，</span><br><span class="line">* 以便能够快读相应用户的操；而在另外一些情况下，你可能想在不同的时间间隔内，向服务器发送</span><br><span class="line">* 数据或者从服务器接收数据。</span><br><span class="line"></span><br><span class="line">    var oImg = document.createElement(&quot;img&quot;);</span><br><span class="line">    oImg.onload = function() &#123;</span><br><span class="line">        alert(&quot;Image is ready&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    oImg.src = &quot;./images/001.gif&quot;;</span><br><span class="line">    document.body.appendChild(oImg);</span><br><span class="line"></span><br><span class="line">    function createIFrame()&#123;</span><br><span class="line">        var oframe = document.createElement(&quot;iframe&quot;);</span><br><span class="line">        oframe.name = &quot;myIFrame&quot;;</span><br><span class="line">        oframe.id = &quot;myIFrame&quot;;</span><br><span class="line">        oframe.style.cssText = &quot;height:500px; width:400px; border:none&quot;;</span><br><span class="line">        oframe.src = &quot;http:jqueryui.com/demos/droppable/accepted-elements.html&quot;;</span><br><span class="line">        document.body.appendChild(oframe);</span><br><span class="line">    &#125;</span><br><span class="line">    createIFrame();</span><br><span class="line"></span><br><span class="line">面向对象的Javascript</span><br><span class="line">1.公共成员</span><br><span class="line">function Customer() &#123;</span><br><span class="line">    this.firstName = &quot;John&quot;;</span><br><span class="line">    this.lastName = &quot;Smith&quot;;</span><br><span class="line">    this.getFullName = function () &#123;</span><br><span class="line">        return this.firstName +  &quot; &quot; + this.lastName;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">var john = new Customer();</span><br><span class="line"></span><br><span class="line">2.私有变量</span><br><span class="line">function Customer(firstName, lastName) &#123;</span><br><span class="line">    var _firstName = firstName;</span><br><span class="line">    var _lastName = lastName;</span><br><span class="line">    this.getFullName = function () &#123;闭包</span><br><span class="line">        return _firstName +  &quot; &quot; + _lastName;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">prototype属性</span><br><span class="line">扩展类的定义</span><br><span class="line">如果在prototype属性所引用的对象里没有找到，它会到这个引用对象的prototype属性里查找，如此递归查询。</span><br><span class="line">Customer.prototype.getFullName = function () &#123;</span><br><span class="line">    return this.firstName + &quot; &quot; + this.lastName;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">面向对象编程和继承</span><br><span class="line">function Partner() &#123;</span><br><span class="line">    this.partnerId = &quot;&quot;;</span><br><span class="line">&#125;</span><br><span class="line">Partner.prototype = new Customer();</span><br><span class="line"></span><br><span class="line">与上等价</span><br><span class="line">Partner.prototype = &#123;</span><br><span class="line">    firstName: &quot;&quot;,</span><br><span class="line">    lastName: &quot;&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">★★★★★★★★Cookie★★★★★★★★</span><br><span class="line">function setCookie(name,value,days) &#123;</span><br><span class="line">    if (days) &#123;</span><br><span class="line">        var date = new Date();</span><br><span class="line">        date.setTime(date.getTime()+(days*24*60*60*1000));</span><br><span class="line">        var expires = &quot;; expires=&quot;+date.toGMTString();</span><br><span class="line">    &#125;</span><br><span class="line">    else var expires = &quot;&quot;;</span><br><span class="line">    document.cookie = name+&quot;=&quot;+value+expires+&quot;; path=/&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function getCookie(name) &#123;</span><br><span class="line">    var nameEQ = name + &quot;=&quot;;</span><br><span class="line">    var ca = document.cookie.split(&apos;;&apos;);</span><br><span class="line">    for(var i=0;i &lt; ca.length;i++) &#123;</span><br><span class="line">        var c = ca[i];</span><br><span class="line">        while (c.charAt(0)==&apos; &apos;) c = c.substring(1,c.length);</span><br><span class="line">        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);</span><br><span class="line">    &#125;</span><br><span class="line">    return null;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function deleteCookie(name) &#123;</span><br><span class="line">    setCookie(name,&quot;&quot;,-1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2424,7 +2425,7 @@
                 
                   <a href="/blog/archives/">
                 
-                    <span class="site-state-item-count">272</span>
+                    <span class="site-state-item-count">273</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2603,7 +2604,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">83</span>
+                      
+                    
+                    <span class="site-state-item-count">84</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
