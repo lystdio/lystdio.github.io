@@ -1472,19 +1472,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[this的指向]]></title>
-    <url>%2Fblog%2F2015%2F04%2F13%2F2015-04-13-this-reference%2F</url>
-    <content type="text"><![CDATA[网友问题： 12345678910var name = "The Window"; var object = &#123; name : "My Object", getNameFunc : function()&#123; return this.name; &#125; &#125;; var a = object.getNameFunc;alert(a());alert(object.getNameFunc()); 原因： object.getNameFunc() ，此时的 object.getNameFunc 为引用类型，其 base 为 object，this 指向的是 base，所以返回 object.name 的值 name = object.getNameFunc, test 作为标识符，生成了其他引用类型的值，此时 base 已经从 object 重置为 null，也就是会指向 global（window），所以返回的是 window.name 的值。 问题的关键在于「引用类型（type Reference）的中间值发生改变」]]></content>
-      <categories>
-        <category>JavaScript</category>
-        <category>前端杂烩</category>
-      </categories>
-      <tags>
-        <tag>this</tag>
-        <tag>reference</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[Xcode-select Error]]></title>
     <url>%2Fblog%2F2015%2F04%2F13%2F2015-04-13-xcode-select-error%2F</url>
     <content type="text"><![CDATA[错误信息： xcode-select: error: tool ‘xcodebuild’ requires Xcode, but active developer directory ‘/Library/Developer/CommandLineTools’ is a command line tools instance 解决方案： 1sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer]]></content>
@@ -1495,6 +1482,19 @@
         <tag>mac</tag>
         <tag>Xcode</tag>
         <tag>Error</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[this的指向]]></title>
+    <url>%2Fblog%2F2015%2F04%2F13%2F2015-04-13-this-reference%2F</url>
+    <content type="text"><![CDATA[网友问题： 12345678910var name = "The Window"; var object = &#123; name : "My Object", getNameFunc : function()&#123; return this.name; &#125; &#125;; var a = object.getNameFunc;alert(a());alert(object.getNameFunc()); 原因： object.getNameFunc() ，此时的 object.getNameFunc 为引用类型，其 base 为 object，this 指向的是 base，所以返回 object.name 的值 name = object.getNameFunc, test 作为标识符，生成了其他引用类型的值，此时 base 已经从 object 重置为 null，也就是会指向 global（window），所以返回的是 window.name 的值。 问题的关键在于「引用类型（type Reference）的中间值发生改变」]]></content>
+      <categories>
+        <category>JavaScript</category>
+        <category>前端杂烩</category>
+      </categories>
+      <tags>
+        <tag>this</tag>
+        <tag>reference</tag>
       </tags>
   </entry>
   <entry>
@@ -1660,6 +1660,17 @@
     <content type="text"><![CDATA[。。。。]]></content>
   </entry>
   <entry>
+    <title><![CDATA[去掉IE11中input右侧的关闭叉叉]]></title>
+    <url>%2Fblog%2F2014%2F11%2F17%2F2014-11-17-input-close-btn-in-ie11%2F</url>
+    <content type="text"><![CDATA[在 IE11 下，浏览器自作多情在 text input 组件上加一个 close 叉叉： 这么整： input::-ms-clear { display: none; } 这种伪元素类似于 web component.]]></content>
+      <categories>
+        <category>前端杂烩</category>
+      </categories>
+      <tags>
+        <tag>CSS</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[让身体残疾的人可以访问Web]]></title>
     <url>%2Fblog%2F2014%2F11%2F17%2F2014-11-17-web-accessibility%2F</url>
     <content type="text"><![CDATA[Web accessibility means that people with disabilities can use the Web.让身体残疾的人可以访问Web，这就是 Web Accessibility。 在中国，有数以百万甚至千万计的人无法正常地使用网络，不是因为他们脑子不好使，也不是因为他们没钱没文化，而是他们用来感知这个世界的能力受到了先天或者后天的破坏。WAI（Web Accessibility inititive）这个议题在1997年五月份被提上议案，至今已经形成了一个庞大的知识体系。 残疾人士包括：失明和低视力、失聪和重听、学习障碍、认知障碍、行动不便、言语残疾、光过敏患者和这些病症的复合患者。涉及类别包括：视觉、听觉、身体、语言、认知、语言、学习以及神经残疾。 事实上，网页无障碍化，其对象不限于残疾人士。如果哪一天你打球手骨折了，你可以感受下无障碍给你带来的便利；如果哪一天你也两鬓霜白，眼力退化、听力退化，网页无障碍化技术就是你的第二双眼睛、第二双耳朵… 后期我会投入一定的时间研究并推动相关内容。]]></content>
@@ -1669,17 +1680,6 @@
       </categories>
       <tags>
         <tag>WAI</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[去掉IE11中input右侧的关闭叉叉]]></title>
-    <url>%2Fblog%2F2014%2F11%2F17%2F2014-11-17-input-close-btn-in-ie11%2F</url>
-    <content type="text"><![CDATA[在 IE11 下，浏览器自作多情在 text input 组件上加一个 close 叉叉： 这么整： input::-ms-clear { display: none; } 这种伪元素类似于 web component.]]></content>
-      <categories>
-        <category>前端杂烩</category>
-      </categories>
-      <tags>
-        <tag>CSS</tag>
       </tags>
   </entry>
   <entry>
@@ -1825,17 +1825,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[绝对定位，margin:0 auto，让元素竖直居中]]></title>
-    <url>%2Fblog%2F2014%2F08%2F07%2F2014-08-07-position-and-margin%2F</url>
-    <content type="text"><![CDATA[问题： div { margin: auto; position: absolute; top: 0; left: 0; right: 0 bottom: 0; width: 100px; height: 100px; } 是如何自适应的。 原因是，绝对定位的布局取决于三个因素，一个是元素的位置，一个是元素的尺寸，一个是元素的margin值。 没有设置尺寸和 margin 的元素会自适应剩余空间，位置固定则分配尺寸，尺寸固定边会分配 margin，都是自适应的。 IE7- 的渲染方式不同，渲染规则也不一样，他不会让定位元素去自适应。]]></content>
-      <categories>
-        <category>前端杂烩</category>
-      </categories>
-      <tags>
-        <tag>CSS</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[Object + Array]]></title>
     <url>%2Fblog%2F2014%2F08%2F07%2F2014-08-07-%7B%7D%2B%5B%5D%2F</url>
     <content type="text"><![CDATA[问题： {} + [] {} + [] 结果应该是 0 console.log({} + []) 结果应该是 object object 两个 {} 的语义不一样,前者被解析成 {}; +[]; 后者 {} 为对象. 操作符，针对非 Number 的处理内部调用 ToPrimary() 函数, {} 和 [] 都执行了自身的 toString 函数 ({} + []) ({}) + [] 这些表达式中，{}都被当做对象来解析，而不是 作用块]]></content>
@@ -1844,6 +1833,17 @@
       </categories>
       <tags>
         <tag>hack</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[绝对定位，margin:0 auto，让元素竖直居中]]></title>
+    <url>%2Fblog%2F2014%2F08%2F07%2F2014-08-07-position-and-margin%2F</url>
+    <content type="text"><![CDATA[问题： div { margin: auto; position: absolute; top: 0; left: 0; right: 0 bottom: 0; width: 100px; height: 100px; } 是如何自适应的。 原因是，绝对定位的布局取决于三个因素，一个是元素的位置，一个是元素的尺寸，一个是元素的margin值。 没有设置尺寸和 margin 的元素会自适应剩余空间，位置固定则分配尺寸，尺寸固定边会分配 margin，都是自适应的。 IE7- 的渲染方式不同，渲染规则也不一样，他不会让定位元素去自适应。]]></content>
+      <categories>
+        <category>前端杂烩</category>
+      </categories>
+      <tags>
+        <tag>CSS</tag>
       </tags>
   </entry>
   <entry>
@@ -1954,17 +1954,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[git切换到远程分支]]></title>
-    <url>%2Fblog%2F2014%2F04%2F30%2F2014-04-30-switch-branch-in-git%2F</url>
-    <content type="text"><![CDATA[远程仓库 git clone 下来，当你执行 git branch，你只会看到 * master 并不会看到其他分支，即便远程仓库上有其他分支，使用 git branch -va 可以查看本地+远程分支列表 * master 0840594 merge master and 1.0.0 remotes/origin/1.0.0 743012a &apos;update&apos; remotes/origin/2.0.0 2787838 udpate remotes/origin/HEAD -&gt; origin/master remotes/origin/master 0840594 merge master and 1.0.0 如果想切换到 origin/2.0.0 的分支，我们可以 git branch remotes/origin/2.0.0 不过结果并不如意： * (detached from origin/2.0.0) master git branch 会看到上面的信息，这里还需要一步操作： git checkout -b 2.0.0 -b 的意思是 base，以当前分支为 base，新建一个名叫 2.0.0 的分支，这里当然也可以使用其他的命名。此时再执行 git branch 就能看到： $ git br master * 2.0.0 就 OK 了~ 最直接的方法是： git checkout -t origin/2.0.0 能够直接新建本地分支，将远程分支提取出来。]]></content>
-      <categories>
-        <category>前端杂烩</category>
-      </categories>
-      <tags>
-        <tag>git</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[css选中前一个元素]]></title>
     <url>%2Fblog%2F2014%2F04%2F30%2F2014-04-30-previous-element-with-css%2F</url>
     <content type="text"><![CDATA[想了半天没找到 hack 的方式，CSS4 也没有提供类似的方法，不过在以后的草案中可能会出现 !previous + next {} 这样选中上一个元素，那么就可以使用 !* + obj 来选中 obj 的前一个元素了]]></content>
@@ -1976,16 +1965,14 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[解析URL到对应的Object]]></title>
-    <url>%2Fblog%2F2014%2F04%2F29%2F2014-04-29-reverse-string-to-object%2F</url>
-    <content type="text"><![CDATA[将 URL 中对象解析出来： var a=&apos;account.type=1&amp;account.id=&amp;account.dependFlag=0&amp;account.card.companyId=1&amp;account.name=%E4%B8%AD%E9%93%B6VISA%E5%8D%A1&amp;account.hidden=&amp;account.card.cardNo=&amp;account.moneyTypeId=0&amp;account.card.billDay=1&amp;account.card.repayType=0&amp;account.card.repayDay=20&amp;account.card.alert=2&amp;account.comment=%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D&apos;; var root={}; a.split(&apos;&amp;&apos;).sort().map(function(s){ var p=root; s.match(/(.+?)(?:\.|=)/g).map(function(ss){ var t=ss.slice(0,-1); p[t]=p[t]||((ss.slice(-1)===&apos;=&apos;)?decodeURIComponent(s.match(/=(.*)$/)[1]):{}); p=p[t]; }); }); console.log(root); 以上是网友的答案，我暂时没想到更好的算法。]]></content>
+    <title><![CDATA[git切换到远程分支]]></title>
+    <url>%2Fblog%2F2014%2F04%2F30%2F2014-04-30-switch-branch-in-git%2F</url>
+    <content type="text"><![CDATA[远程仓库 git clone 下来，当你执行 git branch，你只会看到 * master 并不会看到其他分支，即便远程仓库上有其他分支，使用 git branch -va 可以查看本地+远程分支列表 * master 0840594 merge master and 1.0.0 remotes/origin/1.0.0 743012a &apos;update&apos; remotes/origin/2.0.0 2787838 udpate remotes/origin/HEAD -&gt; origin/master remotes/origin/master 0840594 merge master and 1.0.0 如果想切换到 origin/2.0.0 的分支，我们可以 git branch remotes/origin/2.0.0 不过结果并不如意： * (detached from origin/2.0.0) master git branch 会看到上面的信息，这里还需要一步操作： git checkout -b 2.0.0 -b 的意思是 base，以当前分支为 base，新建一个名叫 2.0.0 的分支，这里当然也可以使用其他的命名。此时再执行 git branch 就能看到： $ git br master * 2.0.0 就 OK 了~ 最直接的方法是： git checkout -t origin/2.0.0 能够直接新建本地分支，将远程分支提取出来。]]></content>
       <categories>
-        <category>JavaScript</category>
         <category>前端杂烩</category>
       </categories>
       <tags>
-        <tag>解析</tag>
-        <tag>JavaScript</tag>
+        <tag>git</tag>
       </tags>
   </entry>
   <entry>
@@ -1998,6 +1985,19 @@
       <tags>
         <tag>mysql</tag>
         <tag>mysqldump</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[解析URL到对应的Object]]></title>
+    <url>%2Fblog%2F2014%2F04%2F29%2F2014-04-29-reverse-string-to-object%2F</url>
+    <content type="text"><![CDATA[将 URL 中对象解析出来： var a=&apos;account.type=1&amp;account.id=&amp;account.dependFlag=0&amp;account.card.companyId=1&amp;account.name=%E4%B8%AD%E9%93%B6VISA%E5%8D%A1&amp;account.hidden=&amp;account.card.cardNo=&amp;account.moneyTypeId=0&amp;account.card.billDay=1&amp;account.card.repayType=0&amp;account.card.repayDay=20&amp;account.card.alert=2&amp;account.comment=%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D%3D&apos;; var root={}; a.split(&apos;&amp;&apos;).sort().map(function(s){ var p=root; s.match(/(.+?)(?:\.|=)/g).map(function(ss){ var t=ss.slice(0,-1); p[t]=p[t]||((ss.slice(-1)===&apos;=&apos;)?decodeURIComponent(s.match(/=(.*)$/)[1]):{}); p=p[t]; }); }); console.log(root); 以上是网友的答案，我暂时没想到更好的算法。]]></content>
+      <categories>
+        <category>JavaScript</category>
+        <category>前端杂烩</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+        <tag>解析</tag>
       </tags>
   </entry>
   <entry>
@@ -2042,19 +2042,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[gem速度慢]]></title>
-    <url>%2Fblog%2F2014%2F04%2F27%2F2014-04-27-gem-sources%2F</url>
-    <content type="text"><![CDATA[删除本来的源，添加淘宝的源。 1 查看源 gem sources list 2 删除list中的源 gem sources --remove http://rubygems.org/ 3 查看是否已经删除 重复1,结果为空就正确 4 添加淘宝的源 gem sources -a http://ruby.taobao.org/]]></content>
-      <categories>
-        <category>杂物间</category>
-        <category>网络交互</category>
-      </categories>
-      <tags>
-        <tag>ruby</tag>
-        <tag>gem</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[Ubuntu下Rhythmbox mp3音乐乱码]]></title>
     <url>%2Fblog%2F2014%2F04%2F27%2F2014-04-27-filename-messy-code%2F</url>
     <content type="text"><![CDATA[linux系统遇到点乱码问题是很正常的，你碰到的问题，别人一般会已经碰到过，甚至已经有了很好的解决方案。 今天遇到的问题是：Rhythmbox mp3音乐乱码 处理方案： sudo vim /etc/profile # 类似 windows 下的环境变量 # 添加 export GST_ID3_TAG_ENCODING=GBK:UTF-8:GB18030 export GST_ID3V2_TAG_ENCODING=GBK:UTF-8:GB18030 重启电脑，没想到不用重启的方法，source ~/.profile 没效果。]]></content>
@@ -2077,6 +2064,19 @@
       <tags>
         <tag>jekyll</tag>
         <tag>ruby</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[gem速度慢]]></title>
+    <url>%2Fblog%2F2014%2F04%2F27%2F2014-04-27-gem-sources%2F</url>
+    <content type="text"><![CDATA[删除本来的源，添加淘宝的源。 1 查看源 gem sources list 2 删除list中的源 gem sources --remove http://rubygems.org/ 3 查看是否已经删除 重复1,结果为空就正确 4 添加淘宝的源 gem sources -a http://ruby.taobao.org/]]></content>
+      <categories>
+        <category>杂物间</category>
+        <category>网络交互</category>
+      </categories>
+      <tags>
+        <tag>ruby</tag>
+        <tag>gem</tag>
       </tags>
   </entry>
   <entry>
@@ -2107,19 +2107,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[巧妙交换值]]></title>
-    <url>%2Fblog%2F2014%2F04%2F26%2F2014-04-26-replace-a-and-b%2F</url>
-    <content type="text"><![CDATA[a = 1, b = 2; a = [b, b = a][0]; a // 2 b // 1 很巧妙的替换了 a 和 b 的值。]]></content>
-      <categories>
-        <category>JavaScript</category>
-        <category>前端杂烩</category>
-      </categories>
-      <tags>
-        <tag>hack</tag>
-        <tag>tips</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[clip的安装和使用]]></title>
     <url>%2Fblog%2F2014%2F04%2F26%2F2014-04-26-clip-in-sys%2F</url>
     <content type="text"><![CDATA[很多情况下我们需要复制整个文件的内容，然后粘贴到其他地方，像我这种命令行控，文件操作基本都是命令行处理的，平时会用 vim 打开文件，然后 vim FILE # 打开文件 ggVG # 全选内容 &quot;+y # 复制到系统缓冲区 说实话，这真的很麻烦，其实我们可以这样： # windows用户 clip &lt; FILE echo &quot;content&quot; | clip # linux用户 xclip -sel clip &lt; FILE 省去了打开文件复制的过程。]]></content>
@@ -2130,6 +2117,19 @@
       <tags>
         <tag>tips</tag>
         <tag>clip</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[巧妙交换值]]></title>
+    <url>%2Fblog%2F2014%2F04%2F26%2F2014-04-26-replace-a-and-b%2F</url>
+    <content type="text"><![CDATA[a = 1, b = 2; a = [b, b = a][0]; a // 2 b // 1 很巧妙的替换了 a 和 b 的值。]]></content>
+      <categories>
+        <category>JavaScript</category>
+        <category>前端杂烩</category>
+      </categories>
+      <tags>
+        <tag>hack</tag>
+        <tag>tips</tag>
       </tags>
   </entry>
   <entry>
@@ -2210,18 +2210,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[webview中的点击高亮问题]]></title>
-    <url>%2Fblog%2F2014%2F03%2F31%2F2014-03-31-tap-highlight-in-webview%2F</url>
-    <content type="text"><![CDATA[这两天在做一个淘金币的小游戏，测试页面的时候还挺正常的，放到webview（嵌入诸如微信、微博等客户端的网页容器）中就出问题了。 给元素绑定了一个 tap 事件，点击元素，该元素周边会出现点东西，IOS 中是个半透明的灰色背景，在 android 中出现红色的边框，不仅影响美感，貌似还会影响性能（这点东西渲染出来需要时间，会阻塞 JS 中控制的元素渲染）。 开始本以为使用 user-select 可以干掉这玩意儿，结果无效，网上寻觅半天之后，找到了问题。 css 中有个属性叫做 -webkit-tap-highlight-color ，顾名思义，就是点击元素的时候会有一个高亮的效果。当然不能把他称之为 bug，这也是浏览器为了让用户知道你点中了某个东西，给他醒目的提示，算是增强体验，但是在一些场景中，这不仅没有增强体验，还会影响体验。 解决方案： .obj {-webkit-tap-highlight-color:rgba(0,0,0,0);} 有些机子可能比较坑爹，rgba 这种方式支持的不是很好，我们可以用 transparent 来给他透明化。 .obj { -webkit-tap-highlight-color: rgba(0,0,0,0); -webkit-tap-highlight-color: transparent; /* For some Androids */ } 小小分享。]]></content>
-      <categories>
-        <category>前端杂烩</category>
-      </categories>
-      <tags>
-        <tag>webview</tag>
-        <tag>highlight</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[npm穿墙]]></title>
     <url>%2Fblog%2F2014%2F03%2F31%2F2014-03-31-npm-cross-wall%2F</url>
     <content type="text"><![CDATA[GWF 很给力，很多东西都能墙掉，但是把 npm 也纳入黑名单，不知道 GWFer 是怎么想的。翻墙翻了好多年了，原理其实也挺简单的，proxy 嘛！ » 方法一A) 国内源，http://cnpmjs.org 使用方式，你可以在 cmd 中键入 npm install -g cnpm，然后出去吃个饭，如果还没有安装好，那就换个方式： npm install -g cnpm --registry=http://r.cnpmjs.org registry 参数的作用就是指向需要 download 的仓库。 cnpm 跟国外的 npm 是同步的，只要 npm 有更新，cnpm 就会跟着一起更新。 当然，你也可以简单点搞： npm config set registry=&quot;http://r.cnpmjs.org&quot; 在配置中直接指定源头，下次就没有必要使用 --registry 参数了。配置好了之后，npm 就指向了国内的仓库。 B) 当然，你也可以安装 cnpm，安装好了之后使用 cnpm 来下载文件，其实原理跟上面是一样的，于是你就可以这样了： cnpm install -g package_name » 方法二代理，在配置中设置代理参数： # 全局路径，也就是 npm install -g，这里 -g 的意义 npm config set prefix=&quot;c:\nodejs&quot; # 一般使用 goagent 翻墙，他的默认端口是 8087 npm config set proxy=http://127.0.0.1:8087 # 设置 https 的代理 npm config set https_proxy=http://127.0.0.1:8087 # 这个地方记得设置下，别搞了个代理，结果在国内源下载 npm config set registry=http://registry.npmjs.org 这样配置好了之后，打开你的 goagent ，记得一定要打开，不然 npm 必然报错。上面写了一堆，其实没必要跟着写这么多，一句话就可以搞定： npm config set proxy=http://127.0.0.1:8087 为啥呢，npm -g 没必要自己去配置， registry 默认就是 http://registry.npmjs.org，不配置 https_proxy，也走的通，所以就只剩下上面这条命令了。 » 方法三直接下载到本地。 实在是怕麻烦，就直接把文件 download 下来，然后放到 node_module 之中就行了。如果是全局模块，找到全局 node_module 的位置，然后解压放进去就行了。]]></content>
@@ -2242,6 +2230,18 @@
       </categories>
       <tags>
         <tag>talk</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[webview中的点击高亮问题]]></title>
+    <url>%2Fblog%2F2014%2F03%2F31%2F2014-03-31-tap-highlight-in-webview%2F</url>
+    <content type="text"><![CDATA[这两天在做一个淘金币的小游戏，测试页面的时候还挺正常的，放到webview（嵌入诸如微信、微博等客户端的网页容器）中就出问题了。 给元素绑定了一个 tap 事件，点击元素，该元素周边会出现点东西，IOS 中是个半透明的灰色背景，在 android 中出现红色的边框，不仅影响美感，貌似还会影响性能（这点东西渲染出来需要时间，会阻塞 JS 中控制的元素渲染）。 开始本以为使用 user-select 可以干掉这玩意儿，结果无效，网上寻觅半天之后，找到了问题。 css 中有个属性叫做 -webkit-tap-highlight-color ，顾名思义，就是点击元素的时候会有一个高亮的效果。当然不能把他称之为 bug，这也是浏览器为了让用户知道你点中了某个东西，给他醒目的提示，算是增强体验，但是在一些场景中，这不仅没有增强体验，还会影响体验。 解决方案： .obj {-webkit-tap-highlight-color:rgba(0,0,0,0);} 有些机子可能比较坑爹，rgba 这种方式支持的不是很好，我们可以用 transparent 来给他透明化。 .obj { -webkit-tap-highlight-color: rgba(0,0,0,0); -webkit-tap-highlight-color: transparent; /* For some Androids */ } 小小分享。]]></content>
+      <categories>
+        <category>前端杂烩</category>
+      </categories>
+      <tags>
+        <tag>webview</tag>
+        <tag>highlight</tag>
       </tags>
   </entry>
   <entry>
