@@ -52,21 +52,21 @@
 
 
 
-<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/blog/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=6.6.0">
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
 
 
-  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png?v=6.6.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png?v=6.6.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
 
 
-  <link rel="mask-icon" href="/blog/images/logo.svg?v=6.6.0" color="#222">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
 
 
 
@@ -79,7 +79,7 @@
 <script id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '/blog/',
+    root: '/',
     scheme: 'Mist',
     version: '6.6.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
@@ -108,7 +108,7 @@
 <meta name="keywords" content="tech,cnblogs,PHP,NodeJS,Etag">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Etag缓存在PHP和NodeJS中的实现">
-<meta property="og:url" content="https://handishenniu.coding.me/blog/2014/05/11/2014-05-11-cb-etag-in-node/index.html">
+<meta property="og:url" content="https://handishenniu.coding.me/2014/05/11/2014-05-11-cb-etag-in-node/index.html">
 <meta property="og:site_name" content="撼地神牛">
 <meta property="og:description" content="本文为归档内容,原始地址在 博客园.  HTTP 提供了许多页面缓存的方案，其中属 Etag 和 Last-Modified 应用最广。本文会先介绍 Etag 的应用场景，然后说说他在 php 和 node 中的使用。一、Etag的使用客户端和浏览器之间的交互：  1234567891011121314+---------+       1         +---------+|">
 <meta property="og:locale" content="zh-CN">
@@ -125,7 +125,7 @@
 
 
 
-  <link rel="canonical" href="https://handishenniu.coding.me/blog/2014/05/11/2014-05-11-cb-etag-in-node/">
+  <link rel="canonical" href="https://handishenniu.coding.me/2014/05/11/2014-05-11-cb-etag-in-node/">
 
 
 
@@ -206,7 +206,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/blog/" class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">撼地神牛</span>
         <span class="logo-line-after"><i></i></span>
@@ -244,7 +244,7 @@
 
     
 
-    <a href="/blog/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
 
   </li>
         
@@ -261,7 +261,7 @@
 
     
 
-    <a href="/blog/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
 
   </li>
         
@@ -278,7 +278,7 @@
 
     
 
-    <a href="/blog/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
 
   </li>
         
@@ -295,7 +295,7 @@
 
     
 
-    <a href="/blog/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
 
   </li>
         
@@ -312,7 +312,7 @@
 
     
 
-    <a href="/blog/sitemap.xml" rel="section"><i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>站点地图</a>
+    <a href="/sitemap.xml" rel="section"><i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>站点地图</a>
 
   </li>
         
@@ -329,7 +329,7 @@
 
     
 
-    <a href="/blog/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
 
   </li>
 
@@ -419,12 +419,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2014/05/11/2014-05-11-cb-etag-in-node/">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/2014/05/11/2014-05-11-cb-etag-in-node/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lion">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
@@ -496,14 +496,14 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/前端杂烩/" itemprop="url" rel="index"><span itemprop="name">前端杂烩</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/前端杂烩/" itemprop="url" rel="index"><span itemprop="name">前端杂烩</span></a></span>
 
                 
                 
                   ，
                 
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/前端杂烩/网络交互/" itemprop="url" rel="index"><span itemprop="name">网络交互</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/前端杂烩/网络交互/" itemprop="url" rel="index"><span itemprop="name">网络交互</span></a></span>
 
                 
                 
@@ -577,15 +577,15 @@
       
         <div class="post-tags">
           
-            <a href="/blog/tags/tech/" rel="tag"># tech</a>
+            <a href="/tags/tech/" rel="tag"># tech</a>
           
-            <a href="/blog/tags/cnblogs/" rel="tag"># cnblogs</a>
+            <a href="/tags/cnblogs/" rel="tag"># cnblogs</a>
           
-            <a href="/blog/tags/PHP/" rel="tag"># PHP</a>
+            <a href="/tags/PHP/" rel="tag"># PHP</a>
           
-            <a href="/blog/tags/NodeJS/" rel="tag"># NodeJS</a>
+            <a href="/tags/NodeJS/" rel="tag"># NodeJS</a>
           
-            <a href="/blog/tags/Etag/" rel="tag"># Etag</a>
+            <a href="/tags/Etag/" rel="tag"># Etag</a>
           
         </div>
       
@@ -598,7 +598,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/2014/05/07/2014-05-07-cb-git-improve/" rel="next" title="git版本管理策略及相关技巧(A)">
+              <a href="/2014/05/07/2014-05-07-cb-git-improve/" rel="next" title="git版本管理策略及相关技巧(A)">
                 <i class="fa fa-chevron-left"></i> git版本管理策略及相关技巧(A)
               </a>
             
@@ -608,7 +608,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/blog/2014/05/15/2014-05-15-cb-personal-website-design-part-2/" rel="prev" title="个人网站架构设计(二)">
+              <a href="/2014/05/15/2014-05-15-cb-personal-website-design-part-2/" rel="prev" title="个人网站架构设计(二)">
                 个人网站架构设计(二) <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -678,7 +678,7 @@
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/blog/archives/">
+                  <a href="/archives/">
                 
                     <span class="site-state-item-count">273</span>
                     <span class="site-state-item-name">日志</span>
@@ -690,7 +690,7 @@
                 
                 
                 <div class="site-state-item site-state-categories">
-                  <a href="/blog/categories/index.html">
+                  <a href="/categories/index.html">
                     
                     
                       
@@ -871,7 +871,7 @@
                 
                 
                 <div class="site-state-item site-state-tags">
-                  <a href="/blog/tags/index.html">
+                  <a href="/tags/index.html">
                     
                     
                       
@@ -1464,42 +1464,42 @@
 
   
   
-    <script src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+    <script src="/lib/jquery/index.js?v=2.1.3"></script>
   
 
   
   
-    <script src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+    <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
   
 
   
   
-    <script src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+    <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
   
-
-
-  
-
-
-  <script src="/blog/js/src/utils.js?v=6.6.0"></script>
-
-  <script src="/blog/js/src/motion.js?v=6.6.0"></script>
-
-
-
-  
-  
-
-  
-  <script src="/blog/js/src/scrollspy.js?v=6.6.0"></script>
-<script src="/blog/js/src/post-details.js?v=6.6.0"></script>
-
 
 
   
 
 
-  <script src="/blog/js/src/bootstrap.js?v=6.6.0"></script>
+  <script src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.6.0"></script>
 
 
 
@@ -1532,7 +1532,7 @@
     } else if (/json$/i.test(search_path)) {
       isXml = false;
     }
-    var path = "/blog/" + search_path;
+    var path = "/" + search_path;
     // monitor main search box;
 
     var onPopupClose = function (e) {
@@ -1870,7 +1870,7 @@
 
   
 
-  <script src="/blog/js/src/music/aplayer.js?v=6.6.0"></script>
-  <script src="/blog/js/src/music/init.js?v=6.6.0"></script>
+  <script src="/js/src/music/aplayer.js?v=6.6.0"></script>
+  <script src="/js/src/music/init.js?v=6.6.0"></script>
 </body>
 </html>

@@ -52,21 +52,21 @@
 
 
 
-<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/blog/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=6.6.0">
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
 
 
-  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png?v=6.6.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png?v=6.6.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
 
 
-  <link rel="mask-icon" href="/blog/images/logo.svg?v=6.6.0" color="#222">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
 
 
 
@@ -79,7 +79,7 @@
 <script id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '/blog/',
+    root: '/',
     scheme: 'Mist',
     version: '6.6.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
@@ -108,7 +108,7 @@
 <meta name="keywords" content="git">
 <meta property="og:type" content="article">
 <meta property="og:title" content="git切换到远程分支">
-<meta property="og:url" content="https://handishenniu.coding.me/blog/2014/04/30/2014-04-30-switch-branch-in-git/index.html">
+<meta property="og:url" content="https://handishenniu.coding.me/2014/04/30/2014-04-30-switch-branch-in-git/index.html">
 <meta property="og:site_name" content="撼地神牛">
 <meta property="og:description" content="远程仓库 git clone 下来，当你执行 git branch，你只会看到 * master 并不会看到其他分支，即便远程仓库上有其他分支，使用 git branch -va 可以查看本地+远程分支列表 * master              0840594 merge master and 1.0.0 remotes/origin/1.0.0  743012a &amp;apos;update&amp;">
 <meta property="og:locale" content="zh-CN">
@@ -122,7 +122,7 @@
 
 
 
-  <link rel="canonical" href="https://handishenniu.coding.me/blog/2014/04/30/2014-04-30-switch-branch-in-git/">
+  <link rel="canonical" href="https://handishenniu.coding.me/2014/04/30/2014-04-30-switch-branch-in-git/">
 
 
 
@@ -203,7 +203,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/blog/" class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">撼地神牛</span>
         <span class="logo-line-after"><i></i></span>
@@ -241,7 +241,7 @@
 
     
 
-    <a href="/blog/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
 
   </li>
         
@@ -258,7 +258,7 @@
 
     
 
-    <a href="/blog/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
 
   </li>
         
@@ -275,7 +275,7 @@
 
     
 
-    <a href="/blog/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
 
   </li>
         
@@ -292,7 +292,7 @@
 
     
 
-    <a href="/blog/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
 
   </li>
         
@@ -309,7 +309,7 @@
 
     
 
-    <a href="/blog/sitemap.xml" rel="section"><i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>站点地图</a>
+    <a href="/sitemap.xml" rel="section"><i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>站点地图</a>
 
   </li>
         
@@ -326,7 +326,7 @@
 
     
 
-    <a href="/blog/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
 
   </li>
 
@@ -416,12 +416,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/blog/blog/2014/04/30/2014-04-30-switch-branch-in-git/">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/2014/04/30/2014-04-30-switch-branch-in-git/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lion">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/blog/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
@@ -493,7 +493,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/blog/categories/前端杂烩/" itemprop="url" rel="index"><span itemprop="name">前端杂烩</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/前端杂烩/" itemprop="url" rel="index"><span itemprop="name">前端杂烩</span></a></span>
 
                 
                 
@@ -582,7 +582,7 @@ master
       
         <div class="post-tags">
           
-            <a href="/blog/tags/git/" rel="tag"># git</a>
+            <a href="/tags/git/" rel="tag"># git</a>
           
         </div>
       
@@ -595,8 +595,8 @@ master
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/2014/04/29/2014-04-29-useage-of-mysqldump/" rel="next" title="mysqldump的使用">
-                <i class="fa fa-chevron-left"></i> mysqldump的使用
+              <a href="/2014/04/30/2014-04-30-previous-element-with-css/" rel="next" title="css选中前一个元素">
+                <i class="fa fa-chevron-left"></i> css选中前一个元素
               </a>
             
           </div>
@@ -605,8 +605,8 @@ master
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/blog/2014/04/30/2014-04-30-previous-element-with-css/" rel="prev" title="css选中前一个元素">
-                css选中前一个元素 <i class="fa fa-chevron-right"></i>
+              <a href="/2014/05/01/2014-05-01-cb-xss-snippets/" rel="prev" title="XSS零碎指南">
+                XSS零碎指南 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -666,7 +666,7 @@ master
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/blog/archives/">
+                  <a href="/archives/">
                 
                     <span class="site-state-item-count">273</span>
                     <span class="site-state-item-name">日志</span>
@@ -678,7 +678,7 @@ master
                 
                 
                 <div class="site-state-item site-state-categories">
-                  <a href="/blog/categories/index.html">
+                  <a href="/categories/index.html">
                     
                     
                       
@@ -859,7 +859,7 @@ master
                 
                 
                 <div class="site-state-item site-state-tags">
-                  <a href="/blog/tags/index.html">
+                  <a href="/tags/index.html">
                     
                     
                       
@@ -1436,42 +1436,42 @@ master
 
   
   
-    <script src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+    <script src="/lib/jquery/index.js?v=2.1.3"></script>
   
 
   
   
-    <script src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+    <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
   
 
   
   
-    <script src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+    <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
   
-
-
-  
-
-
-  <script src="/blog/js/src/utils.js?v=6.6.0"></script>
-
-  <script src="/blog/js/src/motion.js?v=6.6.0"></script>
-
-
-
-  
-  
-
-  
-  <script src="/blog/js/src/scrollspy.js?v=6.6.0"></script>
-<script src="/blog/js/src/post-details.js?v=6.6.0"></script>
-
 
 
   
 
 
-  <script src="/blog/js/src/bootstrap.js?v=6.6.0"></script>
+  <script src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.6.0"></script>
 
 
 
@@ -1504,7 +1504,7 @@ master
     } else if (/json$/i.test(search_path)) {
       isXml = false;
     }
-    var path = "/blog/" + search_path;
+    var path = "/" + search_path;
     // monitor main search box;
 
     var onPopupClose = function (e) {
@@ -1842,7 +1842,7 @@ master
 
   
 
-  <script src="/blog/js/src/music/aplayer.js?v=6.6.0"></script>
-  <script src="/blog/js/src/music/init.js?v=6.6.0"></script>
+  <script src="/js/src/music/aplayer.js?v=6.6.0"></script>
+  <script src="/js/src/music/init.js?v=6.6.0"></script>
 </body>
 </html>
