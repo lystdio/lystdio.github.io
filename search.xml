@@ -1660,17 +1660,6 @@
     <content type="text"><![CDATA[。。。。]]></content>
   </entry>
   <entry>
-    <title><![CDATA[去掉IE11中input右侧的关闭叉叉]]></title>
-    <url>%2F2014%2F11%2F17%2F2014-11-17-input-close-btn-in-ie11%2F</url>
-    <content type="text"><![CDATA[在 IE11 下，浏览器自作多情在 text input 组件上加一个 close 叉叉： 这么整： input::-ms-clear { display: none; } 这种伪元素类似于 web component.]]></content>
-      <categories>
-        <category>前端杂烩</category>
-      </categories>
-      <tags>
-        <tag>CSS</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[让身体残疾的人可以访问Web]]></title>
     <url>%2F2014%2F11%2F17%2F2014-11-17-web-accessibility%2F</url>
     <content type="text"><![CDATA[Web accessibility means that people with disabilities can use the Web.让身体残疾的人可以访问Web，这就是 Web Accessibility。 在中国，有数以百万甚至千万计的人无法正常地使用网络，不是因为他们脑子不好使，也不是因为他们没钱没文化，而是他们用来感知这个世界的能力受到了先天或者后天的破坏。WAI（Web Accessibility inititive）这个议题在1997年五月份被提上议案，至今已经形成了一个庞大的知识体系。 残疾人士包括：失明和低视力、失聪和重听、学习障碍、认知障碍、行动不便、言语残疾、光过敏患者和这些病症的复合患者。涉及类别包括：视觉、听觉、身体、语言、认知、语言、学习以及神经残疾。 事实上，网页无障碍化，其对象不限于残疾人士。如果哪一天你打球手骨折了，你可以感受下无障碍给你带来的便利；如果哪一天你也两鬓霜白，眼力退化、听力退化，网页无障碍化技术就是你的第二双眼睛、第二双耳朵… 后期我会投入一定的时间研究并推动相关内容。]]></content>
@@ -1680,6 +1669,17 @@
       </categories>
       <tags>
         <tag>WAI</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[去掉IE11中input右侧的关闭叉叉]]></title>
+    <url>%2F2014%2F11%2F17%2F2014-11-17-input-close-btn-in-ie11%2F</url>
+    <content type="text"><![CDATA[在 IE11 下，浏览器自作多情在 text input 组件上加一个 close 叉叉： 这么整： input::-ms-clear { display: none; } 这种伪元素类似于 web component.]]></content>
+      <categories>
+        <category>前端杂烩</category>
+      </categories>
+      <tags>
+        <tag>CSS</tag>
       </tags>
   </entry>
   <entry>
@@ -1996,8 +1996,8 @@
         <category>前端杂烩</category>
       </categories>
       <tags>
-        <tag>JavaScript</tag>
         <tag>解析</tag>
+        <tag>JavaScript</tag>
       </tags>
   </entry>
   <entry>
@@ -2017,18 +2017,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[git版本回退操作]]></title>
-    <url>%2F2014%2F04%2F28%2F2014-04-28-git-roll-back%2F</url>
-    <content type="text"><![CDATA[今天 github 上操作遇到了一个很头疼的问题，在某个文件中进行了误操作（有可能是加入了BOM头），diff 没看到差异，但是线上就是不正常显示。修改半天没用，只要回退版本。 通过 git log 可以查看近期 commit 的信息： commit bcdfd65ba3f16a0647e7687f92cca25d51738d2e Author: Barret Lee &lt;barret.china@gmail.com&gt; Date: Mon Apr 28 01:22:27 2014 +0800 now post commit 69eeaa60c5808c143aabce4d52feb104e2e4591b Author: Barret &lt;barret.china@gmail.com&gt; Date: Sat Apr 26 21:03:48 2014 +0800 fix bug commit b9e4b8c697d139ec35e17be7dd353f1338e9b92e Author: Jing Lee &lt;barret.china@gmail.com&gt; Date: Sat Apr 26 19:35:37 2014 +0800 Update atom.xml commit 后面的一串字符就是 SHA 字符。 git reset --hard SHA 这句命令可以回退到指定版本。不过上传的时候要注意了，如果你是： git push -u master origin 肯定会出现这样的错误提示： error: failed to push some refs to &apos;//github.com/barretlee/barretlee.github.io.git&apos; hint: Updates were rejected because the tip of your current branch is behind hint: its remote counterpart. Integrate the remote changes (e.g. hint: &apos;git pull ...&apos;) before pushing again. hint: See the &apos;Note about fast-forwards&apos; in &apos;git push --help&apos; for details. 原因是你本地版本要落后于服务器上的版本（git reset 回退了嘛），如果想覆盖服务器上版本，应该加 -f ，强制提交， git push -u master origin -f 不过这样的操作要谨慎了，先把修改的位置备份（拿出来，复制到文件夹外），完成上述操作之后再复制回来处理。]]></content>
-      <categories>
-        <category>前端杂烩</category>
-      </categories>
-      <tags>
-        <tag>git</tag>
-        <tag>CMS</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[当正则匹配零个字符]]></title>
     <url>%2F2014%2F04%2F28%2F2014-04-28-reg-match-null%2F</url>
     <content type="text"><![CDATA[&quot;something&quot;.match(/\s*(.*?)\s*/) &gt; [&apos;&apos;, &apos;&apos;] &quot;something&quot;.match(/^\s*(.*?)\s*$/) &gt; [&quot;something&quot;, &quot;something&quot;] 为何前者匹配的结果为空？ 如果你不清楚正则的贪婪模式和非贪婪模式，请先移步这里. 整个匹配分为三步： 第一个 \s*, 贪婪模式把字符全部吞掉，然后回溯，直到第一个字符任然没找到 第二步是 .*? 由于是非贪婪模式匹配了一个字符就结束了，继续第三步 第三步匹配失败，回溯到第二步，那第二步会继续减少吞掉的字符，于是字符数缩减到零。 可能这么说还是不太清晰，先看看这个对比： 关于返回结果不是 null 而是 “”，你可以理解为匹配到了零个 a。]]></content>
@@ -2042,16 +2030,15 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[Ubuntu下Rhythmbox mp3音乐乱码]]></title>
-    <url>%2F2014%2F04%2F27%2F2014-04-27-filename-messy-code%2F</url>
-    <content type="text"><![CDATA[linux系统遇到点乱码问题是很正常的，你碰到的问题，别人一般会已经碰到过，甚至已经有了很好的解决方案。 今天遇到的问题是：Rhythmbox mp3音乐乱码 处理方案： sudo vim /etc/profile # 类似 windows 下的环境变量 # 添加 export GST_ID3_TAG_ENCODING=GBK:UTF-8:GB18030 export GST_ID3V2_TAG_ENCODING=GBK:UTF-8:GB18030 重启电脑，没想到不用重启的方法，source ~/.profile 没效果。]]></content>
+    <title><![CDATA[git版本回退操作]]></title>
+    <url>%2F2014%2F04%2F28%2F2014-04-28-git-roll-back%2F</url>
+    <content type="text"><![CDATA[今天 github 上操作遇到了一个很头疼的问题，在某个文件中进行了误操作（有可能是加入了BOM头），diff 没看到差异，但是线上就是不正常显示。修改半天没用，只要回退版本。 通过 git log 可以查看近期 commit 的信息： commit bcdfd65ba3f16a0647e7687f92cca25d51738d2e Author: Barret Lee &lt;barret.china@gmail.com&gt; Date: Mon Apr 28 01:22:27 2014 +0800 now post commit 69eeaa60c5808c143aabce4d52feb104e2e4591b Author: Barret &lt;barret.china@gmail.com&gt; Date: Sat Apr 26 21:03:48 2014 +0800 fix bug commit b9e4b8c697d139ec35e17be7dd353f1338e9b92e Author: Jing Lee &lt;barret.china@gmail.com&gt; Date: Sat Apr 26 19:35:37 2014 +0800 Update atom.xml commit 后面的一串字符就是 SHA 字符。 git reset --hard SHA 这句命令可以回退到指定版本。不过上传的时候要注意了，如果你是： git push -u master origin 肯定会出现这样的错误提示： error: failed to push some refs to &apos;//github.com/barretlee/barretlee.github.io.git&apos; hint: Updates were rejected because the tip of your current branch is behind hint: its remote counterpart. Integrate the remote changes (e.g. hint: &apos;git pull ...&apos;) before pushing again. hint: See the &apos;Note about fast-forwards&apos; in &apos;git push --help&apos; for details. 原因是你本地版本要落后于服务器上的版本（git reset 回退了嘛），如果想覆盖服务器上版本，应该加 -f ，强制提交， git push -u master origin -f 不过这样的操作要谨慎了，先把修改的位置备份（拿出来，复制到文件夹外），完成上述操作之后再复制回来处理。]]></content>
       <categories>
-        <category>杂物间</category>
+        <category>前端杂烩</category>
       </categories>
       <tags>
-        <tag>messy</tag>
-        <tag>乱码</tag>
-        <tag>Ubuntu</tag>
+        <tag>git</tag>
+        <tag>CMS</tag>
       </tags>
   </entry>
   <entry>
@@ -2069,18 +2056,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[jekyll安装不了？]]></title>
-    <url>%2F2014%2F04%2F27%2F2014-04-27-ruby-jekyll-install%2F</url>
-    <content type="text"><![CDATA[1、安装Ruby sudo apt-get install ruby1.9.1-dev 2、安装Jekyll sudo gem install jekyll 3、安装rake(用来可以生成markdown文件) sudo gem install rake 注意几点： 不是安装 ruby，而是 ruby-dev 安装 jekyll 之前应该先安装 rdoc 1sudo gem install rdoc 关于gem的下载速度，查看这篇文章]]></content>
-      <categories>
-        <category>前端杂烩</category>
-      </categories>
-      <tags>
-        <tag>jekyll</tag>
-        <tag>ruby</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[gem速度慢]]></title>
     <url>%2F2014%2F04%2F27%2F2014-04-27-gem-sources%2F</url>
     <content type="text"><![CDATA[删除本来的源，添加淘宝的源。 1 查看源 gem sources list 2 删除list中的源 gem sources --remove http://rubygems.org/ 3 查看是否已经删除 重复1,结果为空就正确 4 添加淘宝的源 gem sources -a http://ruby.taobao.org/]]></content>
@@ -2094,15 +2069,41 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[jekyll中gsub未定义的错误]]></title>
-    <url>%2F2014%2F04%2F26%2F2014-04-26-gsup-error-in-atom-file%2F</url>
-    <content type="text"><![CDATA[今天被 jekyll 编译时的一个问题搞疯了。 Liquid Exception: undefined method `gsub’ for nil:NilClass in atom.xml 上面这个错误，开始以为时jekyll的版本问题，后来又以为时 UIT8 编码错误，再继续折腾，看了很多博客还是没有处理好。 在 atom.xml 中我写了一句 ，以前一直是这样的啊，没报错。不知道 github pages 的后台 jekyll 编译器是不是做了版本或者其他方面的修改，定位到这个位置之后，把内容改成了 \{\{ post.excerpt }} \{\{ post.content }} # 改成这个也可以，只是内容太多，我不喜欢 差不多整了我两个小时，这么点小错误，妹的！]]></content>
+    <title><![CDATA[jekyll安装不了？]]></title>
+    <url>%2F2014%2F04%2F27%2F2014-04-27-ruby-jekyll-install%2F</url>
+    <content type="text"><![CDATA[1、安装Ruby sudo apt-get install ruby1.9.1-dev 2、安装Jekyll sudo gem install jekyll 3、安装rake(用来可以生成markdown文件) sudo gem install rake 注意几点： 不是安装 ruby，而是 ruby-dev 安装 jekyll 之前应该先安装 rdoc 1sudo gem install rdoc 关于gem的下载速度，查看这篇文章]]></content>
+      <categories>
+        <category>前端杂烩</category>
+      </categories>
+      <tags>
+        <tag>jekyll</tag>
+        <tag>ruby</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Ubuntu下Rhythmbox mp3音乐乱码]]></title>
+    <url>%2F2014%2F04%2F27%2F2014-04-27-filename-messy-code%2F</url>
+    <content type="text"><![CDATA[linux系统遇到点乱码问题是很正常的，你碰到的问题，别人一般会已经碰到过，甚至已经有了很好的解决方案。 今天遇到的问题是：Rhythmbox mp3音乐乱码 处理方案： sudo vim /etc/profile # 类似 windows 下的环境变量 # 添加 export GST_ID3_TAG_ENCODING=GBK:UTF-8:GB18030 export GST_ID3V2_TAG_ENCODING=GBK:UTF-8:GB18030 重启电脑，没想到不用重启的方法，source ~/.profile 没效果。]]></content>
+      <categories>
+        <category>杂物间</category>
+      </categories>
+      <tags>
+        <tag>messy</tag>
+        <tag>乱码</tag>
+        <tag>Ubuntu</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[jekyll编译时报错invalid byte sequence in GBK]]></title>
+    <url>%2F2014%2F04%2F26%2F2014-04-26-jekyll-error-when-compile%2F</url>
+    <content type="text"><![CDATA[找到你的Ruby安装目录，如我的是：D:\Ruby193, 在里面找到文件D:\Ruby193\lib\ruby\gems\1.9.1\gems\jekyll-0.12.0\lib\jekyll\convertible.rb在该文件中找到下面句子： # Returns nothing. def read_yaml(base, name) self.content = File.read(File.join(base, name)) 将它修改为： # Returns nothing. def read_yaml(base, name) self.content = File.read(File.join(base, name),:encoding=&gt;&quot;utf-8&quot;) 然后确保所有带中文字符的markdown文件是无BOM的UTF-8格式即可。]]></content>
       <categories>
         <category>前端杂烩</category>
       </categories>
       <tags>
         <tag>error</tag>
         <tag>jekyll</tag>
+        <tag>ruby</tag>
       </tags>
   </entry>
   <entry>
@@ -2119,16 +2120,15 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[jekyll编译时报错invalid byte sequence in GBK]]></title>
-    <url>%2F2014%2F04%2F26%2F2014-04-26-jekyll-error-when-compile%2F</url>
-    <content type="text"><![CDATA[找到你的Ruby安装目录，如我的是：D:\Ruby193, 在里面找到文件D:\Ruby193\lib\ruby\gems\1.9.1\gems\jekyll-0.12.0\lib\jekyll\convertible.rb在该文件中找到下面句子： # Returns nothing. def read_yaml(base, name) self.content = File.read(File.join(base, name)) 将它修改为： # Returns nothing. def read_yaml(base, name) self.content = File.read(File.join(base, name),:encoding=&gt;&quot;utf-8&quot;) 然后确保所有带中文字符的markdown文件是无BOM的UTF-8格式即可。]]></content>
+    <title><![CDATA[jekyll中gsub未定义的错误]]></title>
+    <url>%2F2014%2F04%2F26%2F2014-04-26-gsup-error-in-atom-file%2F</url>
+    <content type="text"><![CDATA[今天被 jekyll 编译时的一个问题搞疯了。 Liquid Exception: undefined method `gsub’ for nil:NilClass in atom.xml 上面这个错误，开始以为时jekyll的版本问题，后来又以为时 UIT8 编码错误，再继续折腾，看了很多博客还是没有处理好。 在 atom.xml 中我写了一句 ，以前一直是这样的啊，没报错。不知道 github pages 的后台 jekyll 编译器是不是做了版本或者其他方面的修改，定位到这个位置之后，把内容改成了 \{\{ post.excerpt }} \{\{ post.content }} # 改成这个也可以，只是内容太多，我不喜欢 差不多整了我两个小时，这么点小错误，妹的！]]></content>
       <categories>
         <category>前端杂烩</category>
       </categories>
       <tags>
         <tag>error</tag>
         <tag>jekyll</tag>
-        <tag>ruby</tag>
       </tags>
   </entry>
   <entry>
@@ -2210,18 +2210,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[webview中的点击高亮问题]]></title>
-    <url>%2F2014%2F03%2F31%2F2014-03-31-tap-highlight-in-webview%2F</url>
-    <content type="text"><![CDATA[这两天在做一个淘金币的小游戏，测试页面的时候还挺正常的，放到webview（嵌入诸如微信、微博等客户端的网页容器）中就出问题了。 给元素绑定了一个 tap 事件，点击元素，该元素周边会出现点东西，IOS 中是个半透明的灰色背景，在 android 中出现红色的边框，不仅影响美感，貌似还会影响性能（这点东西渲染出来需要时间，会阻塞 JS 中控制的元素渲染）。 开始本以为使用 user-select 可以干掉这玩意儿，结果无效，网上寻觅半天之后，找到了问题。 css 中有个属性叫做 -webkit-tap-highlight-color ，顾名思义，就是点击元素的时候会有一个高亮的效果。当然不能把他称之为 bug，这也是浏览器为了让用户知道你点中了某个东西，给他醒目的提示，算是增强体验，但是在一些场景中，这不仅没有增强体验，还会影响体验。 解决方案： .obj {-webkit-tap-highlight-color:rgba(0,0,0,0);} 有些机子可能比较坑爹，rgba 这种方式支持的不是很好，我们可以用 transparent 来给他透明化。 .obj { -webkit-tap-highlight-color: rgba(0,0,0,0); -webkit-tap-highlight-color: transparent; /* For some Androids */ } 小小分享。]]></content>
-      <categories>
-        <category>前端杂烩</category>
-      </categories>
-      <tags>
-        <tag>webview</tag>
-        <tag>highlight</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[npm穿墙]]></title>
     <url>%2F2014%2F03%2F31%2F2014-03-31-npm-cross-wall%2F</url>
     <content type="text"><![CDATA[GWF 很给力，很多东西都能墙掉，但是把 npm 也纳入黑名单，不知道 GWFer 是怎么想的。翻墙翻了好多年了，原理其实也挺简单的，proxy 嘛！ » 方法一A) 国内源，http://cnpmjs.org 使用方式，你可以在 cmd 中键入 npm install -g cnpm，然后出去吃个饭，如果还没有安装好，那就换个方式： npm install -g cnpm --registry=http://r.cnpmjs.org registry 参数的作用就是指向需要 download 的仓库。 cnpm 跟国外的 npm 是同步的，只要 npm 有更新，cnpm 就会跟着一起更新。 当然，你也可以简单点搞： npm config set registry=&quot;http://r.cnpmjs.org&quot; 在配置中直接指定源头，下次就没有必要使用 --registry 参数了。配置好了之后，npm 就指向了国内的仓库。 B) 当然，你也可以安装 cnpm，安装好了之后使用 cnpm 来下载文件，其实原理跟上面是一样的，于是你就可以这样了： cnpm install -g package_name » 方法二代理，在配置中设置代理参数： # 全局路径，也就是 npm install -g，这里 -g 的意义 npm config set prefix=&quot;c:\nodejs&quot; # 一般使用 goagent 翻墙，他的默认端口是 8087 npm config set proxy=http://127.0.0.1:8087 # 设置 https 的代理 npm config set https_proxy=http://127.0.0.1:8087 # 这个地方记得设置下，别搞了个代理，结果在国内源下载 npm config set registry=http://registry.npmjs.org 这样配置好了之后，打开你的 goagent ，记得一定要打开，不然 npm 必然报错。上面写了一堆，其实没必要跟着写这么多，一句话就可以搞定： npm config set proxy=http://127.0.0.1:8087 为啥呢，npm -g 没必要自己去配置， registry 默认就是 http://registry.npmjs.org，不配置 https_proxy，也走的通，所以就只剩下上面这条命令了。 » 方法三直接下载到本地。 实在是怕麻烦，就直接把文件 download 下来，然后放到 node_module 之中就行了。如果是全局模块，找到全局 node_module 的位置，然后解压放进去就行了。]]></content>
@@ -2242,6 +2230,18 @@
       </categories>
       <tags>
         <tag>talk</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[webview中的点击高亮问题]]></title>
+    <url>%2F2014%2F03%2F31%2F2014-03-31-tap-highlight-in-webview%2F</url>
+    <content type="text"><![CDATA[这两天在做一个淘金币的小游戏，测试页面的时候还挺正常的，放到webview（嵌入诸如微信、微博等客户端的网页容器）中就出问题了。 给元素绑定了一个 tap 事件，点击元素，该元素周边会出现点东西，IOS 中是个半透明的灰色背景，在 android 中出现红色的边框，不仅影响美感，貌似还会影响性能（这点东西渲染出来需要时间，会阻塞 JS 中控制的元素渲染）。 开始本以为使用 user-select 可以干掉这玩意儿，结果无效，网上寻觅半天之后，找到了问题。 css 中有个属性叫做 -webkit-tap-highlight-color ，顾名思义，就是点击元素的时候会有一个高亮的效果。当然不能把他称之为 bug，这也是浏览器为了让用户知道你点中了某个东西，给他醒目的提示，算是增强体验，但是在一些场景中，这不仅没有增强体验，还会影响体验。 解决方案： .obj {-webkit-tap-highlight-color:rgba(0,0,0,0);} 有些机子可能比较坑爹，rgba 这种方式支持的不是很好，我们可以用 transparent 来给他透明化。 .obj { -webkit-tap-highlight-color: rgba(0,0,0,0); -webkit-tap-highlight-color: transparent; /* For some Androids */ } 小小分享。]]></content>
+      <categories>
+        <category>前端杂烩</category>
+      </categories>
+      <tags>
+        <tag>webview</tag>
+        <tag>highlight</tag>
       </tags>
   </entry>
   <entry>
