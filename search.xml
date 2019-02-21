@@ -1498,19 +1498,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[Safari不认识type为search的input]]></title>
-    <url>%2F2015%2F04%2F03%2F2015-04-03-input-bug-in-safari%2F</url>
-    <content type="text"><![CDATA[我平时很少测试 safari 和 firefox，系统默认的浏览器被我设置成 chrome. 昨天切图看到个表单，没用人家写好的组件，那一层套一层的 div 看了就怕，因为不需要做什么扩展，就自己写了个。 123&lt;div&gt; &lt;input type="search" name="q" id="J_Query" /&gt;&lt;/div&gt; 给 J_Query 写了一些样式，可是…Safari很任性的不认，左改右改搞了五六分钟没反应，火了！ 把 type 改成 text 就好了。]]></content>
-      <categories>
-        <category>前端杂烩</category>
-      </categories>
-      <tags>
-        <tag>bug</tag>
-        <tag>CSS</tag>
-        <tag>safari</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[根据访问属性进行差异化数据加载]]></title>
     <url>%2F2015%2F04%2F03%2F2015-04-03-detect-first-visit-usr%2F</url>
     <content type="text"><![CDATA[判断用户是否第一次访问页面，先不说怎么做，想想什么场景下会用到？ 如果我们页面的体积过大，用户第一次访问，会消耗大量的时间(2-5s)去下载页面所需要的资源，给用户带来的体验是很不好的，尤其是移动端的用户。如果我们可以在用户第一次访问的时候只加载主要内容，在这个主要内容中引导用户做更多的加载资源的操作，一方面可以让用户熟悉系统，一方面也给页面加载资源争取了巨量的时间，何乐而不为？！ 我们能最快想到的方案是，使用 cookie ，服务器根据 cookie 的属性（如某个 Tag 的值为 1 或者 0）来判断要给用户呈现什么样的内容，这样做有几点不好： 需要服务器协助，而很多时候前端对服务器的控制为 0 cookie在每次网页请求的时候都会附带，浪费 （当然，可以在用户访问一次之后清理这个 cookie，比如服务器端设置 session 值，不过又增加了后端的逻辑负担，而且不靠谱） 如果用户禁用了 cookie 呢？ 问题有很多，解决问题的方案也不少，针对这个问题，HTML5规范也提供了相应的事件和属性支持。 如何判断用户是否为第一次访问页面当页面加载的时候会触发 onload 事件，完了之后触发 pageShow 事件，pageShow 事件是页面每次加载都会触发的，而 onload 不然。默认情况下，浏览器会缓存当前访问的页面（隐私模式除外，特殊处理，也会缓存，退出隐私模式时，缓存的所有内容全部删除），当用户点击前进或者后退按钮时，浏览器会从缓存中获取内容，这个时候 onload 事件是不会触发的。 可以这么说： 如果待加载的页面不存在于缓存中，会触发 onload ，再触发 pageShow 如果待加载的页面存在于缓存中，不触发 onload，只触发 pageShow pageShow 事件对象 event 中有一个属性值，叫做 persisted，如果这个值为 true，则为缓存数据，false，则为第一次加载。 差异化加载12345678910var body = document.body;body.onpageshow = function(evt)&#123; if(evt.persisted)&#123; // 如果从缓存加载，该干啥干啥 doSomething(); &#125; else &#123; // 如果用户第一次访问（没有缓存），只加载主体框架 loadMainContent(); &#125;&#125;; 在 loadMainContent() 我们可以这样干： 123456funtion loadMainContent()&#123; // 引导用户执行操作，操作一次加载点东西 leadUserDoSomething(); // 或者悄悄地缓慢的加载需要的数据 loadDataInQuickMode();&#125; 当然，通过 cookie 或者 pageshow 事件属性判断用户浏览器是否有缓存数据不是最终的解决方案，但这是一种思考模式，可以发散思维~]]></content>
@@ -1522,6 +1509,19 @@
       <tags>
         <tag>javascript</tag>
         <tag>first-time-visit</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Safari不认识type为search的input]]></title>
+    <url>%2F2015%2F04%2F03%2F2015-04-03-input-bug-in-safari%2F</url>
+    <content type="text"><![CDATA[我平时很少测试 safari 和 firefox，系统默认的浏览器被我设置成 chrome. 昨天切图看到个表单，没用人家写好的组件，那一层套一层的 div 看了就怕，因为不需要做什么扩展，就自己写了个。 123&lt;div&gt; &lt;input type="search" name="q" id="J_Query" /&gt;&lt;/div&gt; 给 J_Query 写了一些样式，可是…Safari很任性的不认，左改右改搞了五六分钟没反应，火了！ 把 type 改成 text 就好了。]]></content>
+      <categories>
+        <category>前端杂烩</category>
+      </categories>
+      <tags>
+        <tag>bug</tag>
+        <tag>CSS</tag>
+        <tag>safari</tag>
       </tags>
   </entry>
   <entry>
@@ -1649,6 +1649,17 @@
     <content type="text"><![CDATA[。。。。]]></content>
   </entry>
   <entry>
+    <title><![CDATA[去掉IE11中input右侧的关闭叉叉]]></title>
+    <url>%2F2014%2F11%2F17%2F2014-11-17-input-close-btn-in-ie11%2F</url>
+    <content type="text"><![CDATA[在 IE11 下，浏览器自作多情在 text input 组件上加一个 close 叉叉： 这么整： input::-ms-clear { display: none; } 这种伪元素类似于 web component.]]></content>
+      <categories>
+        <category>前端杂烩</category>
+      </categories>
+      <tags>
+        <tag>CSS</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[让身体残疾的人可以访问Web]]></title>
     <url>%2F2014%2F11%2F17%2F2014-11-17-web-accessibility%2F</url>
     <content type="text"><![CDATA[Web accessibility means that people with disabilities can use the Web.让身体残疾的人可以访问Web，这就是 Web Accessibility。 在中国，有数以百万甚至千万计的人无法正常地使用网络，不是因为他们脑子不好使，也不是因为他们没钱没文化，而是他们用来感知这个世界的能力受到了先天或者后天的破坏。WAI（Web Accessibility inititive）这个议题在1997年五月份被提上议案，至今已经形成了一个庞大的知识体系。 残疾人士包括：失明和低视力、失聪和重听、学习障碍、认知障碍、行动不便、言语残疾、光过敏患者和这些病症的复合患者。涉及类别包括：视觉、听觉、身体、语言、认知、语言、学习以及神经残疾。 事实上，网页无障碍化，其对象不限于残疾人士。如果哪一天你打球手骨折了，你可以感受下无障碍给你带来的便利；如果哪一天你也两鬓霜白，眼力退化、听力退化，网页无障碍化技术就是你的第二双眼睛、第二双耳朵… 后期我会投入一定的时间研究并推动相关内容。]]></content>
@@ -1658,17 +1669,6 @@
       </categories>
       <tags>
         <tag>WAI</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[去掉IE11中input右侧的关闭叉叉]]></title>
-    <url>%2F2014%2F11%2F17%2F2014-11-17-input-close-btn-in-ie11%2F</url>
-    <content type="text"><![CDATA[在 IE11 下，浏览器自作多情在 text input 组件上加一个 close 叉叉： 这么整： input::-ms-clear { display: none; } 这种伪元素类似于 web component.]]></content>
-      <categories>
-        <category>前端杂烩</category>
-      </categories>
-      <tags>
-        <tag>CSS</tag>
       </tags>
   </entry>
   <entry>
@@ -1751,6 +1751,17 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[￥符号，少了一横]]></title>
+    <url>%2F2014%2F08%2F29%2F2014-08-29-dollar-in-different-face%2F</url>
+    <content type="text"><![CDATA[跟钱有关的问题。 数值前加一个 ￥ 符号，可是视觉同学一定要使用两横的 dollar 符号。咋弄？ 这个符号在不同字体下呈现的效果是不一样的，微软雅黑下是两横，不过显示的并不好看，正确的处理方式应该是： &lt;style&gt;i {font-family:&quot;Microsoft Yahei&quot;;}&lt;/style&gt; &lt;i&gt;&amp;yen;&lt;/i&gt;]]></content>
+      <categories>
+        <category>前端杂烩</category>
+      </categories>
+      <tags>
+        <tag>css</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[评《别太听上司的话》]]></title>
     <url>%2F2014%2F08%2F29%2F2014-08-29-be-patient%2F</url>
     <content type="text"><![CDATA[今天早上逛博客园，看到了一篇吐槽的文章：别太听上司的话，有些感触： 给你加任务的，可以称之为需求方。在需求方看来，无论你是前端开发还是后台开发，广义上讲，都是资源，有需求当然也是需要资源的。 每一个需求过来都应该进行评审，需求方不提，你自己也没有提出来，他们觉得加一点东西或者改一点东西是十分轻松的事情，因为他们不懂技术，可是你懂呀，你需要把排期和难点罗列出来，给出一个相对准确的项目时间，这有啥难度么？ 能力强不等于无敌，有些人会说能力越强责任越重，你可以认为这是忽悠你的借口，不过这也是事实，当你的技术能力和业务能力持平之后，你的工资和职衔也就上去了。 你说一两年学到的东西还不如两个月的，显然，你指的是技术方面。想必楼主是一个沉醉于技术的人，但是在工作中，技术只是一方面，或许学会做人才是最重要的。 我也经常会遭遇楼主这样的经历，每每过来都是忍气吞声，但是每一次我都试着去坦然去面对，当然提高了自己跟人 PK 的能力。 所以，加油吧！]]></content>
@@ -1760,17 +1771,6 @@
       <tags>
         <tag>life</tag>
         <tag>work</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[￥符号，少了一横]]></title>
-    <url>%2F2014%2F08%2F29%2F2014-08-29-dollar-in-different-face%2F</url>
-    <content type="text"><![CDATA[跟钱有关的问题。 数值前加一个 ￥ 符号，可是视觉同学一定要使用两横的 dollar 符号。咋弄？ 这个符号在不同字体下呈现的效果是不一样的，微软雅黑下是两横，不过显示的并不好看，正确的处理方式应该是： &lt;style&gt;i {font-family:&quot;Microsoft Yahei&quot;;}&lt;/style&gt; &lt;i&gt;&amp;yen;&lt;/i&gt;]]></content>
-      <categories>
-        <category>前端杂烩</category>
-      </categories>
-      <tags>
-        <tag>css</tag>
       </tags>
   </entry>
   <entry>
@@ -1814,17 +1814,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[绝对定位，margin:0 auto，让元素竖直居中]]></title>
-    <url>%2F2014%2F08%2F07%2F2014-08-07-position-and-margin%2F</url>
-    <content type="text"><![CDATA[问题： div { margin: auto; position: absolute; top: 0; left: 0; right: 0 bottom: 0; width: 100px; height: 100px; } 是如何自适应的。 原因是，绝对定位的布局取决于三个因素，一个是元素的位置，一个是元素的尺寸，一个是元素的margin值。 没有设置尺寸和 margin 的元素会自适应剩余空间，位置固定则分配尺寸，尺寸固定边会分配 margin，都是自适应的。 IE7- 的渲染方式不同，渲染规则也不一样，他不会让定位元素去自适应。]]></content>
-      <categories>
-        <category>前端杂烩</category>
-      </categories>
-      <tags>
-        <tag>CSS</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[Object + Array]]></title>
     <url>%2F2014%2F08%2F07%2F2014-08-07-%7B%7D%2B%5B%5D%2F</url>
     <content type="text"><![CDATA[问题： {} + [] {} + [] 结果应该是 0 console.log({} + []) 结果应该是 object object 两个 {} 的语义不一样,前者被解析成 {}; +[]; 后者 {} 为对象. 操作符，针对非 Number 的处理内部调用 ToPrimary() 函数, {} 和 [] 都执行了自身的 toString 函数 ({} + []) ({}) + [] 这些表达式中，{}都被当做对象来解析，而不是 作用块]]></content>
@@ -1833,6 +1822,17 @@
       </categories>
       <tags>
         <tag>hack</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[绝对定位，margin:0 auto，让元素竖直居中]]></title>
+    <url>%2F2014%2F08%2F07%2F2014-08-07-position-and-margin%2F</url>
+    <content type="text"><![CDATA[问题： div { margin: auto; position: absolute; top: 0; left: 0; right: 0 bottom: 0; width: 100px; height: 100px; } 是如何自适应的。 原因是，绝对定位的布局取决于三个因素，一个是元素的位置，一个是元素的尺寸，一个是元素的margin值。 没有设置尺寸和 margin 的元素会自适应剩余空间，位置固定则分配尺寸，尺寸固定边会分配 margin，都是自适应的。 IE7- 的渲染方式不同，渲染规则也不一样，他不会让定位元素去自适应。]]></content>
+      <categories>
+        <category>前端杂烩</category>
+      </categories>
+      <tags>
+        <tag>CSS</tag>
       </tags>
   </entry>
   <entry>
@@ -2031,18 +2031,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[jekyll安装不了？]]></title>
-    <url>%2F2014%2F04%2F27%2F2014-04-27-ruby-jekyll-install%2F</url>
-    <content type="text"><![CDATA[1、安装Ruby sudo apt-get install ruby1.9.1-dev 2、安装Jekyll sudo gem install jekyll 3、安装rake(用来可以生成markdown文件) sudo gem install rake 注意几点： 不是安装 ruby，而是 ruby-dev 安装 jekyll 之前应该先安装 rdoc 1sudo gem install rdoc 关于gem的下载速度，查看这篇文章]]></content>
-      <categories>
-        <category>前端杂烩</category>
-      </categories>
-      <tags>
-        <tag>jekyll</tag>
-        <tag>ruby</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[gem速度慢]]></title>
     <url>%2F2014%2F04%2F27%2F2014-04-27-gem-sources%2F</url>
     <content type="text"><![CDATA[删除本来的源，添加淘宝的源。 1 查看源 gem sources list 2 删除list中的源 gem sources --remove http://rubygems.org/ 3 查看是否已经删除 重复1,结果为空就正确 4 添加淘宝的源 gem sources -a http://ruby.taobao.org/]]></content>
@@ -2066,6 +2054,18 @@
         <tag>messy</tag>
         <tag>乱码</tag>
         <tag>Ubuntu</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[jekyll安装不了？]]></title>
+    <url>%2F2014%2F04%2F27%2F2014-04-27-ruby-jekyll-install%2F</url>
+    <content type="text"><![CDATA[1、安装Ruby sudo apt-get install ruby1.9.1-dev 2、安装Jekyll sudo gem install jekyll 3、安装rake(用来可以生成markdown文件) sudo gem install rake 注意几点： 不是安装 ruby，而是 ruby-dev 安装 jekyll 之前应该先安装 rdoc 1sudo gem install rdoc 关于gem的下载速度，查看这篇文章]]></content>
+      <categories>
+        <category>前端杂烩</category>
+      </categories>
+      <tags>
+        <tag>jekyll</tag>
+        <tag>ruby</tag>
       </tags>
   </entry>
   <entry>
@@ -2096,16 +2096,15 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[jekyll编译时报错invalid byte sequence in GBK]]></title>
-    <url>%2F2014%2F04%2F26%2F2014-04-26-jekyll-error-when-compile%2F</url>
-    <content type="text"><![CDATA[找到你的Ruby安装目录，如我的是：D:\Ruby193, 在里面找到文件D:\Ruby193\lib\ruby\gems\1.9.1\gems\jekyll-0.12.0\lib\jekyll\convertible.rb在该文件中找到下面句子： # Returns nothing. def read_yaml(base, name) self.content = File.read(File.join(base, name)) 将它修改为： # Returns nothing. def read_yaml(base, name) self.content = File.read(File.join(base, name),:encoding=&gt;&quot;utf-8&quot;) 然后确保所有带中文字符的markdown文件是无BOM的UTF-8格式即可。]]></content>
+    <title><![CDATA[jekyll中gsub未定义的错误]]></title>
+    <url>%2F2014%2F04%2F26%2F2014-04-26-gsup-error-in-atom-file%2F</url>
+    <content type="text"><![CDATA[今天被 jekyll 编译时的一个问题搞疯了。 Liquid Exception: undefined method `gsub’ for nil:NilClass in atom.xml 上面这个错误，开始以为时jekyll的版本问题，后来又以为时 UIT8 编码错误，再继续折腾，看了很多博客还是没有处理好。 在 atom.xml 中我写了一句 ，以前一直是这样的啊，没报错。不知道 github pages 的后台 jekyll 编译器是不是做了版本或者其他方面的修改，定位到这个位置之后，把内容改成了 \{\{ post.excerpt }} \{\{ post.content }} # 改成这个也可以，只是内容太多，我不喜欢 差不多整了我两个小时，这么点小错误，妹的！]]></content>
       <categories>
         <category>前端杂烩</category>
       </categories>
       <tags>
         <tag>error</tag>
         <tag>jekyll</tag>
-        <tag>ruby</tag>
       </tags>
   </entry>
   <entry>
@@ -2122,15 +2121,16 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[jekyll中gsub未定义的错误]]></title>
-    <url>%2F2014%2F04%2F26%2F2014-04-26-gsup-error-in-atom-file%2F</url>
-    <content type="text"><![CDATA[今天被 jekyll 编译时的一个问题搞疯了。 Liquid Exception: undefined method `gsub’ for nil:NilClass in atom.xml 上面这个错误，开始以为时jekyll的版本问题，后来又以为时 UIT8 编码错误，再继续折腾，看了很多博客还是没有处理好。 在 atom.xml 中我写了一句 ，以前一直是这样的啊，没报错。不知道 github pages 的后台 jekyll 编译器是不是做了版本或者其他方面的修改，定位到这个位置之后，把内容改成了 \{\{ post.excerpt }} \{\{ post.content }} # 改成这个也可以，只是内容太多，我不喜欢 差不多整了我两个小时，这么点小错误，妹的！]]></content>
+    <title><![CDATA[jekyll编译时报错invalid byte sequence in GBK]]></title>
+    <url>%2F2014%2F04%2F26%2F2014-04-26-jekyll-error-when-compile%2F</url>
+    <content type="text"><![CDATA[找到你的Ruby安装目录，如我的是：D:\Ruby193, 在里面找到文件D:\Ruby193\lib\ruby\gems\1.9.1\gems\jekyll-0.12.0\lib\jekyll\convertible.rb在该文件中找到下面句子： # Returns nothing. def read_yaml(base, name) self.content = File.read(File.join(base, name)) 将它修改为： # Returns nothing. def read_yaml(base, name) self.content = File.read(File.join(base, name),:encoding=&gt;&quot;utf-8&quot;) 然后确保所有带中文字符的markdown文件是无BOM的UTF-8格式即可。]]></content>
       <categories>
         <category>前端杂烩</category>
       </categories>
       <tags>
         <tag>error</tag>
         <tag>jekyll</tag>
+        <tag>ruby</tag>
       </tags>
   </entry>
   <entry>
@@ -2211,6 +2211,17 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[老程序员Vs新程序员]]></title>
+    <url>%2F2014%2F03%2F31%2F2014-03-31-old-programmer-vs-newer%2F</url>
+    <content type="text"><![CDATA[经验越足、知道的越多编程越慢这就是为何不能让老程序员冲锋在一线开发岗位的原因。因为编程经验越足、知道的越多，他做项目时就会思前顾后。往往一个小功能给菜鸟开发需要一周，老鸟开发可能得两周，结果用户一个需求变更直接干趴老鸟程序员。 当你成为老程序员时是否也要开始重新审视下自己？！]]></content>
+      <categories>
+        <category>观点和感想</category>
+      </categories>
+      <tags>
+        <tag>talk</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[npm穿墙]]></title>
     <url>%2F2014%2F03%2F31%2F2014-03-31-npm-cross-wall%2F</url>
     <content type="text"><![CDATA[GWF 很给力，很多东西都能墙掉，但是把 npm 也纳入黑名单，不知道 GWFer 是怎么想的。翻墙翻了好多年了，原理其实也挺简单的，proxy 嘛！ » 方法一A) 国内源，http://cnpmjs.org 使用方式，你可以在 cmd 中键入 npm install -g cnpm，然后出去吃个饭，如果还没有安装好，那就换个方式： npm install -g cnpm --registry=http://r.cnpmjs.org registry 参数的作用就是指向需要 download 的仓库。 cnpm 跟国外的 npm 是同步的，只要 npm 有更新，cnpm 就会跟着一起更新。 当然，你也可以简单点搞： npm config set registry=&quot;http://r.cnpmjs.org&quot; 在配置中直接指定源头，下次就没有必要使用 --registry 参数了。配置好了之后，npm 就指向了国内的仓库。 B) 当然，你也可以安装 cnpm，安装好了之后使用 cnpm 来下载文件，其实原理跟上面是一样的，于是你就可以这样了： cnpm install -g package_name » 方法二代理，在配置中设置代理参数： # 全局路径，也就是 npm install -g，这里 -g 的意义 npm config set prefix=&quot;c:\nodejs&quot; # 一般使用 goagent 翻墙，他的默认端口是 8087 npm config set proxy=http://127.0.0.1:8087 # 设置 https 的代理 npm config set https_proxy=http://127.0.0.1:8087 # 这个地方记得设置下，别搞了个代理，结果在国内源下载 npm config set registry=http://registry.npmjs.org 这样配置好了之后，打开你的 goagent ，记得一定要打开，不然 npm 必然报错。上面写了一堆，其实没必要跟着写这么多，一句话就可以搞定： npm config set proxy=http://127.0.0.1:8087 为啥呢，npm -g 没必要自己去配置， registry 默认就是 http://registry.npmjs.org，不配置 https_proxy，也走的通，所以就只剩下上面这条命令了。 » 方法三直接下载到本地。 实在是怕麻烦，就直接把文件 download 下来，然后放到 node_module 之中就行了。如果是全局模块，找到全局 node_module 的位置，然后解压放进去就行了。]]></content>
@@ -2220,17 +2231,6 @@
       <tags>
         <tag>npm</tag>
         <tag>proxy</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[老程序员Vs新程序员]]></title>
-    <url>%2F2014%2F03%2F31%2F2014-03-31-old-programmer-vs-newer%2F</url>
-    <content type="text"><![CDATA[经验越足、知道的越多编程越慢这就是为何不能让老程序员冲锋在一线开发岗位的原因。因为编程经验越足、知道的越多，他做项目时就会思前顾后。往往一个小功能给菜鸟开发需要一周，老鸟开发可能得两周，结果用户一个需求变更直接干趴老鸟程序员。 当你成为老程序员时是否也要开始重新审视下自己？！]]></content>
-      <categories>
-        <category>观点和感想</category>
-      </categories>
-      <tags>
-        <tag>talk</tag>
       </tags>
   </entry>
   <entry>

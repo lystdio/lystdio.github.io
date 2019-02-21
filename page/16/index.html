@@ -139,7 +139,7 @@
     var _hmt = _hmt || [];
     (function() {
       var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?304ebec1c594afeac3282f7afb1f3448";
+      hm.src = "https://hm.baidu.com/hm.js?ab65f84a007e7fb250fe7dbe36037ad6";
       var s = document.getElementsByTagName("script")[0];
       s.parentNode.insertBefore(hm, s);
     })();
@@ -612,6 +612,190 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.com/2014/08/07/2014-08-07-{}+[]/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lion">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="撼地神牛">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2014/08/07/2014-08-07-{}+[]/" class="post-title-link" itemprop="https://handishenniu.com/page/16/index.html">Object + Array</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2014-08-07 00:00:00" itemprop="dateCreated datePublished" datetime="2014-08-07T00:00:00+08:00">2014-08-07</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-12 18:10:11" itemprop="dateModified" datetime="2018-12-12T18:10:11+08:00">2018-12-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/前端杂烩/" itemprop="url" rel="index"><span itemprop="name">前端杂烩</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><strong>问题：</strong></p>
+<pre><code>{} + []
+</code></pre><ul>
+<li>{} + [] 结果应该是 0</li>
+<li>console.log({} + []) 结果应该是 object object</li>
+</ul>
+<p>两个 {} 的语义不一样,前者被解析成 {}; +[]; 后者 {} 为对象.</p>
+<ul>
+<li><p>操作符，针对非 Number 的处理内部调用 ToPrimary() 函数, {} 和 [] 都执行了自身的 toString 函数</p>
+<p>  ({} + [])<br>  ({}) + []</p>
+</li>
+</ul>
+<p>这些表达式中，{}都被当做对象来解析，而不是 作用块</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://handishenniu.com/2014/08/07/2014-08-07-position-and-margin/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -742,190 +926,6 @@
 <p>原因是，绝对定位的布局取决于三个因素，一个是元素的位置，一个是元素的尺寸，一个是元素的margin值。</p>
 <p>没有设置尺寸和 margin 的元素会自适应剩余空间，位置固定则分配尺寸，尺寸固定边会分配 margin，都是自适应的。</p>
 <p>IE7- 的渲染方式不同，渲染规则也不一样，他不会让定位元素去自适应。</p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://handishenniu.com/2014/08/07/2014-08-07-{}+[]/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Lion">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="撼地神牛">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2014/08/07/2014-08-07-{}+[]/" class="post-title-link" itemprop="https://handishenniu.com/page/16/index.html">Object + Array</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2014-08-07 00:00:00" itemprop="dateCreated datePublished" datetime="2014-08-07T00:00:00+08:00">2014-08-07</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-12-12 18:10:11" itemprop="dateModified" datetime="2018-12-12T18:10:11+08:00">2018-12-12</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/前端杂烩/" itemprop="url" rel="index"><span itemprop="name">前端杂烩</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><strong>问题：</strong></p>
-<pre><code>{} + []
-</code></pre><ul>
-<li>{} + [] 结果应该是 0</li>
-<li>console.log({} + []) 结果应该是 object object</li>
-</ul>
-<p>两个 {} 的语义不一样,前者被解析成 {}; +[]; 后者 {} 为对象.</p>
-<ul>
-<li><p>操作符，针对非 Number 的处理内部调用 ToPrimary() 函数, {} 和 [] 都执行了自身的 toString 函数</p>
-<p>  ({} + [])<br>  ({}) + []</p>
-</li>
-</ul>
-<p>这些表达式中，{}都被当做对象来解析，而不是 作用块</p>
 
           
         
