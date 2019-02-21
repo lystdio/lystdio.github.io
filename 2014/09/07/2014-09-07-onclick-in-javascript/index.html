@@ -108,7 +108,7 @@
 <meta name="keywords" content="javascript,浏览器拦截">
 <meta property="og:type" content="article">
 <meta property="og:title" content="window.open被浏览器拦截">
-<meta property="og:url" content="https://handishenniu.coding.me/2014/09/07/2014-09-07-onclick-in-javascript/index.html">
+<meta property="og:url" content="https://handishenniu.com/2014/09/07/2014-09-07-onclick-in-javascript/index.html">
 <meta property="og:site_name" content="撼地神牛">
 <meta property="og:description" content="我们都知道浏览器会拦截非鼠标触发的 window.open 事件，不同浏览器的处理不统一，如 chrome 还支持键盘触发 open，而 firefox 只允许鼠标左键触发，etc. 在低版本 IE 下，我们可以使用 ActiveXObject 或者 Object 新开一个页面，如： // IE Only var o=new ActiveXObject(&amp;quot;WMPlayer.OCX&amp;quo">
 <meta property="og:locale" content="zh-CN">
@@ -122,7 +122,7 @@
 
 
 
-  <link rel="canonical" href="https://handishenniu.coding.me/2014/09/07/2014-09-07-onclick-in-javascript/">
+  <link rel="canonical" href="https://handishenniu.com/2014/09/07/2014-09-07-onclick-in-javascript/">
 
 
 
@@ -416,7 +416,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/2014/09/07/2014-09-07-onclick-in-javascript/">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.com/2014/09/07/2014-09-07-onclick-in-javascript/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lion">
@@ -1837,6 +1837,21 @@ document.onclick = function(){
   
 
   
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
 
   
 

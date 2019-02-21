@@ -108,28 +108,28 @@
 <meta name="keywords" content="淘宝首页,性能优化">
 <meta property="og:type" content="article">
 <meta property="og:title" content="淘宝首页性能优化实践">
-<meta property="og:url" content="https://handishenniu.coding.me/2016/04/01/2016-04-01-optimization-in-taobao-homepage/index.html">
+<meta property="og:url" content="https://handishenniu.com/2016/04/01/2016-04-01-optimization-in-taobao-homepage/index.html">
 <meta property="og:site_name" content="撼地神牛">
 <meta property="og:description" content="代码的性能优化是一个精细活，如果你要在一个庞大的未经优化的页面上做性能优化，可能会面临一次重构代码。本文从淘宝首页个性化引出的问题出发，从微观到宏观讲述了页面的优化实践，提出了几条可以借鉴的「黄金法则」，希望对你有所启发，后续会继续给大家带来淘宝首页稳定性保障的分享。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://handishenniu.coding.me/blogimgs/2016/04/01/TB1W6IyLVXXXXbQaXXXvLv21FXX-1846-1074.png_800x800.jpg">
-<meta property="og:image" content="https://handishenniu.coding.me/blogimgs/2016/04/01/TB1CbQPLVXXXXauXFXXIrP49pXX-446-537.gif">
-<meta property="og:image" content="https://handishenniu.coding.me/blogimgs/2016/04/01/TB1JZa9LVXXXXb3XFXXXXXXXXXX-200-200.gif">
-<meta property="og:image" content="https://handishenniu.coding.me/blogimgs/2016/04/01/TB1JZa9LVXXXXb3XFXXXXXXXXXX-200-200.gif_100x100.jpg">
-<meta property="og:image" content="https://handishenniu.coding.me/blogimgs/2016/04/01/TB1JZa9LVXXXXb3XFXXXXXXXXXX-200-200.gif_100x100.jpg_.webp.jpg">
-<meta property="og:image" content="https://handishenniu.coding.me/blogimgs/2016/04/01/TB1qwc6LVXXXXcnXXXX5W.tKFXX-1818-1096.png">
+<meta property="og:image" content="https://handishenniu.com/blogimgs/2016/04/01/TB1W6IyLVXXXXbQaXXXvLv21FXX-1846-1074.png_800x800.jpg">
+<meta property="og:image" content="https://handishenniu.com/blogimgs/2016/04/01/TB1CbQPLVXXXXauXFXXIrP49pXX-446-537.gif">
+<meta property="og:image" content="https://handishenniu.com/blogimgs/2016/04/01/TB1JZa9LVXXXXb3XFXXXXXXXXXX-200-200.gif">
+<meta property="og:image" content="https://handishenniu.com/blogimgs/2016/04/01/TB1JZa9LVXXXXb3XFXXXXXXXXXX-200-200.gif_100x100.jpg">
+<meta property="og:image" content="https://handishenniu.com/blogimgs/2016/04/01/TB1JZa9LVXXXXb3XFXXXXXXXXXX-200-200.gif_100x100.jpg_.webp.jpg">
+<meta property="og:image" content="https://handishenniu.com/blogimgs/2016/04/01/TB1qwc6LVXXXXcnXXXX5W.tKFXX-1818-1096.png">
 <meta property="og:updated_time" content="2018-12-12T10:10:11.340Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="淘宝首页性能优化实践">
 <meta name="twitter:description" content="代码的性能优化是一个精细活，如果你要在一个庞大的未经优化的页面上做性能优化，可能会面临一次重构代码。本文从淘宝首页个性化引出的问题出发，从微观到宏观讲述了页面的优化实践，提出了几条可以借鉴的「黄金法则」，希望对你有所启发，后续会继续给大家带来淘宝首页稳定性保障的分享。">
-<meta name="twitter:image" content="https://handishenniu.coding.me/blogimgs/2016/04/01/TB1W6IyLVXXXXbQaXXXvLv21FXX-1846-1074.png_800x800.jpg">
+<meta name="twitter:image" content="https://handishenniu.com/blogimgs/2016/04/01/TB1W6IyLVXXXXbQaXXXvLv21FXX-1846-1074.png_800x800.jpg">
 
 
 
 
 
 
-  <link rel="canonical" href="https://handishenniu.coding.me/2016/04/01/2016-04-01-optimization-in-taobao-homepage/">
+  <link rel="canonical" href="https://handishenniu.com/2016/04/01/2016-04-01-optimization-in-taobao-homepage/">
 
 
 
@@ -423,7 +423,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/2016/04/01/2016-04-01-optimization-in-taobao-homepage/">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.com/2016/04/01/2016-04-01-optimization-in-taobao-homepage/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lion">
@@ -1923,6 +1923,21 @@
   
 
   
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
 
   
 

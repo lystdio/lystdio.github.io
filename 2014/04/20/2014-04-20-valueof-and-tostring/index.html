@@ -108,7 +108,7 @@
 <meta name="keywords" content="hack">
 <meta property="og:type" content="article">
 <meta property="og:title" content="array 不等于 array">
-<meta property="og:url" content="https://handishenniu.coding.me/2014/04/20/2014-04-20-valueof-and-tostring/index.html">
+<meta property="og:url" content="https://handishenniu.com/2014/04/20/2014-04-20-valueof-and-tostring/index.html">
 <meta property="og:site_name" content="撼地神牛">
 <meta property="og:description" content="1[] == ![] // true 其实这个问题没啥好讨论的，ECMA-262看看就知道了。不过很多人问，就做个笔记。 前面那个 [] 在解析的时候调用的是 valueOf 返回的结果是 ‘’后面那个取反运算，对 NAN undefined null “” 0 取反结果才会是true，所以 ![] 的结果是 false 左边是 ‘’ ，右边是 false，答案是什么一目了然了。 具体可以看看：h">
 <meta property="og:locale" content="zh-CN">
@@ -122,7 +122,7 @@
 
 
 
-  <link rel="canonical" href="https://handishenniu.coding.me/2014/04/20/2014-04-20-valueof-and-tostring/">
+  <link rel="canonical" href="https://handishenniu.com/2014/04/20/2014-04-20-valueof-and-tostring/">
 
 
 
@@ -416,7 +416,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/2014/04/20/2014-04-20-valueof-and-tostring/">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.com/2014/04/20/2014-04-20-valueof-and-tostring/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lion">
@@ -1809,6 +1809,21 @@
   
 
   
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
 
   
 

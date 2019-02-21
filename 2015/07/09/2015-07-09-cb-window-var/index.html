@@ -108,7 +108,7 @@
 <meta name="keywords" content="tech,cnblogs">
 <meta property="og:type" content="article">
 <meta property="og:title" content="如何快速定位不小心暴露到全局的变量">
-<meta property="og:url" content="https://handishenniu.coding.me/2015/07/09/2015-07-09-cb-window-var/index.html">
+<meta property="og:url" content="https://handishenniu.com/2015/07/09/2015-07-09-cb-window-var/index.html">
 <meta property="og:site_name" content="撼地神牛">
 <meta property="og:description" content="本文为归档内容,原始地址在 博客园.  今天在查看页面控制台的时候，无意中看到了一个暴露到全局的变量 i，全局变量是不会被压缩工具压缩成简写的字母，这个被频繁使用的变量名暴露到全局也是个相当大的隐患，可能一个不小心就覆盖了第二次暴露到全局的同名变量。刚开始我就怀疑是自己出现了这样愚蠢的错误：  123456789101112function A() &amp;#123;    // 在一个函数中多次用到了">
 <meta property="og:locale" content="zh-CN">
@@ -124,7 +124,7 @@
 
 
 
-  <link rel="canonical" href="https://handishenniu.coding.me/2015/07/09/2015-07-09-cb-window-var/">
+  <link rel="canonical" href="https://handishenniu.com/2015/07/09/2015-07-09-cb-window-var/">
 
 
 
@@ -418,7 +418,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/2015/07/09/2015-07-09-cb-window-var/">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.com/2015/07/09/2015-07-09-cb-window-var/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lion">
@@ -1853,6 +1853,21 @@
   
 
   
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
 
   
 

@@ -108,7 +108,7 @@
 <meta name="keywords" content="tech,cnblogs,PHP">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PHP常用优化">
-<meta property="og:url" content="https://handishenniu.coding.me/2013/05/27/2013-05-27-cb-php-optimization/index.html">
+<meta property="og:url" content="https://handishenniu.com/2013/05/27/2013-05-27-cb-php-optimization/index.html">
 <meta property="og:site_name" content="撼地神牛">
 <meta property="og:description" content="本文为归档内容,原始地址在 博客园.  0、用单引号代替双引号来包含字符串，这样做会更快一些。因为PHP会在双引号包围的字符串中搜寻变量，单引号则不会，注意：只有echo能这么做，它是一种可以把多个字符串当作参数的\函数&quot;（译注：PHP手册中说echo是语言结构，不是真正的函数，故把函数加上了双引号）。 1、如果能将类的方法定义成static，就尽量定义成static，它的速度会提升将近4倍。">
 <meta property="og:locale" content="zh-CN">
@@ -122,7 +122,7 @@
 
 
 
-  <link rel="canonical" href="https://handishenniu.coding.me/2013/05/27/2013-05-27-cb-php-optimization/">
+  <link rel="canonical" href="https://handishenniu.com/2013/05/27/2013-05-27-cb-php-optimization/">
 
 
 
@@ -416,7 +416,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/2013/05/27/2013-05-27-cb-php-optimization/">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.com/2013/05/27/2013-05-27-cb-php-optimization/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lion">
@@ -1907,6 +1907,21 @@ if (!isset($foo{5})) { echo \Foo is too short"$$ }
   
 
   
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
 
   
 

@@ -108,7 +108,7 @@
 <meta name="keywords" content="tech,cnblogs,hack,XSS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="XSS零碎指南">
-<meta property="og:url" content="https://handishenniu.coding.me/2014/05/01/2014-05-01-cb-xss-snippets/index.html">
+<meta property="og:url" content="https://handishenniu.com/2014/05/01/2014-05-01-cb-xss-snippets/index.html">
 <meta property="og:site_name" content="撼地神牛">
 <meta property="og:description" content="本文为归档内容,原始地址在 博客园.  该文章是本人两天的学习笔记，共享出来，跟大家交流。知识比较零散，但是对有一定 JS 基础的人来说，每个小知识都有助于开阔你的 Hack 视角。首先声明，本文只是 XSS 攻击的冰山一角，读者自行深入研究。一、XSS学习提要http://qdemo.sinaapp.com/ppt/xss/ 三水清 简单介绍 xsshttp://drops.wooyun.org">
 <meta property="og:locale" content="zh-CN">
@@ -122,7 +122,7 @@
 
 
 
-  <link rel="canonical" href="https://handishenniu.coding.me/2014/05/01/2014-05-01-cb-xss-snippets/">
+  <link rel="canonical" href="https://handishenniu.com/2014/05/01/2014-05-01-cb-xss-snippets/">
 
 
 
@@ -416,7 +416,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/2014/05/01/2014-05-01-cb-xss-snippets/">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.com/2014/05/01/2014-05-01-cb-xss-snippets/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lion">
@@ -1940,6 +1940,21 @@
   
 
   
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
 
   
 

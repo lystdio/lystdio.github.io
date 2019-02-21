@@ -108,7 +108,7 @@
 <meta name="keywords" content="正则">
 <meta property="og:type" content="article">
 <meta property="og:title" content="正则中分支示例">
-<meta property="og:url" content="https://handishenniu.coding.me/2014/05/04/2014-05-04-branch-in-regexp/index.html">
+<meta property="og:url" content="https://handishenniu.com/2014/05/04/2014-05-04-branch-in-regexp/index.html">
 <meta property="og:site_name" content="撼地神牛">
 <meta property="og:description" content="问题： &amp;quot;baddad&amp;quot;.match(/([bd]ad?)*/) 为什么匹配的是dad而不是bad。 回答： 不是不匹配bad，而是已经匹配过了，* 号为贪婪模式，所以第一次匹配到 bad 之后会继续往后吞并字符，最后发现后面还有一个 dad 也适合，于是便把 baddad 全部匹配了，第二次匹配是分支匹配，前面的 [bd] 是两个分支，刚才第一个分支已经匹配完了，进入第二个分">
 <meta property="og:locale" content="zh-CN">
@@ -122,7 +122,7 @@
 
 
 
-  <link rel="canonical" href="https://handishenniu.coding.me/2014/05/04/2014-05-04-branch-in-regexp/">
+  <link rel="canonical" href="https://handishenniu.com/2014/05/04/2014-05-04-branch-in-regexp/">
 
 
 
@@ -416,7 +416,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://handishenniu.coding.me/2014/05/04/2014-05-04-branch-in-regexp/">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.com/2014/05/04/2014-05-04-branch-in-regexp/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lion">
@@ -1809,6 +1809,21 @@
   
 
   
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
 
   
 
