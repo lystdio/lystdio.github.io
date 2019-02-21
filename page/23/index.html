@@ -412,228 +412,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://handishenniu.com/2013/08/11/2013-08-11-cb-responsive-web-desigin/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Lion">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="撼地神牛">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2013/08/11/2013-08-11-cb-responsive-web-desigin/" class="post-title-link" itemprop="https://handishenniu.com/page/23/index.html">那些年，我们一起玩过的响应式布局</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2013-08-11 12:17:00" itemprop="dateCreated datePublished" datetime="2013-08-11T12:17:00+08:00">2013-08-11</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-12-12 18:10:11" itemprop="dateModified" datetime="2018-12-12T18:10:11+08:00">2018-12-12</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a></span>
-
-                
-                
-                  ，
-                
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/JavaScript/前端杂烩/" itemprop="url" rel="index"><span itemprop="name">前端杂烩</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <div class="history-article">本文为归档内容,原始地址在 <a href="http://www.cnblogs.com/hustskyking/archive/2013/08/11/responsive-web-desigin.html" target="_blank">博客园</a>.</div>
-
-<p>&nbsp;博客园的资源很丰富，也很精彩。不过这些精彩的东西放到一些移动终端上阅览就不堪入目了，<span>体验相当不好</span>。</p><br><p>&nbsp;&nbsp;<img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2013/08/11/11111006-2d09cc55663d4efaab0b4e7c9f734775.png" data-source="http://images.cnitblog.com/blog/387325/201308/11111006-2d09cc55663d4efaab0b4e7c9f734775.png" alt="" width="386" height="686"></p><br><p>&nbsp;你可以忍受每一次打开博客，还得放大屏幕阅读么？整个屏幕都挤满了很小很小的文字，反正我是受够了。</p><br><p>&nbsp;所以，我们需要改变！！！ 先看看什么是响应式布局，你所看的这篇文章就是采用响应时布局~ <span>（<strong>现代浏览器才能看到效果</strong>）</span></p>
-
-
-<p></p><h3>什么是响应式布局</h3><p></p>
-<p>我的理解就是，<span>为了让用户享受更好的体验效果，给用户展现最有价值的信息，让同一个页面在不同终端上有不一样的展现效果</span>。比如你正在阅读的这篇博客，当你缩小（放大）浏览器窗口时<em>（先滚动顶部，因为顶部做了比较多的修改，效果比较明显）</em>，你会看到这些神奇的效果。</p><br><p><span><strong>正常情况下</strong></span>，顶部是这样的：</p><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2013/08/11/11111800-ae1213c1cbe34476b2d4401a788ac48d.jpg" data-source="http://images.cnitblog.com/blog/387325/201308/11111800-ae1213c1cbe34476b2d4401a788ac48d.jpg" alt="" width="691" height="362"></p><br><p><span><strong>稍微缩小一点</strong></span>，是这样的：</p><br><ul><br><li>变化一：about那个块不见了</li><br><li>变化二：浮动的推荐&lt;反对框偏移了</li><br></ul><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2013/08/11/11111900-eee34c4fac6342f585c1d91681d52e4a.jpg" data-source="http://images.cnitblog.com/blog/387325/201308/11111900-eee34c4fac6342f585c1d91681d52e4a.jpg" alt="" width="690" height="449"></p><br><p><span><strong>再缩小一点</strong></span>：</p><br><ul><br><li>变化一：背景图片不见了</li><br><li>变化二：右侧sidebar块跑到文章下面去了</li><br></ul><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2013/08/11/11112040-da39f5f2f3d04f6bb07917930be7f098.jpg" data-source="http://images.cnitblog.com/blog/387325/201308/11112040-da39f5f2f3d04f6bb07917930be7f098.jpg" alt="" width="591" height="525"></p><br><p><span><strong>还可以再小一点</strong></span>，</p><br><p>　　这个变化就相当大了，很多东西都不见了，元素的位置也改变了</p><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2013/08/11/11112203-fd25eec77a92454292437db2ca0a40a8.jpg" data-source="http://images.cnitblog.com/blog/387325/201308/11112203-fd25eec77a92454292437db2ca0a40a8.jpg" alt="" width="436" height="564"></p><br><p>　　那么，什么是响应式布局，你有了一定的理解么~</p>
-
-
-<p></p><h3>技术什么的不是关键，关键是设计</h3><p></p>
-<p>　　技术太普遍了，大家都会用，可是<span>真正让用户感到舒适的，还是好的设计</span>。<span>我是这样考虑的：</span></p><br><p><strong>1. 屏幕分类：</strong></p><br><p>　　根据移动终端的尺寸（分辨率），我大概做了这么些分类：</p><br><p>　　←480px &nbsp; 481px~700px &nbsp; 701px~960px &nbsp; 961px→</p><br><p>　　首先搞清楚你的用户群所使用的终端类型和比例，这是2012年第二季度的统计数据</p><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2013/08/11/11112952-d5d987f9fc6247a7afc34ac7d46b87ff.gif" data-source="http://images.cnitblog.com/blog/387325/201308/11112952-d5d987f9fc6247a7afc34ac7d46b87ff.gif" alt=""></p><br><p><span>　　iPhone、Nokia、HTC、Samsung和Moto 五个品牌的移动终端位居前五位，占比分别为22.13%、13.98 和11.69%、10.87% 和7.47%，其次为Huawei、Sony 和ZTE 等。</span></p><br><p><span>　　感兴趣的话，可以去搜搜这些终端的分辨率是多少，然后针对这些数据做一个分类~我不多说了。</span></p>
-
-
-<p><strong><span>2. 不同的需求</span></strong></p><br><p><strong><span>　　</span></strong><span>一个比较小的屏幕能够容纳多少数据，展现多少信息，这一点必须把握住，比如当设备宽度是480像素的时候，我们没必要展现太多的信息，因为你展现出来用户也不会看，这些<span>冗余信息只会影响用户对信息主次的判断，甚至他们会觉得这些冗余信息太多，而跳过你的内容</span>。</span></p><br><p><span>　　我的设计是这样的：</span></p><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2013/08/11/11113624-b63e08b4fa52468abde3a2c0ea331d00.jpg" data-source="http://images.cnitblog.com/blog/387325/201308/11113624-b63e08b4fa52468abde3a2c0ea331d00.jpg" alt="" width="406" height="524"></p><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2013/08/11/11113648-0fc153eca1cc433e89023b9ed037a4ac.jpg" data-source="http://images.cnitblog.com/blog/387325/201308/11113648-0fc153eca1cc433e89023b9ed037a4ac.jpg" alt="" width="405" height="575"></p><br><p>&nbsp;我的页面只包括这些内容，像随笔分类、随笔档案，友情链接，推荐链接等，<span>这些信息又多又占空间，应该去除!</span></p><br><p>&nbsp;再比如：刚开始的时候，那个推荐&lt;反对的块及贴在文章的右侧，当窗口缩小之后，我把他放到了右下角，再小些，为了展示更多的内容，直接把他给隐藏了~</p>
-
-
-<p></p><h3>关于技术</h3><p></p>
-<p>技术核心是Media Query，网上都说烂了。</p><br><p><strong>给推荐两篇博文：</strong></p><br><ul><br><li><a title="Read 'The State Of Responsive Web Design'" href="http://mobile.smashingmagazine.com/2013/05/29/the-state-of-responsive-web-design/" rel="bookmark" target="_blank">The State Of Responsive Web Design</a></li><br><li><br><p class="post_title fs24 f_w"><a title="响应式布局这件小事" href="http://www.jiawin.com/response-type-layout-design/" rel="bookmark" target="_blank">响应式布局这件小事</a></p><br></li><br></ul><br><p>这两个<span>博客的布局也是响应式布局</span>。</p>
-
-
-<p><strong>需要注意的几个点：</strong></p><br><p>　　1. head中记得加上这句话：</p>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width; initial-scale=1.0&quot;&gt;</span><br></pre></td></tr></table></figure>
-<p>　　如果不加，效果就是本文第一章图所示，文字会很小很多的挤在一个页面上。</p>
-
-
-<p>　　2. media query虽然好用，<strong><span>但是低版本IE不支持</span></strong>，不要纠结，咱把他给忽视掉~O(&cap;_&cap;)O~</p><br><p>　　如果你太固执一定要考虑的话，推荐这个：<a href="//code.google.com/p/css3-mediaqueries-js/">//code.google.com/p/css3-mediaqueries-js/</a></p>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--[if lt IE 9]&gt;</span><br><span class="line">     &lt;script src=&quot;http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js&quot;&gt;</span><br><span class="line">&lt;/script&gt; &lt;![endif]--&gt;</span><br></pre></td></tr></table></figure>
-<p>　　把这句话加到你的代码顶部，我试过了，相当不好用，响应式效果甚微。</p>
-
-
-<p></p><h3>关于测试工具</h3><p></p>
-<p>　　1. 这个网站，你可以试试，戳<a href="http://dfcb.github.io/Responsivator/" target="_blank">测试工具</a></p><br><p>　　2. chrome下有一个插件，叫做Moblile/Tablet Divice Testing，下载地址：<a href="//chrome.google.com/webstore/detail/mobiletablet-device-testi/elmekokodcohlommfikpmojheggnbelo" target="_blank">戳我</a></p><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2013/08/11/11115330-20656f7059b8442b8d4443946c499ad5.jpg" data-source="http://images.cnitblog.com/blog/387325/201308/11115330-20656f7059b8442b8d4443946c499ad5.jpg" alt=""></p>
-
-
-<p></p><h3>本文响应式布局代码</h3><p></p>
-<p>说了半天，有些童鞋可能等不及想去试试了~</p><br><p>晒晒我弄的几行代码，有兴趣的可以参考下：<a href="http://files.cnblogs.com/hustskyking/media-480.css" target="_blank">../file/media-480.css</a></p>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">/*====================== media =========================*/</span><br><span class="line">@media screen and (max-width: 480px) &#123;</span><br><span class="line">    html, body &#123;</span><br><span class="line">        background: none;</span><br><span class="line">    &#125;</span><br><span class="line">    ul#topMnu,</span><br><span class="line">    a.minyx,</span><br><span class="line">    #rss,</span><br><span class="line">    #sideLeft,</span><br><span class="line">    #sideRight,</span><br><span class="line">    #menu,</span><br><span class="line">    #profile_block &#123;</span><br><span class="line">        display: none;</span><br><span class="line">    &#125;</span><br><span class="line">    div#container &#123;</span><br><span class="line">        width: 96%;</span><br><span class="line">        padding: 0 2%;</span><br><span class="line">        min-width: 0 !important;</span><br><span class="line">    &#125;</span><br><span class="line">    div#content &#123;</span><br><span class="line">        margin-right: 0;</span><br><span class="line">        float: none;</span><br><span class="line">        padding-top: 310px;</span><br><span class="line">    &#125;</span><br><span class="line">    div#sidebar &#123;</span><br><span class="line">        margin-left: 0;</span><br><span class="line">        width: 100%;</span><br><span class="line">        float: none;</span><br><span class="line">    &#125;</span><br><span class="line">    .commentbox_title,</span><br><span class="line">    #tbCommentBody &#123;</span><br><span class="line">        width: 96%;</span><br><span class="line">    &#125;</span><br><span class="line">    #about &#123;</span><br><span class="line">        position: absolute;</span><br><span class="line">        width: 96%;</span><br><span class="line">        top: 80px;</span><br><span class="line">    &#125;</span><br><span class="line">    #div_digg &#123;</span><br><span class="line">        position: static;</span><br><span class="line">    &#125;</span><br><span class="line">    #skyking-footer &#123;</span><br><span class="line">        margin-top: 30px;</span><br><span class="line">        padding: 15px 20px 0;</span><br><span class="line">    &#125;</span><br><span class="line">    #skyking-footer div &#123;</span><br><span class="line">        width: 100%;</span><br><span class="line">    &#125;</span><br><span class="line">    #skyking-footer span &#123;</span><br><span class="line">        float: none;</span><br><span class="line">        border: none;</span><br><span class="line">        padding: 0;</span><br><span class="line">        width: 100%;</span><br><span class="line">        display: inline-block;</span><br><span class="line">        margin-bottom: 15px;</span><br><span class="line">    &#125;</span><br><span class="line">    #skyking-footer p &#123;</span><br><span class="line">        margin: 0;</span><br><span class="line">        text-indent: 2em;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">@media screen and (min-width: 481px) and (max-width: 699px) &#123;</span><br><span class="line">    html, body &#123;</span><br><span class="line">        background: none;</span><br><span class="line">    &#125;</span><br><span class="line">    ul#topMnu,</span><br><span class="line">    a.minyx,</span><br><span class="line">    #rss &#123;</span><br><span class="line">        display: none;</span><br><span class="line">    &#125;</span><br><span class="line">    div#container &#123;</span><br><span class="line">        width: 96%;</span><br><span class="line">        padding: 0 2%;</span><br><span class="line">        min-width: 0 !important;</span><br><span class="line">    &#125;</span><br><span class="line">    div#content &#123;</span><br><span class="line">        margin-right: 0;</span><br><span class="line">        float: none;</span><br><span class="line">    &#125;</span><br><span class="line">    div#sidebar &#123;</span><br><span class="line">        margin-left: 0;</span><br><span class="line">        width: 100%;</span><br><span class="line">        float: none;</span><br><span class="line">    &#125;</span><br><span class="line">    #about &#123;</span><br><span class="line">        position: static;</span><br><span class="line">    &#125;</span><br><span class="line">    .commentbox_title,</span><br><span class="line">    #tbCommentBody &#123;</span><br><span class="line">        width: 96%;</span><br><span class="line">    &#125;</span><br><span class="line">    #skyking-footer &#123;</span><br><span class="line">        margin-top: 30px;</span><br><span class="line">        padding: 15px 20px 0;</span><br><span class="line">    &#125;</span><br><span class="line">    #skyking-footer div &#123;</span><br><span class="line">        width: 100%;</span><br><span class="line">    &#125;</span><br><span class="line">    #skyking-footer span &#123;</span><br><span class="line">        float: none;</span><br><span class="line">        border: none;</span><br><span class="line">        padding: 0;</span><br><span class="line">        width: 100%;</span><br><span class="line">        display: inline-block;</span><br><span class="line">        margin-bottom: 15px;</span><br><span class="line">    &#125;</span><br><span class="line">    #skyking-footer p &#123;</span><br><span class="line">        margin: 0;</span><br><span class="line">        text-indent: 2em;</span><br><span class="line">    &#125;</span><br><span class="line">    #div_digg &#123;</span><br><span class="line">        right: 15px;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">@media screen and (min-width: 700px) and (max-width: 960px) &#123;</span><br><span class="line">    div#container &#123;</span><br><span class="line">        width: 96%;</span><br><span class="line">        padding: 0 2%;</span><br><span class="line">        min-width: 0 !important;</span><br><span class="line">    &#125;</span><br><span class="line">    #wrapper &#123;</span><br><span class="line">        overflow-x:hidden;</span><br><span class="line">    &#125;</span><br><span class="line">    #skyking-footer div &#123;</span><br><span class="line">        width: 100%;</span><br><span class="line">    &#125;</span><br><span class="line">    #skyking-footer span &#123;</span><br><span class="line">        float: left;</span><br><span class="line">        margin-bottom: 15px;</span><br><span class="line">        margin-left: 1%;</span><br><span class="line">        width: 22%;</span><br><span class="line">        min-height: 120px;</span><br><span class="line">    &#125;</span><br><span class="line">    div#sidebar div#sideRight,</span><br><span class="line">    div#sidebar div#sideLeft &#123;</span><br><span class="line">        float: none;</span><br><span class="line">        width: auto;</span><br><span class="line">    &#125;</span><br><span class="line">    div#content &#123;</span><br><span class="line">        margin-right: 32%;</span><br><span class="line">    &#125;</span><br><span class="line">    div#sidebar &#123;</span><br><span class="line">        width: 30%;</span><br><span class="line">        margin-left: -30%;</span><br><span class="line">    &#125;</span><br><span class="line">    #about &#123;</span><br><span class="line">        position: static;</span><br><span class="line">        display:none;</span><br><span class="line">    &#125;</span><br><span class="line">    #div_digg &#123;</span><br><span class="line">        right: 15px;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">meida query</span><br></pre></td></tr></table></figure>
-<p></p><h3>小结</h3><p></p>
-<p><span>　　响应式布局是这几年很流行的一个设计理念，随着移动互联网的盛行，为解决如今各式各样的浏览器分辨率以及不同移动设备的显示效果，响应式布局显得十分重要。设计虽好，我觉得也存在诸如一下的一些<span><strong>弊端</strong></span>：</span></p><br><p><span>　　1. 页面需要加载更多额外的内容，比如我们的手机看这个页面的话，体验效果还行，但是那些次要的内容依然被加载进来了，没看看见是因为被我display:none给隐藏了。</span><span>所以，如果想得到好的用户体验，同时节省流量的话，应该在加载之前做一些判断。</span></p><br><p><span>　　<span>2. 还是存在兼容性问题，要知道，现在IE6-8所占的市场份额仍然在40%+，这么庞大的用户群我们暂时是不能忽略的，若引用其他的JS来矫正，这个太费资源，不可取，而且事实表明这些JS并不好用。</span></span></p>
-
-
-<p>P.S：本文图片都是直接截屏，没有做优化处理，整个页面体积过于庞大，看来图片的优化和lazyload很有必要啊！！！下次弄一个简洁版的lazyload用用~~</p><br><p>&nbsp;最后。。。来一张萌图，哈哈哈~</p><br><p><img src="//img.alicdn.com/tfs/TB1oyqGa_tYBeNjy1XdXXXXyVXa-300-300.png" data-original="/blogimgs/2013/08/11/11124011-2bb20347825f45139a41031f0fde7b22.gif" data-source="http://images.cnitblog.com/blog/387325/201308/11124011-2bb20347825f45139a41031f0fde7b22.gif" alt=""></p>
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://handishenniu.com/2013/08/09/2013-08-09-cb-css-bug-in-IE6/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -2497,6 +2275,294 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://handishenniu.com/2013/06/06/2013-06-06-cb-linux-learning/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lion">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="撼地神牛">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2013/06/06/2013-06-06-cb-linux-learning/" class="post-title-link" itemprop="https://handishenniu.com/page/23/index.html">Linux学习笔记（上次更新时间2013/07/28）</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2013-06-06 11:19:00" itemprop="dateCreated datePublished" datetime="2013-06-06T11:19:00+08:00">2013-06-06</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-12 18:10:11" itemprop="dateModified" datetime="2018-12-12T18:10:11+08:00">2018-12-12</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <div class="history-article">本文为归档内容,原始地址在 <a href="http://www.cnblogs.com/hustskyking/archive/2013/06/06/linux-learning.html" target="_blank">博客园</a>.</div>
+
+<p>自从上次不小心把硬盘全部格式化之后，电脑里的几个系统，以及诸多配置都咔嚓了，没办法，又得从头来过。这个总结和记录了Linux学习过程中遇到的问题，以及电脑的配置等等，为下一次手贱做好准备。。。</p><br><p>P.S: 本次系统更换为 <span>unbuntu 13.04</span></p><br><h3>关于配置</h3><br><p><strong>1. 源</strong></p><br><p>软件中心 -》 编辑 -》软件源 -》</p><br><p>　　我一般是选择，163的源，速度还不错，听说最近我们学校也弄了一个源（<a href="http://mirrors.hustunique.com" target="_blank" rel="noopener">http://mirrors.hustunique.com</a>），不知道写错没有，但是在系统中没有找到这个源，就将就着速度还不错的163源吧。</p><br><p>改完之后，更新一下源：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get upgrade</span><br></pre></td></tr></table></figure>
+<p>这个也不错（太长了，折叠）&nbsp;</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">1、首先备份Ubuntu 11.04源列表</span><br><span class="line"></span><br><span class="line">    sudo cp /etc/apt/sources.list /etc/apt/sources.list.backup （备份下当前的源列表，有备无患嘛）</span><br><span class="line"></span><br><span class="line">    2、修改更新源</span><br><span class="line">    sudo gedit /etc/apt/sources.list （打开Ubuntu 11.04源列表文件）</span><br><span class="line"></span><br><span class="line">    3、将下面的代码粘贴进去（\#&quot;开头的那一行为注释，可以直接复制进文件中）</span><br><span class="line"></span><br><span class="line"> #台湾源</span><br><span class="line"></span><br><span class="line">deb http://tw.archive.ubuntu.com/ubuntu/ natty main universe restricted multiverse </span><br><span class="line">deb-src http://tw.archive.ubuntu.com/ubuntu/ natty main universe restricted multiverse </span><br><span class="line">deb http://tw.archive.ubuntu.com/ubuntu/ natty-security universe main multiverse restricted </span><br><span class="line">deb-src http://tw.archive.ubuntu.com/ubuntu/ natty-security universe main multiverse restricted </span><br><span class="line">deb http://tw.archive.ubuntu.com/ubuntu/ natty-updates universe main multiverse restricted </span><br><span class="line">deb-src http://tw.archive.ubuntu.com/ubuntu/ natty-updates universe main multiverse restricted</span><br><span class="line"></span><br><span class="line">#网易 Ubuntu 11.04 源（速度很快）</span><br><span class="line"></span><br><span class="line">deb http://mirrors.163.com/ubuntu/ natty main universe restricted multiverse </span><br><span class="line">deb-src http://mirrors.163.com/ubuntu/ natty main universe restricted multiverse </span><br><span class="line">deb http://mirrors.163.com/ubuntu/ natty-security universe main multiverse restricted </span><br><span class="line">deb-src http://mirrors.163.com/ubuntu/ natty-security universe main multiverse restricted </span><br><span class="line">deb http://mirrors.163.com/ubuntu/ natty-updates universe main multiverse restricted </span><br><span class="line">deb http://mirrors.163.com/ubuntu/ natty-proposed universe main multiverse restricted </span><br><span class="line">deb-src http://mirrors.163.com/ubuntu/ natty-proposed universe main multiverse restricted </span><br><span class="line">deb http://mirrors.163.com/ubuntu/ natty-backports universe main multiverse restricted </span><br><span class="line">deb-src http://mirrors.163.com/ubuntu/ natty-backports universe main multiverse restricted </span><br><span class="line">deb-src http://mirrors.163.com/ubuntu/ natty-updates universe main multiverse restricted</span><br><span class="line"></span><br><span class="line"> #骨头源，骨头源是bones7456架设的一个Ubuntu源 ，提供ubuntu,deepin</span><br><span class="line"></span><br><span class="line">deb http://ubuntu.srt.cn/ubuntu/ natty main universe restricted multiverse </span><br><span class="line">deb-src http://ubuntu.srt.cn/ubuntu/ natty main universe restricted multiverse </span><br><span class="line">deb http://ubuntu.srt.cn/ubuntu/ natty-security universe main multiverse restricted </span><br><span class="line">deb-src http://ubuntu.srt.cn/ubuntu/ natty-security universe main multiverse restricted </span><br><span class="line">deb http://ubuntu.srt.cn/ubuntu/ natty-updates universe main multiverse restricted </span><br><span class="line">deb http://ubuntu.srt.cn/ubuntu/ natty-proposed universe main multiverse restricted </span><br><span class="line">deb-src http://ubuntu.srt.cn/ubuntu/ natty-proposed universe main multiverse restricted </span><br><span class="line">deb http://ubuntu.srt.cn/ubuntu/ natty-backports universe main multiverse restricted </span><br><span class="line">deb-src http://ubuntu.srt.cn/ubuntu/ natty-backports universe main multiverse restricted </span><br><span class="line">deb-src http://ubuntu.srt.cn/ubuntu/ natty-updates universe main multiverse restricted</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#大家可以自己根据自己的版本设置一下，不一定局限于ubuntu 11.04，下面列出一些校内更新源。</span><br><span class="line"></span><br><span class="line">#电子科技大学</span><br><span class="line"></span><br><span class="line">deb http://ubuntu.uestc.edu.cn/ubuntu/ natty main restricted universe multiverse</span><br><span class="line">deb http://ubuntu.uestc.edu.cn/ubuntu/ natty-backports main restricted universe multiverse</span><br><span class="line">deb http://ubuntu.uestc.edu.cn/ubuntu/ natty-proposed main restricted universe multiverse</span><br><span class="line">deb http://ubuntu.uestc.edu.cn/ubuntu/ natty-security main restricted universe multiverse</span><br><span class="line">deb http://ubuntu.uestc.edu.cn/ubuntu/ natty-updates main restricted universe multiverse</span><br><span class="line">deb-src http://ubuntu.uestc.edu.cn/ubuntu/ natty main restricted universe multiverse</span><br><span class="line">deb-src http://ubuntu.uestc.edu.cn/ubuntu/ natty-backports main restricted universe multiverse</span><br><span class="line">deb-src http://ubuntu.uestc.edu.cn/ubuntu/ natty-proposed main restricted universe multiverse</span><br><span class="line">deb-src http://ubuntu.uestc.edu.cn/ubuntu/ natty-security main restricted universe multiverse</span><br><span class="line">deb-src http://ubuntu.uestc.edu.cn/ubuntu/ natty-updates main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">#中国科技大学</span><br><span class="line"></span><br><span class="line">deb http://debian.ustc.edu.cn/ubuntu/ natty main restricted universe multiverse</span><br><span class="line">deb http://debian.ustc.edu.cn/ubuntu/ natty-backports restricted universe multiverse</span><br><span class="line">deb http://debian.ustc.edu.cn/ubuntu/ natty-proposed main restricted universe multiverse</span><br><span class="line">deb http://debian.ustc.edu.cn/ubuntu/ natty-security main restricted universe multiverse</span><br><span class="line">deb http://debian.ustc.edu.cn/ubuntu/ natty-updates main restricted universe multiverse</span><br><span class="line">deb-src http://debian.ustc.edu.cn/ubuntu/ natty main restricted universe multiverse</span><br><span class="line">deb-src http://debian.ustc.edu.cn/ubuntu/ natty-backports main restricted universe multiverse</span><br><span class="line">deb-src http://debian.ustc.edu.cn/ubuntu/ natty-proposed main restricted universe multiverse</span><br><span class="line">deb-src http://debian.ustc.edu.cn/ubuntu/ natty-security main restricted universe multiverse</span><br><span class="line">deb-src http://debian.ustc.edu.cn/ubuntu/ natty-updates main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">#北京理工大学</span><br><span class="line"></span><br><span class="line">deb http://mirror.bjtu.edu.cn/ubuntu/ natty main multiverse restricted universe</span><br><span class="line">deb http://mirror.bjtu.edu.cn/ubuntu/ natty-backports main multiverse restricted universe</span><br><span class="line">deb http://mirror.bjtu.edu.cn/ubuntu/ natty-proposed main multiverse restricted universe</span><br><span class="line">deb http://mirror.bjtu.edu.cn/ubuntu/ natty-security main multiverse restricted universe</span><br><span class="line">deb http://mirror.bjtu.edu.cn/ubuntu/ natty-updates main multiverse restricted universe</span><br><span class="line">deb-src http://mirror.bjtu.edu.cn/ubuntu/ natty main multiverse restricted universe</span><br><span class="line">deb-src http://mirror.bjtu.edu.cn/ubuntu/ natty-backports main multiverse restricted universe</span><br><span class="line">deb-src http://mirror.bjtu.edu.cn/ubuntu/ natty-proposed main multiverse restricted universe</span><br><span class="line">deb-src http://mirror.bjtu.edu.cn/ubuntu/ natty-security main multiverse restricted universe</span><br><span class="line">deb-src http://mirror.bjtu.edu.cn/ubuntu/ natty-updates main multiverse restricted universe</span><br><span class="line"></span><br><span class="line">#兰州大学</span><br><span class="line"></span><br><span class="line">deb ftp://mirror.lzu.edu.cn/ubuntu/ natty main multiverse restricted universe</span><br><span class="line">deb ftp://mirror.lzu.edu.cn/ubuntu/ natty-backports main multiverse restricted universe</span><br><span class="line">deb ftp://mirror.lzu.edu.cn/ubuntu/ natty-proposed main multiverse restricted universe</span><br><span class="line">deb ftp://mirror.lzu.edu.cn/ubuntu/ natty-security main multiverse restricted universe</span><br><span class="line">deb ftp://mirror.lzu.edu.cn/ubuntu/ natty-updates main multiverse restricted universe</span><br><span class="line">deb ftp://mirror.lzu.edu.cn/ubuntu-cn/ natty main multiverse restricted universe</span><br><span class="line"></span><br><span class="line">#上海交通大学</span><br><span class="line"></span><br><span class="line">deb http://ftp.sjtu.edu.cn/ubuntu/ natty main multiverse restricted universe</span><br><span class="line">deb http://ftp.sjtu.edu.cn/ubuntu/ natty-backports main multiverse restricted universe</span><br><span class="line">deb http://ftp.sjtu.edu.cn/ubuntu/ natty-proposed main multiverse restricted universe</span><br><span class="line">deb http://ftp.sjtu.edu.cn/ubuntu/ natty-security main multiverse restricted universe</span><br><span class="line">deb http://ftp.sjtu.edu.cn/ubuntu/ natty-updates main multiverse restricted universe</span><br><span class="line">deb http://ftp.sjtu.edu.cn/ubuntu-cn/ natty main multiverse restricted universe</span><br><span class="line">deb-src http://ftp.sjtu.edu.cn/ubuntu/ natty main multiverse restricted universe</span><br><span class="line">deb-src http://ftp.sjtu.edu.cn/ubuntu/ natty-backports main multiverse restricted universe</span><br><span class="line">deb-src http://ftp.sjtu.edu.cn/ubuntu/ natty-proposed main multiverse restricted universe</span><br><span class="line">deb-src http://ftp.sjtu.edu.cn/ubuntu/ natty-security main multiverse restricted universe</span><br><span class="line">deb-src http://ftp.sjtu.edu.cn/ubuntu/ natty-updates main multiverse restricted universe</span><br><span class="line"></span><br><span class="line">View Code</span><br></pre></td></tr></table></figure>
+<p><strong>&nbsp;2. 字体</strong></p><br><p>ubuntu自带的字体文泉字体，边缘很粗糙，不好看 ，我还是比较喜欢微软雅黑。</p><br><p>网上随便搜的一个，有兴趣的可以看看：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">用Ubuntu 系统自带的文泉字体  边缘太模糊  ，所以就上网找了一些更换字体的方法  。跟着做了半天都没成功，后来  发现有个人写了一篇日志  ，编译好了，只需要 按着输入命令就行了  ，下面把方法贴出来</span><br><span class="line">http://www.idyj.net/blog/read.php?5</span><br><span class="line"></span><br><span class="line">支持在Ubuntu8.10、Ubuntu9.04系统上自动安装微软雅黑、monaco-linux、lucida-console等字体。</span><br><span class="line">而且可以设置LED、CRT两种不同的显示器的渲染效果，无需手工配置，实现自动化安装。</span><br><span class="line">使用方法如下：</span><br><span class="line">打开命令控制台，然后运行下面的脚本（可以通过复制下面的内容到命令控制台来执行脚本）：</span><br><span class="line">wget -O get-fonts.sh.zip http://files.cnblogs.com/DengYangjun/get-fonts.sh.zip</span><br><span class="line">unzip -o get-fonts.sh.zip 1&gt;/dev/null</span><br><span class="line">chmod a+x get-fonts.sh</span><br><span class="line">./get-fonts.sh</span><br><span class="line"></span><br><span class="line">删除下载的字体安装脚本文件：</span><br><span class="line">rm get-fonts.sh get-fonts.sh.zip 2&gt;/dev/null</span><br><span class="line"></span><br><span class="line">注销生效</span><br><span class="line"></span><br><span class="line">如果觉得不爽，想恢复以前的字体设置：</span><br><span class="line">cd /etc/fonts/conf.avail</span><br><span class="line">sudo mv 51-local.conf.old 51-local.conf 2&gt;/dev/null</span><br><span class="line">sudo mv 69-language-selector-zh-cn.conf.old 69-language-selector-zh-cn.conf 2&gt;/dev/null</span><br><span class="line">sudo rm -f -r /usr/share/fonts/truetype/myfonts 2&gt;/dev/null</span><br><span class="line">cd -</span><br><span class="line"></span><br><span class="line">修正记录：</span><br><span class="line">#1.添加了最新的Windows 7的微软雅黑字体。（附件大小限制，未实现）</span><br><span class="line">2.修正了CRT渲染的配置文件的链接错误。</span><br><span class="line">3.添加字体：Agency FB</span><br><span class="line">4.添加字体设置恢复功能。</span><br><span class="line"></span><br><span class="line">附注：所有字体文件和安装脚本都通过网络下载，安装速度快慢由你的网络状况决定。</span><br><span class="line"></span><br><span class="line">View Code</span><br></pre></td></tr></table></figure>
+<p><strong>3. 输入法</strong></p><br><p>这里为什么要说打字法。相比linux使用者都有一个很大的感触，智能提示太弱，一个原因是没有足够的本地词库，但如果词库加的太多会导致索引速度很慢，显得很卡。</p><br><p>如果你是在网页中打字的话，我建议你使用<strong>搜狗云输入法</strong>或者<strong>QQ云输入法，</strong>很赞哦~</p><br><p>在这里强调输入法的另外一个原因是，wineQQ和ibus输入法有一些兼容性问题，所以，可能你需要另外安装一个输入法。曾经我用的是谷歌输入法，还是不太好用。</p>
+
+
+<p><strong>4. 翻围墙</strong></p><br><p>经常跟google打交道，所以用他的东西也是理所当然的啦，<a title="百度goagent" href="http://www.baidu.com/s?wd=goagent" target="_blank"><span>goAgent</span></a>，网上搜搜这个关键词吧，你肯定行的，步骤有些繁琐，但是一旦弄好了，你一定会爽到爆的！！！</p><br><p>多说几句，goAgent的包里面已经包含了&nbsp;SwitchySharp的配置文件，<span>/local/SwitchyOptions.bak</span></p><br><p>弄玩之后记得把证书导入进入，否则你会很蛋疼的～ 证书位置：<span> /local/CA.crt</span></p><br><p>&nbsp;好吧，你不要告诉我，你全部弄好了，但是你不会运行。。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python ./path/local/proxy.py</span><br></pre></td></tr></table></figure>
+<p>为了方便下次使用，写个文件放到桌面，下次双击打开就好。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cd ~/desktop</span><br><span class="line">vim proxy.sh</span><br><span class="line"></span><br><span class="line">//写入</span><br><span class="line">python ./path/local/proxy.py</span><br><span class="line"></span><br><span class="line">//存盘</span><br><span class="line">:wq</span><br></pre></td></tr></table></figure>
+<p><strong>5. 备份</strong></p>
+
+
+<p><strong>6. 右键打开终端</strong></p><br><p>1）方法一：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install nautilus-open-terminal</span><br></pre></td></tr></table></figure>
+<p>上面的方法比较直接，安装一个软件辅助就行，但是安装好了之后，需要注销之后才生效，应该可以在命令行里敲个什么代码，刷新当前状态之类的，这个我不是很清楚。</p><br><p>2）方法二：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd ~/.gnome2/nautilus-scriptssudo gedit open-terminal //此处可以任意命名</span><br></pre></td></tr></table></figure>
+<p>将下面代码拷贝进去，ctrl + s保存。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#!/bin/bash</span><br><span class="line">#</span><br><span class="line"># This script opens a gnome-terminal in the directory you select.</span><br><span class="line">#</span><br><span class="line"># Distributed under the terms of GNU GPL version 2 or later</span><br><span class="line">#</span><br><span class="line"># Install in ~/.gnome2/nautilus-scripts or ~/Nautilus/scripts</span><br><span class="line"># You need to be running Nautilus 1.0.3+ to use scripts.</span><br><span class="line"></span><br><span class="line"># When a directory is selected, go there. Otherwise go to current</span><br><span class="line"># directory. If more than one directory is selected, show error.</span><br><span class="line">if [ -n &quot;$NAUTILUS_SCRIPT_SELECTED_FILE_PATHS&quot; ]; then</span><br><span class="line">set $NAUTILUS_SCRIPT_SELECTED_FILE_PATHS</span><br><span class="line">if [ $# -eq 1 ]; then</span><br><span class="line">destination=&quot;$1&quot;</span><br><span class="line"># Go to file&apos;s directory if it&apos;s a file</span><br><span class="line">if [ ! -d &quot;$destination&quot; ]; then</span><br><span class="line">destination=&quot;`dirname &quot;$destination&quot;`&quot;</span><br><span class="line">fi</span><br><span class="line">else</span><br><span class="line">zenity --error --title=&quot;Error - Open terminal here&quot; \</span><br><span class="line">--text=&quot;You can only select one directory.&quot;</span><br><span class="line">exit 1</span><br><span class="line">fi</span><br><span class="line">else</span><br><span class="line">destination=&quot;`echo &quot;$NAUTILUS_SCRIPT_CURRENT_URI&quot; | sed &apos;s/^file:\/\///&apos;`&quot;</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line"># It&apos;s only possible to go to local directories</span><br><span class="line">if [ -n &quot;`echo &quot;$destination&quot; | grep &apos;^[a-zA-Z0-9]\+:&apos;`&quot; ]; then</span><br><span class="line">zenity --error --title=&quot;Error - Open terminal here&quot; \</span><br><span class="line">--text=&quot;Only local directories can be used.&quot;</span><br><span class="line">exit 1</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">cd &quot;$destination&quot;</span><br><span class="line">exec x-terminal-emulator</span><br><span class="line"></span><br><span class="line">右键菜单代码</span><br></pre></td></tr></table></figure>
+<p>然后修改下这段代码的权限</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x  ./open-terminal</span><br></pre></td></tr></table></figure>
+<p><strong>7. 开机自启</strong></p><br><p>联网什么的最麻烦里，就希望一劳永逸，配置一次，以后不管里。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gedit /etc/rc.local</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//然后开始你的胡作非为</span><br><span class="line">mentohust //我们学校最近好像禁用里mentohust，颇为蛋疼</span><br><span class="line"></span><br><span class="line">//于是就只能用锐捷了</span><br><span class="line">./path/rujie.sh -uusername -ppassword -neth0 - sinternet -d0 -S1&lt;start sofeware-name</span><br></pre></td></tr></table></figure>
+<p>在打开的文件中添加命令就行。</p>
+
+
+
+
+<p></p><h3>关于软件</h3><p></p>
+<p><strong>1. 浏览器</strong></p><br><p>我比较喜欢用的是chrome，在liunx下叫做<strong>chromium</strong>，这个东西和google帐号绑定，很多东西转移电脑也能够直接拿到。</p><br><p>我不知道chrome在发什么神经，安装好了之后，不停的刷新google首页，键入任何页面都自动reload到google首页。不能忍了！！！！　　</p><br><p>刚把chrome卸载，却有发现了解决方案，我次奥！！！所以说，遇到问题还是先到网上搜搜，没准儿能解决！</p><br><p>上面问题<strong>解决方案</strong>：</p><br><blockquote><br><p>a. 针对13.04版本下Chromium不断刷新网页问题，你在浏览器设置里面<strong>禁用掉”启用即搜即得\</strong>即可完美解决</p><br><p>b. 把网络关掉（自然就不能一直刷新了：），然后打开设置，点开自己的账户，把搜索里的即使搜索关掉就没事了。</p><br></blockquote><br><p>推荐几款chrome下开发工具：</p><br><p>　　1）<span> xmarks 从windows到linux</span>，很多收藏的网址就靠这个同步啦～</p><br><p>　　2） <span>coloZilla</span>，一款与firefox的rainbow类似的颜色吸取工具，搞前端必备啊！</p><br><p>　　3）&nbsp;<span><span>SwitchySharp</span>， 翻墙靠你了！！！</span></p><br><p><span>　　4）<span>&nbsp;</span><span><span>Quick Note</span>， 轻松作笔记</span></span></p><br><p><span><span>　　5）&nbsp;<span><span>Mobile Tester</span>， 当你弄移动端开发的时候，他可以被成为神器。</span></span></span></p><br><p><span><span><span>　　6） <span><span>FVD Video Downloader</span>，</span>&nbsp;神马？网页视频音频弄不下来，这个家伙帮你下载！</span></span></span></p>
+
+
+<p><strong>2. 编辑器</strong></p><br><p>　　1）<span> Vim</span>， &nbsp;看一些朋友，这软件那真是玩的出神入化啊，他们不是在打字，是在高频弹指啊，尼玛，太快鸟！！！着玩意儿要多配置几个插件~</p><br><p>　　2）<span> Emacs</span>， 这个也很不错，不过我没用过，下次尝试着用它吧～</p><br><p>　　3） &nbsp;<span>Qt</span>， 搞C/C++开发的同学，推荐你用这家伙，集成度高，很给力。</p><br><p>　　4） <span>sublime text</span>， 个人最喜欢的一款软件，相当喜欢的说！！！无论是windows环境还是linux环境，都大爱sublime，现在都版本3了吧～</p><br><p>　　　　<a href="http://www.tuicool.com/topics/10100104" target="_blank" rel="noopener">http://www.tuicool.com/topics/10100104</a></p>
+
+
+<p><strong>3. 图形处理工具</strong></p><br><p><span>GIMP</span>，你懂的。等同于windows下的ps，当然界面略丑陋。</p>
+
+
+<p><strong>4. QQ</strong></p><br><p>&nbsp;<span>wineQQ</span> ，现在版本是2012 beta3版，还行。（兼容性不好）</p><br><p><strong>P.S:</strong> <a href="http://www.cnblogs.com/hustskyking/archive/2013/06/06/linux-learning.html#2702894" target="_blank" rel="noopener">@LovelyOu&nbsp;</a>说pidgin-lwqq不错，当然如果你对聊天界面没啥要求的话，这个也是个不错的插件~ 只是截图比较麻烦。</p><br><p>安装方式：</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo add-apt-repository ppa:lainme/pidgin-lwqq sudo apt-get update sudo apt-get install libpurple0 pidgin-lwqq</span><br></pre></td></tr></table></figure>
+<p><span>&nbsp;</span></p><br><p><strong>5. 影音</strong></p><br><p>&nbsp;<span>VLC media player</span>，这玩意儿不错，但是有两个烦人的点，<span>一是，中文乱码，二是，没有字幕</span>。（下次说解决方案）</p>
+
+
+<p><strong>6. 截屏</strong></p><br><p>通常我用的是<span>shutter</span>，截图功能比较强大。</p>
+
+
+<p><strong>7. Flashplayer</strong></p><br><p>这个在软件中心顺便弄上，chrome看视频，省得麻烦。</p>
+
+
+<p></p><h3>一些问题</h3><p></p>
+<p><strong>1. 多个软件同时安装</strong></p><br><blockquote><br><p>E: 无法获得锁 /var/lib/dpkg/lock - open (11: 资源暂时不可用)E: 无法锁定管理目录(/var/lib/dpkg/)，是否有其他进程正占用它？</p>
+
+<p></p></blockquote><p></p>
+<p>&nbsp;比如你的软件中心在安装软件或者更新源，结果你又在命令行里键入sudo apt-get install vim 之类的命令，此时系统是不会响应你的请求的，于是就有了上面这样的报错。</p>
+
+
+<p><strong>2. 权限问题</strong></p><br><p>&nbsp;有的童鞋在网上搜罗里一些软件，结果安装的时候，发现出问题里，安装不了？不要着急，很多情况都是因为权限问题。</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chmod +x /path/filename //+x的意思就是让他可以运行</span><br><span class="line">//权限这一块不懂的可以去网速看看，这里不赘述。</span><br></pre></td></tr></table></figure>
+<p><strong>3.ubuntu-E:Encountered a section with no Package: header的解决办法</strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">终端中输入以下两条命令：</span><br><span class="line">sudo rm /var/lib/apt/lists/* -vf</span><br><span class="line">sudo apt-get update</span><br><span class="line">执行完了命令之后，软件更新器应该会自动要求更新的，搞定。</span><br></pre></td></tr></table></figure>
+<p></p><h3>github</h3><p></p>
+<p>网上看了不少文章，觉得这两篇还算不错。</p><br><p>配置：<a href="http://blog.csdn.net/lalor/article/details/7830895" target="_blank" rel="noopener">http://blog.csdn.net/lalor/article/details/7830895</a></p><br><p>使用：<a href="http://blog.csdn.net/wfdtxz/article/details/7973608" target="_blank" rel="noopener">http://blog.csdn.net/wfdtxz/article/details/7973608</a></p><br><p>推荐：<a href="http://my.oschina.net/shipley/blog/98477" target="_blank">http://my.oschina.net/shipley/blog/98477</a></p>
+
+
+
+
+
+
+<p></p><h3>前端这一块</h3><p></p>
+<p><strong>1. wamp环境配置，应该是lamp</strong>，呵呵。<a title="ubuntu下安装Apache+PHP+Mysql" href="http://www.cnblogs.com/hustskyking/articles/apache-php-mysql.html" target="_blank">戳我</a></p><br><p>转载的文章，感觉比较不错，放在自己家里。</p>
+
+
+<p><strong>2. nodeJS</strong></p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install nodejs</span><br><span class="line">sudo apt-get install npm</span><br></pre></td></tr></table></figure>
+<p>比较不喜欢找源码，然后这样做</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./configure</span><br><span class="line">make</span><br><span class="line">sudo make install</span><br></pre></td></tr></table></figure>
+<p>apt-get真心方便~</p><br><p>然后尽兴添加你想要的组建</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install express</span><br></pre></td></tr></table></figure>
+<p>当然，安装好了之后测试下</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nodejs --version</span><br></pre></td></tr></table></figure>
+<p>有输出说明是正确的。下面给一串代码，让乃测试</p>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">var http = require(&quot;http&quot;);</span><br><span class="line">function onRequest(request, response) &#123;</span><br><span class="line">    console.log(&quot;Request received.&quot;);</span><br><span class="line">    response.writeHead(200, &#123;&quot;Content-Type&quot;: &quot;text/plain&quot;&#125;);</span><br><span class="line">    response.write(&quot;Hello World&quot;);</span><br><span class="line">    response.end();</span><br><span class="line">&#125;</span><br><span class="line">http.createServer(onRequest).listen(8888);</span><br><span class="line">console.log(&quot;Server has started.&quot;);</span><br><span class="line"></span><br><span class="line"> 测试代码</span><br></pre></td></tr></table></figure>
+<p><span>&nbsp;</span></p><br><h3>笔者感言</h3><br><p><strong>1.</strong> 建议新手还是玩<strong>稳定版本</strong>，10.04&nbsp; 12.04这些算是经典版本了。</p>
+
+
+
+
+
+
+<p><span><em>以上基本都是没有补充完善，先把几个记得比较清楚的点列出来，下次有时间，慢慢说～</em></span></p>
+
+
+
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
@@ -2544,7 +2610,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">273</span>
+                    <span class="site-state-item-count">272</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2723,9 +2789,7 @@
                     
                       
                     
-                      
-                    
-                    <span class="site-state-item-count">84</span>
+                    <span class="site-state-item-count">83</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -3170,9 +3234,7 @@
                     
                       
                     
-                      
-                    
-                    <span class="site-state-item-count">215</span>
+                    <span class="site-state-item-count">214</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

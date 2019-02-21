@@ -310,17 +310,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[走近 Python (类比 JS)]]></title>
-    <url>%2F2017%2F10%2F31%2F%E8%B5%B0%E8%BF%91-Python%2F</url>
-    <content type="text"><![CDATA[本文首发在 个人博客 Python 是一门运用很广泛的语言，自动化脚本、爬虫，甚至在深度学习领域也都有 Python 的身影。作为一名前端开发者，也了解 ES6 中的很多特性借鉴自 Python (比如默认参数、解构赋值、Decorator等)，同时本文会对 Python 的一些用法与 JS 进行类比。不管是提升自己的知识广度，还是更好地迎接 AI 时代，Python 都是一门值得学习的语言。 数据类型在 Python 中，最常用的能够直接处理的数据类型有以下几种： 数字[整数(int)、浮点型(float)、长整型(long)、复数(complex)] 字符串(str) 布尔值(bool) 空值(None) 除此之外，Python 还提供了列表[list]、字典[dict] 等多种数据类型，这在下文中会介绍。 类型转换与类型判断与 JS 十分类似，python 也能实现不同数据类型间的强制与隐式转换，例子如下： 强制类型转换:1234567int('3') # 3str(3.14) # '3.14'float('3.14') # 3.14# 区别于 JS 只有 Number 一种类型，Python 中数字中的不同类型也能相互强制转换float(3) # 3.0bool(3) # Truebool(0) # False 隐式类型转换:123451 + 1.0 # 2.01 + False # 11.0 + True # 2.0# 区别于 JS 的 String + Number = String, py 中 str + int 会报错1 + '1' # TypeError: cannot concatenate 'str' and 'int' objects 此外写代码的时候经常会需要判断值的类型，可以 使用 python 提供的 type() 函数获取变量的类型，或者使用 isinstance(x, type) 来判断 x 是否属于相应的 type 类型。123456type(1.3) == float # Trueisinstance('a', str) # Trueisinstance(1.3, int) # Falseisinstance(True, bool) # Trueisinstance([], list) # Trueisinstance(&#123;&#125;, dict) # True 有序集合类型集合是指包含一组元素的数据结构，有序集合即集合里面的元素是是按照顺序排列的，Python 中的有序集合大概有以下几类：list, tuple, str, unicode。 list 类型Python 中 List 类型类似于 JS 中的 Array, 1234567891011L = [1, 2, 3]print L[-1] # '3'L.append(4) # 末尾添加元素print L # [1, 2, 3, 4]L.insert(0, 'hi') # 指定索引位置添加元素print L # ['hi', 1, 2, 3, 4]L.pop() # 末尾移除元素 L.pop(2) ?????? 2 ???print L # ['hi', 1, 2, 3] tuple 类型tuple 类型是另一种有序的列表，中文翻译为“ 元组 ”。tuple 和 list 非常类似，但是，tuple 一旦创建完毕，就不能修改了。 123456789t = (1, 2, 3)print t[0] # 1t[0] = 11 # TypeError: 'tuple' object does not support item assignmentt = (1)print t # 1 t 的结果是整数 1t = (1,) # 为了避免出现如上有歧义的单元素 tuple，所以 Python 规定，单元素 tuple 要多加一个逗号“,”print t # (1,) 无序集合类型dict 类型Python 中的 dict 类型类似于 JS 中的 {} (最大的不同是它是没有顺序的), 它有如下特点: 查找速度快 (无论 dict 有 10 个元素还是 10 万个元素，查找速度都一样) 占用内存大 (与 list 类型相反) dict 中的 key 不能重复 dict 中存储的 key-value 序对是没有顺序的 1234567891011121314d = &#123; 'a': 1, 'b': 2, 'c': 3&#125;print d # &#123;'a': 1, 'c': 3, 'b': 2&#125; 可以看出打印出的序对没有按正常的顺序打出# 遍历 dictfor key,value in d.items(): print('%s: %s' % (key,value))# a: 1# c: 3# b: 2 set 类型有的时候，我们只想要 dict 的 key，不关心 key 对应的 value，而且要保证这个集合的元素不会重复，这时，set 类型就派上用场了。set 类型有如下特点： set 存储的元素和 dict 的 key 类似，必须是不变对象 set 存储的元素也是没有顺序的 12345678s = set(['A', 'B', 'C', 'C'])print s # set(['A', 'C', 'B'])s.add('D')print s # set(['A', 'C', 'B', 'D'])s.remove('D')print s # set(['A', 'C', 'B']) Python 中的迭代在介绍完 Python 中的有序集合和无序集合类型后，必然存在遍历集合的 for 循环。但是和其它语言的标准 for 循环不同，Python 中的所有迭代是通过 for … in 来完成的。以下给出一些常用的迭代 demos: 索引迭代： 1234567L = ['apple', 'banana', 'orange']for index, name in enumerate(L): # enumerate() 函数把 ['apple', 'banana', 'orange'] 变成了类似 [(0, 'apple), (1, 'banana'), (2, 'orange')] 的形式 print index, '-', name# 0 - apple# 1 - banana# 2 - orange 迭代 dict 的 value: 1234567d = &#123; 'apple': 6, 'banana': 8, 'orange': 5 &#125;print d.values() # [6, 8, 5]for v in d.values() print v# 6# 8# 5 迭代 dict 的 key 和 value: 123456d = &#123; 'apple': 6, 'banana': 8, 'orange': 5 &#125;for key, value in d.items() print key, ':', value# apple : 6# banana: 8# orange: 5 切片操作符Python 提供的切片操作符类似于 JS 提供的原生函数 slice()。有了切片操作符，大大简化了一些原来得用循环的操作。 12345L = ['apple', 'banana', 'orange', 'pear']L[0:2] # ['apple', 'banana'] 取前 2 个元素L[:2] # ['apple', 'banana'] 如果第一个索引是 0，可以省略L[:] # ['apple', 'banana', 'orange', 'pear'] 只用一个 : ，表示从头到尾L[::2] # ['apple', 'orange'] 第三个参数表示每 N 个取一个，这里表示从头开始，每 2 个元素取出一个来 列表生成器如果要生成 [1x1, 2x2, 3x3, …, 10x10] 怎么做？方法一是循环： 123L = []for x in range(1, 11): L.append(x * x) 但是循环太繁琐，而列表生成式则可以用一行语句代替循环生成上面的 list： 123# 把要生成的元素 x * x 放到前面，后面跟 for 循环，就可以把 list 创建出来[x * x for x in range(1, 11)]# [1, 4, 9, 16, 25, 36, 49, 64, 81, 100] 列表生成式的 for 循环后面还可以加上 if 判断(类似于 JS 中的 filter() 函数)，示例如下： 12[x * x for x in range(1, 11) if x % 2 == 0]# [4, 16, 36, 64, 100] for 循环可以嵌套，因此，在列表生成式中，也可以用多层 for 循环来生成列表。 12[m + n for m in 'ABC' for n in '123']# ['A1', 'A2', 'A3', 'B1', 'B2', 'B3', 'C1', 'C2', 'C3'] Python 函数默认参数JS 中 ES6 的 默认参数正是借鉴于 Python，用法如下： 12345def greet(name='World'): print 'Hello, ' + name + '.'greet() # Hello, World.greet('Python') # Hello, Python. 可变参数类似于 JS 函数中自动识别传入参数的个数，Python 也提供了定义可变参数，即在可变参数的名字前面带上个 * 号。 123456def fn(*args): print argsfn() # ()fn('a') # ('a',)fn('a', 'b') # ('a', 'b') Python 解释器会把传入的一组参数组装成一个 tuple 传递给可变参数，因此，在函数内部，直接把变量 args 看成一个 tuple 就好了。 常用高阶函数Python 中常用的函数 (map、reduce、filter) 的作用和 JS 中一致，只是用法稍微不同。 map 函数: 接收一个函数 f 和一个 list，并通过把函数 f 依次作用在 list 的每个元素上，得到一个新的 list 并返回。 123def f(x): return x * xprint map(f, [1, 2, 3, 4, 5, 6, 7, 8, 9]) # [1, 4, 9, 16, 25, 36, 49, 64, 81] reduce 函数: 接收一个函数 f 和一个 list(可以接受第三个值作为初始值)，reduce() 对 list 的每个元素反复调用函数 f，并返回最终结果值。 1234def f(x, y): return x * yreduce(f, [1, 3, 5]) # 15 filter 函数: 接收一个函数 f 和一个list，这个函数 f 的作用是对每个元素进行判断，返回 True或 False，filter() 根据判断结果自动过滤掉不符合条件的元素，返回由符合条件元素组成的新 list。 1234def is_odd(x): return x % 2 == 1filter(is_odd, [1, 4, 6, 7, 9, 12, 17]) # [1, 7, 9, 17] 匿名函数和 JS 的匿名函数不同的地方是，Python 的匿名函数中只能有一个表达式，且不能写 return。拿 map() 函数为例： 1map(lambda x: x * x, [1, 2, 3, 4, 5, 6, 7, 8, 9]) # [1, 4, 9, 16, 25, 36, 49, 64, 81] 关键词 lambda 表示匿名函数，冒号前面的 x 表示函数参数，可以看出匿名函数 lambda x: x* x 实际上就是: 12def f(x): return x * x 闭包之前写过一些关于 JS 闭包的文章，比如 深入浅出JavaScript之闭包（Closure）、以及 读书笔记-你不知道的 JavaScript (上)，Python 中闭包的定义和 JS 中的是一致的即：内层函数引用了外层函数的变量，然后返回内层函数。下面来看下 Py 中闭包之 for 循环经典问题： 1234567891011# 希望一次返回3个函数，分别计算1x1,2x2,3x3:def count(): fs = [] for i in range(1, 4): def f(): return i * i fs.append(f) return fsf1, f2, f3 = count() # 这种写法相当于 ES6 中的解构赋值print f1(), f2(), f3() # 9 9 9 老问题了，f1(), f2(), f3() 结果不应该是 1, 4, 9 吗，实际结果为什么都是 9 呢？ 原因就是当 count() 函数返回了 3 个函数时，这 3 个函数所引用的变量 i 的值已经变成了 3。由于 f1、f2、f3 并没有被调用，所以，此时他们并未计算 i*i，当 f1 被调用时，i 已经变为 3 了。 要正确使用闭包，就要确保引用的局部变量在函数返回后不能变。代码修改如下: 方法一: 可以理解为创建了一个封闭的作用域，i 的 值传给 j 之后，就和 i 没任何关系了。每次循环形成的闭包都存进了内存中。12345678910111213def count(): fs = [] for i in range(1, 4): def f(j): def g(): # 方法一 return j * j return g r = f(i) fs.append(r) return fsf1, f2, f3 = count()print f1(), f2(), f3() # 1 4 9 方法二：思路比较巧妙，用到了默认参数 j 在函数定义时可以获取到 i 的值，虽然没有用到闭包，但是和方法一有异曲同工之处。12345678910def count(): fs = [] for i in range(1, 4): def f(j = i): # 方法二 return j * j fs.append(f) return fsf1, f2, f3 = count()print f1(), f2(), f3() # 1 4 9 decorator 装饰器ES6 的语法中的 decorator 正是借鉴了 Python 的 decorator。decorator 本质上就是一个高阶函数，它接收一个函数作为参数，然后返回一个新函数。 那装饰器的作用在哪呢？先上一段日常项目中用 ts 写的网关代码： 12345678910@Post('/rider/detail') // URL 路由@log() // 打印日志 @ResponseBody public async getRiderBasicInfo( @RequestBody('riderId') riderId: number, @RequestBody('cityId') cityId: number, ) &#123; const result = await this.riderManager.findDetail(cityId, riderId) return result &#125; 可以看出使用装饰器可以极大地简化代码，避免每个函数(比如日志、路由、性能检测)编写重复性代码。 回到 Python 上，Python 提供的 @ 语法来使用 decorator，@ 等价于 f = decorate(f)。下面来看看 @log() 在 Python 中的实现: 123456789101112131415161718# 我们想把调用的函数名字给打印出来@log()def factorial(n): return reduce(lambda x,y: x*y, range(1, n+1))print factorial(10)# 来看看 @log() 的定义def log(): def log_decorator(f): def fn(x): print '调用了函数' + f.__name__ + '()' return f(x) return fn return log_decorator# 结果# 调用了函数 factorial()# 3628800 class面向对象编程面向对象编程是一种程序设计范式，基本思想是：用类定义抽象类型，然后根据类的定义创建出实例。在掌握其它语言的基础上，还是比较容易理解这块知识点的，比如从下面两种写法可以看出不同语言的语言特性间竟然有如此多的共性。 es6: (附：本文的主题是 python，所以只是初略展示下 js 中类的定义以及实例的创建，为了说明写法的相似性)12345678class Person &#123; constructor(name, age) &#123; this.name = name this.age = age &#125;&#125;const child1 = new Person('Xiao Ming', 10) Python: (核心要点写在注释中)12345678910111213141516# 定义一个 Person 类：根据 Person 类就可以造成很多 child 实例class Person(object): address = 'Earth' # 类属性 (实例公有) def __init__(self, name, age): # 创建实例时，__init__()方法被自动调用 self.name = name self.age = age def get_age(self): # 定义实例方法，它的第一个参数永远是 self，指向调用该方法的实例本身，其他参数和普通函数是一样的 return self.agechild1 = Person('Xiao Ming', 10)child2 = Person('Xiao Hong', 9)print child1.name # 'Xiao Ming'print child2.get_age() # 9print child1.address # 'Earth'print child2.address # 'Earth' 继承child 属于 Student 类，Student 类属于 People 类，这就引出了继承: 即获得了父类的方法属性后又能添加自己的方法属性。 12345678910111213class Person(object): def __init__(self, name, age): self.name = name self.age = ageclass Student(Person): def __init__(self, name, age, grade): super(Student, self).__init__(name, age) # 这里也能写成 Person.__init__(self, name, age) self.grade = grades = Student('Xiao Ming', 10, 90)print s.name # 'Xiao Ming'print s.grade # 90 可以看到子类在父类的基础上又增加了 grade 属性。我们可以再来看看 s 的类型。 12isinstance(s, Person)isinstance(s, Student) 可以看出，Python 中在一条继承链上，一个实例可以看成它本身的类型，也可以看成它父类的类型。]]></content>
-      <categories>
-        <category>Python</category>
-      </categories>
-      <tags>
-        <tag>Python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[Node.js 异步异闻录]]></title>
     <url>%2F2017%2F09%2F22%2FNode.js%20%E5%BC%82%E6%AD%A5%E5%BC%82%E9%97%BB%E5%BD%95%2F</url>
     <content type="text"><![CDATA[提到 Node.js, 我们脑海就会浮现异步、非阻塞、单线程等关键词，进一步我们还会想到 buffer、模块机制、事件循环、进程、V8、libuv 等知识点。本文起初旨在理顺 Node.js 以上易混淆概念，然而一入异步深似海，本文尝试基于 Node.js 的异步展开讨论，其他的主题只能日后慢慢补上了。(附：亦可以把本文当作是朴灵老师所著的《深入浅出 Node.js》一书的小结)。 异步 I/ONode.js 正是依靠构建了一套完善的高性能异步 I/O 框架，从而打破了 JavaScript 在服务器端止步不前的局面。 异步 I/O VS 非阻塞 I/O听起来异步和非阻塞，同步和阻塞是相互对应的，从实际效果而言，异步和非阻塞都达到了我们并行 I/O 的目的，但是从计算机内核 I/O 而言，异步/同步和阻塞/非阻塞实际上是两回事。 注意，操作系统内核对于 I/O 只有两种方式：阻塞与非阻塞。 调用阻塞 I/O 的过程： 调用非阻塞 I/O 的过程： 在此先引人一个叫作轮询的技术。轮询不同于回调，举个生活例子，你有事去隔壁寝室找同学，发现人不在，你怎么办呢？方法1，每隔几分钟再去趟隔壁寝室，看人在不；方法2，拜托与他同寝室的人，看到他回来时叫一下你；那么前者是轮询，后者是回调。 再回到主题，阻塞 I/O 造成 CPU 等待浪费，非阻塞 I/O 带来的麻烦却是需要轮询去确认是否完全完成数据获取。从操作系统的这个层面上看，对于应用程序而言，不管是阻塞 I/O 亦或是 非阻塞 I/O，它们都只能是一种同步，因为尽管使用了轮询技术，应用程序仍然需要等待 I/O 完全返回。 Node 的异步 I/O完成整个异步 I/O 环节的有事件循环、观察者、请求对象以及 I/O 线程池。 事件循环在进程启动的时候，Node 会创建一个类似于 whlie(true) 的循环，每一次执行循环体的过程我们称为 Tick。 每个 Tick 的过程就是查看是否有事件待处理，如果有，就取出事件及其相关的回调函数。如果存在相关的回调函数，就执行他们。然后进入下一个循环，如果不再有事件处理，就退出进程。 伪代码如下：12345678while(ture) &#123; const event = eventQueue.pop() if (event &amp;&amp; event.handler) &#123; event.handler.execute() // execute the callback in Javascript thread &#125; else &#123; sleep() // sleep some time to release the CPU do other stuff &#125;&#125; 观察者每个 Tick 的过程中，如何判断是否有事件需要处理，这里就需要引入观察者这个概念。 每个事件循环中有一个或多个观察者，而判断是否有事件需要处理的过程就是向这些观察者询问是否有要处理的事件。 在 Node 中，事件主要来源于网络请求、文件 I/O 等，这些事件都有对应的观察者。 请求对象对于 Node 中的异步 I/O 而言，回调函数不由开发者来调用，在 JavaScript 发起调用到内核执行完 id 操作的过渡过程中，存在一种中间产物，它叫作请求对象。 请求对象是异步 I/O 过程中的重要中间产物，所有状态都保存在这个对象中，包括送入线程池等待执行以及 I/O 操作完后的回调处理 以 fs.open() 为例：12345678fs.open = function(path, flags, mode, callback) &#123; bingding.open( pathModule._makeLong(path), stringToFlags(flags), mode, callback )&#125; fs.open 的作用就是根据指定路径和参数去打开一个文件，从而得到一个文件描述符。 从前面的代码中可以看到，JavaScript 层面的代码通过调用 C++ 核心模块进行下层的操作。 从 JavaScript 调用 Node 的核心模块，核心模块调用 C++ 内建模块，内建模块通过 libuv 进行系统调用，这是 Node 里经典的调用方式。 libuv 作为封装层，有两个平台的实现，实质上是调用了 uv_fs_open 方法，在 uv_fs_open 的调用过程中，会创建一个 FSReqWrap 请求对象，从 JavaScript 层传入的参数和当前方法都被封装在这个请求对象中。回调函数则被设置在这个对象的 oncomplete_sym 属性上。 1req_wrap -&gt; object_ -&gt; Set(oncomplete_sym, callback) 对象包装完毕后，在 Windows 下，则调用 QueueUserWorkItem() 方法将这个 FSReqWrap 对象推人线程池中等待执行。 至此，JavaScript 调用立即返回，由 JavaScript 层面发起的异步调用的第一阶段就此结束(即上图所注释的异步 I/O 第一部分)。JavaScript 线程可以继续执行当前任务的后续操作，当前的 I/O 操作在线程池中等待执行，不管它是否阻塞 I/O，都不会影响到 JavaScript 线程的后续操作，如此达到了异步的目的。 执行回调组装好请求对象、送入 I/O 线程池等待执行，实际上是完成了异步 I/O 的第一部分，回调通知是第二部分。 线程池中的 I/O 操作调用完毕之后，会将获取的结果储存在 req -&gt; result 属性上，然后调用 PostQueuedCompletionStatus() 通知 IOCP，告知当前对象操作已经完成，并将线程归还线程池。 在这个过程中，我们动用了事件循环的 I/O 观察者，在每次 Tick 的执行过程中，它会调用 IOCP 相关的 GetQueuedCompletionStatus 方法检查线程池中是否有执行完的请求，如果存在，会将请求对象加入到 I/O 观察者的队列中，然后将其当做事件处理。 I/O 观察者回调函数的行为就是取出请求对象的 result 属性作为参数，取出 oncomplete_sym 属性作为方法，然后调用执行，以此达到调用 JavaScript 中传入的回调函数的目的。 小结通过介绍完整个异步 I/O 后，有个需要重视的观点是 JavaScript 是单线程的，Node 本身其实是多线程的，只是 I/O 线程使用的 CPU 比较少；还有个重要的观点是，除了用户的代码无法并行执行外，所有的 I/O (磁盘 I/O 和网络 I/O) 则是可以并行起来的。 异步编程Node 是首个将异步大规模带到应用层面的平台。通过上文所述我们了解了 Node 如何通过事件循环实现异步 I/O，有异步 I/O 必然存在异步编程。异步编程的路经历了太多坎坷，从回调函数、发布订阅模式、Promise 对象，到 generator、asycn/await。趁着异步编程这个主题刚好把它们串起来理理。 异步 VS 回调对于刚接触异步的新人，很大几率会混淆回调 (callback) 和异步 (asynchronous) 的概念。先来看看维基的 Callback) 条目: In computer programming, a callback is any executable code that is passed as an argument to other code 因此，回调本质上是一种设计模式，并且 jQuery (包括其他框架)的设计原则遵循了这个模式。 在 JavaScript 中，回调函数具体的定义为：函数 A 作为参数(函数引用)传递到另一个函数 B 中，并且这个函数 B 执行函数 A。我们就说函数 A 叫做回调函数。如果没有名称(函数表达式)，就叫做匿名回调函数。 因此 callback 不一定用于异步，一般同步(阻塞)的场景下也经常用到回调，比如要求执行某些操作后执行回调函数。讲了这么多让我们来看下同步回调和异步回调的例子： 同步回调：12345678910function f2() &#123; console.log('f2 finished')&#125;function f1(cb) &#123; cb() console.log('f1 finished')&#125;f1(f2) // 得到的结果是 f2 finished, f1 finished 异步回调：12345678910function f2() &#123; console.log('f2 finished')&#125;function f1(cb) &#123; setTimeout(cb, 1000) // 通过 setTimeout() 来模拟耗时操作 console.log('f1 finished')&#125;f1(f2) // 得到的结果是 f1 finished, f2 finished 小结：回调可以进行同步也可以异步调用，但是 Node.js 提供的 API 大多都是异步回调的，比如 buffer、http、cluster 等模块。 发布/订阅模式事件发布/订阅模式 (PubSub) 自身并无同步和异步调用的问题，但在 Node 的 events 模块的调用中多半伴随事件循环而异步触发的，所以我们说事件发布/订阅广泛应用于异步编程。它的应用非常广泛，可以在异步编程中帮助我们完成更松的解耦，甚至在 MVC、MVVC 的架构中以及设计模式中也少不了发布-订阅模式的参与。 以 jQuery 事件监听为例 12345$('#btn').on('myEvent', function(e) &#123; // 触发事件 console.log('I am an Event')&#125;)$('#btn').trigger('myEvent') // 订阅事件 可以看到，订阅事件就是一个高阶函数的应用。事件发布/订阅模式可以实现一个事件与多个回调函数的关联，这些回调函数又称为事件侦听器。下面我们来看看发布/订阅模式的简易实现。 1234567891011121314151617181920212223242526var PubSub = function() &#123; this.handlers = &#123;&#125;&#125;PubSub.prototype.subscribe = function(eventType, handler) &#123; // 注册函数逻辑 if (!(eventType in this.handlers)) &#123; this.handlers[eventType] = [] &#125; this.handlers[eventType].push(handler) // 添加事件监听器 return this // 返回上下文环境以实现链式调用&#125;PubSub.prototype.publish = function(eventType) &#123; // 发布函数逻辑 var _args = Array.prototype.slice.call(arguments, 1) for (var i = 0, _handlers = this.handlers[eventType]; i &lt; _handlers.length; i++) &#123; // 遍历事件监听器 _handlers[i].apply(this, _args) // 调用事件监听器 &#125;&#125;var event = new PubSub // 构造 PubSub 实例event.subscribe('name', function(msg) &#123; console.log('my name is ' + msg) // my name is muyy&#125;)event.publish('name', 'muyy') 至此，一个简易的订阅发布模式就实现了。然而发布/订阅模式也存在一些缺点，创建订阅本身会消耗一定的时间与内存，也许当你订阅一个消息之后，之后可能就不会发生。发布-订阅模式虽然它弱化了对象与对象之间的关系，但是如果过度使用，对象与对象的必要联系就会被深埋，会导致程序难以跟踪与维护。 Promise/Deferred 模式想象一下，如果某个操作需要经过多个非阻塞的 IO 操作，每一个结果都是通过回调，程序有可能会看上去像这个样子。这样的代码很难维护。这样的情况更多的会发生在 server side 的情况下。代码片段如下： 123456789operation1(function(err, result1) &#123; operation2(result1, function(err, result2) &#123; operation3(result2, function(err, result3) &#123; operation4(result3, function(err, result4) &#123; callback(result4) // do something useful &#125;) &#125;) &#125;)&#125;) 这时候，Promise 出现了，其出现的目的就是为了解决所谓的回调地狱的问题。让我们看下使用 Promise 后的代码片段： 1234567891011promise() .then(operation1) .then(operation2) .then(operation3) .then(operation4) .then(function(value4) &#123; // Do something with value4 &#125;, function (error) &#123; // Handle any error from step1 through step4 &#125;) .done() 可以看到，使用了第二种编程模式后能极大地提高我们的编程体验，接着就让我们自己动手实现一个支持序列执行的 Promise。(附：为了直观的在浏览器上也能感受到 Promise，为此也写了一段浏览器上的 Promise 用法示例) 在此之前，我们先要了解 Promise/A 提议中对单个异步操作所作的抽象定义，定义具体如下所示： Promise 操作只会处在 3 种状态的一种：未完成态、完成态和失败态。 Promise 的状态只会出现从未完成态向完成态或失败态转化，不能逆反。完成态和失败态不能相互转化。 Promise 的状态一旦转化，将不能被更改。 Promise 的状态转化示意图如下： 除此之外，Promise 对象的另一个关键就是需要具备 then() 方法，对于 then() 方法，有以下简单的要求: 接受完成态、错误态的回调方法。在操作完成或出现错误时，将会调用对应方法。 then() 方法只接受 function 对象，其余对象将被忽略。 then() 方法继续返回 Promise 对象，已实现链式调用。 then() 方法的定义如下：1then(fulfilledHandler, errorHandler) 有了这些核心知识，接着进入 Promise/Deferred 核心代码环节： 1234567891011121314151617var Promise = function() &#123; // 构建 Promise 对象 // 队列用于存储执行的回调函数 this.queue = [] this.isPromise = true&#125;Promise.prototype.then = function (fulfilledHandler, errorHandler) &#123; // 构建 Progress 的 then 方法 var handler = &#123;&#125; if (typeof fulfilledHandler === 'function') &#123; handler.fulfilled = fulfilledHandler &#125; if (typeof errorHandler === 'function') &#123; handler.error = errorHandler &#125; this.queue.push(handler) return this&#125; 如上 Promise 的代码就完成了，但是别忘了 Promise/Deferred 中的后者 Deferred，为了完成 Promise 的整个流程，我们还需要触发执行上述回调函数的地方，实现这些功能的对象就叫作 Deferred，即延迟对象。 Promise 和 Deferred 的整体关系如下图所示，从中可知，Deferred 主要用于内部来维护异步模型的状态；而 Promise 则作用于外部，通过 then() 方法暴露给外部以添加自定义逻辑。 接着来看 Deferred 代码部分的实现： 12345678910111213141516171819202122232425262728293031323334353637383940414243444546var Deferred = function() &#123; this.promise = new Promise()&#125;// 完成态Deferred.prototype.resolve = function(obj) &#123; var promise = this.promise var handler while(handler = promise.queue.shift()) &#123; if (handler &amp;&amp; handler.fulfilled) &#123; var ret = handler.fulfilled(obj) if (ret &amp;&amp; ret.isPromise) &#123; // 这一行以及后面3行的意思是：一旦检测到返回了新的 Promise 对象，停止执行，然后将当前 Deferred 对象的 promise 引用改变为新的 Promise 对象，并将队列中余下的回调转交给它 ret.queue = promise.queue this.promise = ret return &#125; &#125; &#125;&#125;// 失败态Deferred.prototype.reject = function(err) &#123; var promise = this.promise var handler while (handler = promise.queue.shift()) &#123; if (handler &amp;&amp; handler.error) &#123; var ret = handler.error(err) if (ret &amp;&amp; ret.isPromise) &#123; ret.queue = promise.queue this.promise = ret return &#125; &#125; &#125;&#125;// 生成回调函数Deferred.prototype.callback = function() &#123; var that = this return function(err, file) &#123; if(err) &#123; return that.reject(err) &#125; that.resolve(file) &#125;&#125; 接着我们以两次文件读取作为例子，来验证该设计的可行性。这里假设第二个文件读取依赖于第一个文件中的内容，相关代码如下： 1234567891011121314151617var readFile1 = function(file, encoding) &#123; var deferred = new Deferred() fs.readFile(file, encoding, deferred.callback()) return deferred.promise&#125;var readFile2 = function(file, encoding) &#123; var deferred = new Deferred() fs.readFile(file, encoding, deferred.callback()) return deferred.promise&#125;readFile1('./file1.txt', 'utf8').then(function(file1) &#123; // 这里通过 then 把两个回调存进队列中 return readFile2(file1, 'utf8')&#125;).then(function(file2) &#123; console.log(file2) // I am file2.&#125;) 最后可以看到控制台输出 I am file2，验证成功~，这个案例的完整代码可以点这里查看，并建议使用 node-inspector 进行断点观察，(这段代码里面有些逻辑确实很绕，通过断点调试就能较容易理解了)。 从 Promise 链式调用可以清晰地看到队列(先进先出)的知识，其有如下两个核心步骤： 将所有的回调都存到队列中； Promise 完成时，逐个执行回调，一旦检测到返回了新的 Promise 对象，停止执行，然后将当前 Deferred 对象的 promise 引用改变为新的 Promise 对象，并将队列中余下的回调转交给它； 至此，实现了 Promise/Deferred 的完整逻辑，Promise 的其他知识未来也会继续探究。 Generator尽管 Promise 一定程度解决了回调地狱的问题，但是对于喜欢简洁的程序员来说，一大堆的模板代码 .then(data =&gt; {...}) 显得不是很友好。所以爱折腾的开发者们在 ES6 中引人了 Generator 这种数据类型。仍然以读取文件为例，先上一段非常简洁的 Generator + co 的代码： 123456co(function* () &#123; const file1 = yield readFile('./file1.txt') const file2 = yield readFile('./file2.txt') console.log(file1) console.log(file2)&#125;) 可以看到比 Promise 的写法简洁了许多。后文会给出 co 库的实现原理。在此之前，先归纳下什么是 Generator。可以把 Generator 理解为一个可以遍历的状态机，调用 next 就可以切换到下一个状态，其最大特点就是可以交出函数的执行权（即暂停执行），让我们看如下代码： 1234567891011121314151617function* gen(x) &#123; yield (function() &#123;return 1&#125;)() var y = yield x + 2 return y&#125;// 调用方式一var g = gen(1)g.next() // &#123; value: 1, done: false &#125;g.next() // &#123; value: 3, done: false &#125;g.next() // &#123; value: undefined, done: true &#125;// 调用方式二var g = gen(1)g.next() // &#123; value: 1, done: false &#125;g.next() // &#123; value: 3, done: false &#125;g.next(10) // &#123; value: 10, done: true &#125; 由此我们归纳下 Generator 的基础知识： Generator 生成迭代器后，等待迭代器的 next() 指令启动。 启动迭代器后，代码会运行到 yield 处停止。并返回一个 {value: AnyType, done: Boolean} 对象，value 是这次执行的结果，done 是迭代是否结束。并等待下一次的 next() 指令。 next() 再次启动，若 done 的属性不为 true，则可以继续从上一次停止的地方继续迭代。 一直重复 2，3 步骤，直到 done 为 true。 通过调用方式二，我们可看到 next 方法可以带一个参数，该参数就会被当作上一个 yield 语句的返回值。 另外我们注意到，上述代码中的第一种调用方式中的 y 值是 undefined，如果我们真想拿到 y 值，就需要通过 g.next(); g.next().value 这种方式取出。可以看出，Generator 函数将异步操作表示得很简洁，但是流程管理却不方便。这时候用于 Generator 函数的自动执行的 co 函数库 登场了。为什么 co 可以自动执行 Generator 函数呢？我们知道，Generator 函数就是一个异步操作的容器。它的自动执行需要一种机制，当异步操作有了结果，能够自动交回执行权。 两种方法可以做到这一点： Thunk 函数。将异步操作包装成 Thunk 函数，在回调函数里面交回执行权。 Promise 对象。将异步操作包装成 Promise 对象，用 then 方法交回执行权。 co 函数库其实就是将两种自动自动执行器(Thunk 函数和 Promise 对象)，包装成一个库。使用 co 的前提条件是，Generator 函数的 yield 命令后面，只能是 Thunk 函数或者是 Promise 对象。下面分别用以上两种方法对 co 进行一个简单的实现。 基于 Thunk 函数的自动执行在 JavaScript 中，Thunk 函数就是指将多参数函数替换成单参数的形式，并且其只接受回调函数作为参数的函数。Thunk 函数的例子如下： 123456789// 正常版本的 readFile(多参数)fs.readFile(filename, 'utf8', callback)// Thunk 版本的 readFile(单参数)function readFile(filename) &#123; return function(callback) &#123; fs.readFile(filename, 'utf8', callback); &#125;;&#125; 在基于 Thunk 函数和 Generator 的知识上，接着我们来看看 co 基于 Thunk 函数的实现。(附：代码参考自co最简版实现) 1234567891011121314151617function co(generator) &#123; return function(fn) &#123; var gen = generator() function next(err, result) &#123; if(err) &#123; return fn(err) &#125; var step = gen.next(result) if (!step.done) &#123; step.value(next) // 这里可以把它联想成递归；将异步操作包装成 Thunk 函数，在回调函数里面交回执行权。 &#125; else &#123; fn(null, step.value) &#125; &#125; next() &#125;&#125; 用法如下：12345678910co(function* () &#123; // 把 function*() 作为参数 generator 传入 co 函数 var file1 = yield readFile('./file1.txt') var file2 = yield readFile('./file2.txt') console.log(file1) // I'm file1 console.log(file2) // I'm file2 return 'done'&#125;)(function(err, result) &#123; // 这部分的 function 作为 co 函数内的 fn 的实参传入 console.log(result) // done&#125;) 上述部分关键代码已进行注释，下面对 co 函数里的几个难点进行说明： var step = gen.next(result), 前文提到的一句话在这里就很有用处了：next方法可以带一个参数，该参数就会被当作上一个yield语句的返回值;在上述代码的运行中一共会经过这个地方 3 次，result 的值第一次是空值，第二次是 file1.txt 的内容 I’m file1，第三次是 file2.txt 的内容 I’m file2。根据上述关键语句的提醒，所以第二次的内容会作为 file1 的值(当作上一个yield语句的返回值)，同理第三次的内容会作为 file2 的值。 另一处是 step.value(next), step.value 就是前面提到的 thunk 函数返回的 function(callback) {}, next 就是传入 thunk 函数的 callback。这句代码是条递归语句，是这个简易版 co 函数能自动调用 Generator 的关键语句。 建议亲自跑一遍代码，多打断点，从而更好地理解，代码已上传github。 基于 Promise 对象的自动执行基于 Thunk 函数的自动执行中，yield 后面需跟上 Thunk 函数，在基于 Promise 对象的自动执行中，yield 后面自然要跟 Promise 对象了，让我们先构建一个 readFile 的 Promise 对象： 12345678function readFile(fileName) &#123; return new Promise(function(resolve, reject) &#123; fs.readFile(fileName, function(error, data) &#123; if (error) reject(error) resolve(data) &#125;) &#125;)&#125; 在基于前文 Promise 对象和 Generator 的知识上，接着我们来看看 co 基于 Promise 函数的实现: 123456789101112function co(generator) &#123; var gen = generator() function next(data) &#123; var result = gen.next(data) // 同上，经历了 3 次，第一次是 undefined，第二次是 I'm file1，第三次是 I'm file2 if (result.done) return result.value result.value.then(function(data) &#123; // 将异步操作包装成 Promise 对象，用 then 方法交回执行权 next(data) &#125;) &#125; next()&#125; 用法如下：1234567co(function* generator() &#123; var file1 = yield readFile('./file1.txt') var file2 = yield readFile('./file2.txt') console.log(file1.toString()) // I'm file1 console.log(file2.toString()) // I'm file2&#125;) 这一部分的代码上传在这里，通过观察可以发现基于 Thunk 函数和基于 Promise 对象的自动执行方案的 co 函数设计思路几乎一致，也因此呼应了它们共同的本质 —— 当异步操作有了结果，自动交回执行权。 async看上去 Generator 已经足够好用了，但是使用 Generator 处理异步必须得依赖 tj/co，于是 asycn 出来了。本质上 async 函数就是 Generator 函数的语法糖，这样说是因为 async 函数的实现，就是将 Generator 函数和自动执行器，包装进一个函数中。伪代码如下，(注：其中 automatic 的实现可以参考 async 函数的含义和用法中的实现) 1234567891011async function fn(args)&#123; // ...&#125;// 等同于function fn(args) &#123; return automatic(function*() &#123; // automatic 函数就是自动执行器，其的实现可以仿照 co 库自动运行方案来实现，这里就不展开了 // ... &#125;)&#125; 接着仍然以上文的读取文件为例，来比较 Generator 和 async 函数的写法差异： 1234567891011// Generatorvar genReadFile = co(function*() &#123; var file1 = yield readFile('./file1.txt') var file2 = yield readFile('./file2.txt')&#125;)// 改用 async 函数var asyncReadFile = async function() &#123; var file1 = await readFile('./file1.txt') var file2 = await 1 // 等同于同步操作（如果跟上原始类型的值）&#125; 总体来说 async/await 看上去和使用 co 库后的 generator 看上去很相似，不过相较于 Generator，可以看到 Async 函数更优秀的几点： 内置执行器。Generator 函数的执行必须依靠执行器，而 Aysnc 函数自带执行器，调用方式跟普通函数的调用一样； 更好的语义。async 和 await 相较于 * 和 yield 更加语义化； 更广的适用性。前文提到的 co 模块约定，yield 命令后面只能是 Thunk 函数或 Promise 对象，而 async 函数的 await 命令后面则可以是 Promise 或者原始类型的值； 返回值是 Promise。async 函数返回值是 Promise 对象，比 Generator 函数返回的 Iterator 对象方便，因此可以直接使用 then() 方法进行调用； 参考资料 深入浅出 Node.js 理解回调函数 JavaScript之异步编程简述 理解co执行逻辑 co 函数库的含义和用法 async 函数的含义和用法]]></content>
@@ -1660,17 +1649,6 @@
     <content type="text"><![CDATA[。。。。]]></content>
   </entry>
   <entry>
-    <title><![CDATA[去掉IE11中input右侧的关闭叉叉]]></title>
-    <url>%2F2014%2F11%2F17%2F2014-11-17-input-close-btn-in-ie11%2F</url>
-    <content type="text"><![CDATA[在 IE11 下，浏览器自作多情在 text input 组件上加一个 close 叉叉： 这么整： input::-ms-clear { display: none; } 这种伪元素类似于 web component.]]></content>
-      <categories>
-        <category>前端杂烩</category>
-      </categories>
-      <tags>
-        <tag>CSS</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[让身体残疾的人可以访问Web]]></title>
     <url>%2F2014%2F11%2F17%2F2014-11-17-web-accessibility%2F</url>
     <content type="text"><![CDATA[Web accessibility means that people with disabilities can use the Web.让身体残疾的人可以访问Web，这就是 Web Accessibility。 在中国，有数以百万甚至千万计的人无法正常地使用网络，不是因为他们脑子不好使，也不是因为他们没钱没文化，而是他们用来感知这个世界的能力受到了先天或者后天的破坏。WAI（Web Accessibility inititive）这个议题在1997年五月份被提上议案，至今已经形成了一个庞大的知识体系。 残疾人士包括：失明和低视力、失聪和重听、学习障碍、认知障碍、行动不便、言语残疾、光过敏患者和这些病症的复合患者。涉及类别包括：视觉、听觉、身体、语言、认知、语言、学习以及神经残疾。 事实上，网页无障碍化，其对象不限于残疾人士。如果哪一天你打球手骨折了，你可以感受下无障碍给你带来的便利；如果哪一天你也两鬓霜白，眼力退化、听力退化，网页无障碍化技术就是你的第二双眼睛、第二双耳朵… 后期我会投入一定的时间研究并推动相关内容。]]></content>
@@ -1680,6 +1658,17 @@
       </categories>
       <tags>
         <tag>WAI</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[去掉IE11中input右侧的关闭叉叉]]></title>
+    <url>%2F2014%2F11%2F17%2F2014-11-17-input-close-btn-in-ie11%2F</url>
+    <content type="text"><![CDATA[在 IE11 下，浏览器自作多情在 text input 组件上加一个 close 叉叉： 这么整： input::-ms-clear { display: none; } 这种伪元素类似于 web component.]]></content>
+      <categories>
+        <category>前端杂烩</category>
+      </categories>
+      <tags>
+        <tag>CSS</tag>
       </tags>
   </entry>
   <entry>
@@ -1762,17 +1751,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[￥符号，少了一横]]></title>
-    <url>%2F2014%2F08%2F29%2F2014-08-29-dollar-in-different-face%2F</url>
-    <content type="text"><![CDATA[跟钱有关的问题。 数值前加一个 ￥ 符号，可是视觉同学一定要使用两横的 dollar 符号。咋弄？ 这个符号在不同字体下呈现的效果是不一样的，微软雅黑下是两横，不过显示的并不好看，正确的处理方式应该是： &lt;style&gt;i {font-family:&quot;Microsoft Yahei&quot;;}&lt;/style&gt; &lt;i&gt;&amp;yen;&lt;/i&gt;]]></content>
-      <categories>
-        <category>前端杂烩</category>
-      </categories>
-      <tags>
-        <tag>css</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[评《别太听上司的话》]]></title>
     <url>%2F2014%2F08%2F29%2F2014-08-29-be-patient%2F</url>
     <content type="text"><![CDATA[今天早上逛博客园，看到了一篇吐槽的文章：别太听上司的话，有些感触： 给你加任务的，可以称之为需求方。在需求方看来，无论你是前端开发还是后台开发，广义上讲，都是资源，有需求当然也是需要资源的。 每一个需求过来都应该进行评审，需求方不提，你自己也没有提出来，他们觉得加一点东西或者改一点东西是十分轻松的事情，因为他们不懂技术，可是你懂呀，你需要把排期和难点罗列出来，给出一个相对准确的项目时间，这有啥难度么？ 能力强不等于无敌，有些人会说能力越强责任越重，你可以认为这是忽悠你的借口，不过这也是事实，当你的技术能力和业务能力持平之后，你的工资和职衔也就上去了。 你说一两年学到的东西还不如两个月的，显然，你指的是技术方面。想必楼主是一个沉醉于技术的人，但是在工作中，技术只是一方面，或许学会做人才是最重要的。 我也经常会遭遇楼主这样的经历，每每过来都是忍气吞声，但是每一次我都试着去坦然去面对，当然提高了自己跟人 PK 的能力。 所以，加油吧！]]></content>
@@ -1782,6 +1760,17 @@
       <tags>
         <tag>life</tag>
         <tag>work</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[￥符号，少了一横]]></title>
+    <url>%2F2014%2F08%2F29%2F2014-08-29-dollar-in-different-face%2F</url>
+    <content type="text"><![CDATA[跟钱有关的问题。 数值前加一个 ￥ 符号，可是视觉同学一定要使用两横的 dollar 符号。咋弄？ 这个符号在不同字体下呈现的效果是不一样的，微软雅黑下是两横，不过显示的并不好看，正确的处理方式应该是： &lt;style&gt;i {font-family:&quot;Microsoft Yahei&quot;;}&lt;/style&gt; &lt;i&gt;&amp;yen;&lt;/i&gt;]]></content>
+      <categories>
+        <category>前端杂烩</category>
+      </categories>
+      <tags>
+        <tag>css</tag>
       </tags>
   </entry>
   <entry>
@@ -2017,6 +2006,19 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[当正则匹配零个字符]]></title>
+    <url>%2F2014%2F04%2F28%2F2014-04-28-reg-match-null%2F</url>
+    <content type="text"><![CDATA[&quot;something&quot;.match(/\s*(.*?)\s*/) &gt; [&apos;&apos;, &apos;&apos;] &quot;something&quot;.match(/^\s*(.*?)\s*$/) &gt; [&quot;something&quot;, &quot;something&quot;] 为何前者匹配的结果为空？ 如果你不清楚正则的贪婪模式和非贪婪模式，请先移步这里. 整个匹配分为三步： 第一个 \s*, 贪婪模式把字符全部吞掉，然后回溯，直到第一个字符任然没找到 第二步是 .*? 由于是非贪婪模式匹配了一个字符就结束了，继续第三步 第三步匹配失败，回溯到第二步，那第二步会继续减少吞掉的字符，于是字符数缩减到零。 可能这么说还是不太清晰，先看看这个对比： 关于返回结果不是 null 而是 “”，你可以理解为匹配到了零个 a。]]></content>
+      <categories>
+        <category>JavaScript</category>
+        <category>前端杂烩</category>
+      </categories>
+      <tags>
+        <tag>正则</tag>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[git版本回退操作]]></title>
     <url>%2F2014%2F04%2F28%2F2014-04-28-git-roll-back%2F</url>
     <content type="text"><![CDATA[今天 github 上操作遇到了一个很头疼的问题，在某个文件中进行了误操作（有可能是加入了BOM头），diff 没看到差异，但是线上就是不正常显示。修改半天没用，只要回退版本。 通过 git log 可以查看近期 commit 的信息： commit bcdfd65ba3f16a0647e7687f92cca25d51738d2e Author: Barret Lee &lt;barret.china@gmail.com&gt; Date: Mon Apr 28 01:22:27 2014 +0800 now post commit 69eeaa60c5808c143aabce4d52feb104e2e4591b Author: Barret &lt;barret.china@gmail.com&gt; Date: Sat Apr 26 21:03:48 2014 +0800 fix bug commit b9e4b8c697d139ec35e17be7dd353f1338e9b92e Author: Jing Lee &lt;barret.china@gmail.com&gt; Date: Sat Apr 26 19:35:37 2014 +0800 Update atom.xml commit 后面的一串字符就是 SHA 字符。 git reset --hard SHA 这句命令可以回退到指定版本。不过上传的时候要注意了，如果你是： git push -u master origin 肯定会出现这样的错误提示： error: failed to push some refs to &apos;//github.com/barretlee/barretlee.github.io.git&apos; hint: Updates were rejected because the tip of your current branch is behind hint: its remote counterpart. Integrate the remote changes (e.g. hint: &apos;git pull ...&apos;) before pushing again. hint: See the &apos;Note about fast-forwards&apos; in &apos;git push --help&apos; for details. 原因是你本地版本要落后于服务器上的版本（git reset 回退了嘛），如果想覆盖服务器上版本，应该加 -f ，强制提交， git push -u master origin -f 不过这样的操作要谨慎了，先把修改的位置备份（拿出来，复制到文件夹外），完成上述操作之后再复制回来处理。]]></content>
@@ -2029,16 +2031,28 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[当正则匹配零个字符]]></title>
-    <url>%2F2014%2F04%2F28%2F2014-04-28-reg-match-null%2F</url>
-    <content type="text"><![CDATA[&quot;something&quot;.match(/\s*(.*?)\s*/) &gt; [&apos;&apos;, &apos;&apos;] &quot;something&quot;.match(/^\s*(.*?)\s*$/) &gt; [&quot;something&quot;, &quot;something&quot;] 为何前者匹配的结果为空？ 如果你不清楚正则的贪婪模式和非贪婪模式，请先移步这里. 整个匹配分为三步： 第一个 \s*, 贪婪模式把字符全部吞掉，然后回溯，直到第一个字符任然没找到 第二步是 .*? 由于是非贪婪模式匹配了一个字符就结束了，继续第三步 第三步匹配失败，回溯到第二步，那第二步会继续减少吞掉的字符，于是字符数缩减到零。 可能这么说还是不太清晰，先看看这个对比： 关于返回结果不是 null 而是 “”，你可以理解为匹配到了零个 a。]]></content>
+    <title><![CDATA[jekyll安装不了？]]></title>
+    <url>%2F2014%2F04%2F27%2F2014-04-27-ruby-jekyll-install%2F</url>
+    <content type="text"><![CDATA[1、安装Ruby sudo apt-get install ruby1.9.1-dev 2、安装Jekyll sudo gem install jekyll 3、安装rake(用来可以生成markdown文件) sudo gem install rake 注意几点： 不是安装 ruby，而是 ruby-dev 安装 jekyll 之前应该先安装 rdoc 1sudo gem install rdoc 关于gem的下载速度，查看这篇文章]]></content>
       <categories>
-        <category>JavaScript</category>
         <category>前端杂烩</category>
       </categories>
       <tags>
-        <tag>正则</tag>
-        <tag>JavaScript</tag>
+        <tag>jekyll</tag>
+        <tag>ruby</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[gem速度慢]]></title>
+    <url>%2F2014%2F04%2F27%2F2014-04-27-gem-sources%2F</url>
+    <content type="text"><![CDATA[删除本来的源，添加淘宝的源。 1 查看源 gem sources list 2 删除list中的源 gem sources --remove http://rubygems.org/ 3 查看是否已经删除 重复1,结果为空就正确 4 添加淘宝的源 gem sources -a http://ruby.taobao.org/]]></content>
+      <categories>
+        <category>杂物间</category>
+        <category>网络交互</category>
+      </categories>
+      <tags>
+        <tag>ruby</tag>
+        <tag>gem</tag>
       </tags>
   </entry>
   <entry>
@@ -2069,28 +2083,16 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[jekyll安装不了？]]></title>
-    <url>%2F2014%2F04%2F27%2F2014-04-27-ruby-jekyll-install%2F</url>
-    <content type="text"><![CDATA[1、安装Ruby sudo apt-get install ruby1.9.1-dev 2、安装Jekyll sudo gem install jekyll 3、安装rake(用来可以生成markdown文件) sudo gem install rake 注意几点： 不是安装 ruby，而是 ruby-dev 安装 jekyll 之前应该先安装 rdoc 1sudo gem install rdoc 关于gem的下载速度，查看这篇文章]]></content>
+    <title><![CDATA[巧妙交换值]]></title>
+    <url>%2F2014%2F04%2F26%2F2014-04-26-replace-a-and-b%2F</url>
+    <content type="text"><![CDATA[a = 1, b = 2; a = [b, b = a][0]; a // 2 b // 1 很巧妙的替换了 a 和 b 的值。]]></content>
       <categories>
+        <category>JavaScript</category>
         <category>前端杂烩</category>
       </categories>
       <tags>
-        <tag>jekyll</tag>
-        <tag>ruby</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[gem速度慢]]></title>
-    <url>%2F2014%2F04%2F27%2F2014-04-27-gem-sources%2F</url>
-    <content type="text"><![CDATA[删除本来的源，添加淘宝的源。 1 查看源 gem sources list 2 删除list中的源 gem sources --remove http://rubygems.org/ 3 查看是否已经删除 重复1,结果为空就正确 4 添加淘宝的源 gem sources -a http://ruby.taobao.org/]]></content>
-      <categories>
-        <category>杂物间</category>
-        <category>网络交互</category>
-      </categories>
-      <tags>
-        <tag>ruby</tag>
-        <tag>gem</tag>
+        <tag>hack</tag>
+        <tag>tips</tag>
       </tags>
   </entry>
   <entry>
@@ -2107,18 +2109,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[jekyll中gsub未定义的错误]]></title>
-    <url>%2F2014%2F04%2F26%2F2014-04-26-gsup-error-in-atom-file%2F</url>
-    <content type="text"><![CDATA[今天被 jekyll 编译时的一个问题搞疯了。 Liquid Exception: undefined method `gsub’ for nil:NilClass in atom.xml 上面这个错误，开始以为时jekyll的版本问题，后来又以为时 UIT8 编码错误，再继续折腾，看了很多博客还是没有处理好。 在 atom.xml 中我写了一句 ，以前一直是这样的啊，没报错。不知道 github pages 的后台 jekyll 编译器是不是做了版本或者其他方面的修改，定位到这个位置之后，把内容改成了 \{\{ post.excerpt }} \{\{ post.content }} # 改成这个也可以，只是内容太多，我不喜欢 差不多整了我两个小时，这么点小错误，妹的！]]></content>
-      <categories>
-        <category>前端杂烩</category>
-      </categories>
-      <tags>
-        <tag>error</tag>
-        <tag>jekyll</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[clip的安装和使用]]></title>
     <url>%2F2014%2F04%2F26%2F2014-04-26-clip-in-sys%2F</url>
     <content type="text"><![CDATA[很多情况下我们需要复制整个文件的内容，然后粘贴到其他地方，像我这种命令行控，文件操作基本都是命令行处理的，平时会用 vim 打开文件，然后 vim FILE # 打开文件 ggVG # 全选内容 &quot;+y # 复制到系统缓冲区 说实话，这真的很麻烦，其实我们可以这样： # windows用户 clip &lt; FILE echo &quot;content&quot; | clip # linux用户 xclip -sel clip &lt; FILE 省去了打开文件复制的过程。]]></content>
@@ -2132,16 +2122,15 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[巧妙交换值]]></title>
-    <url>%2F2014%2F04%2F26%2F2014-04-26-replace-a-and-b%2F</url>
-    <content type="text"><![CDATA[a = 1, b = 2; a = [b, b = a][0]; a // 2 b // 1 很巧妙的替换了 a 和 b 的值。]]></content>
+    <title><![CDATA[jekyll中gsub未定义的错误]]></title>
+    <url>%2F2014%2F04%2F26%2F2014-04-26-gsup-error-in-atom-file%2F</url>
+    <content type="text"><![CDATA[今天被 jekyll 编译时的一个问题搞疯了。 Liquid Exception: undefined method `gsub’ for nil:NilClass in atom.xml 上面这个错误，开始以为时jekyll的版本问题，后来又以为时 UIT8 编码错误，再继续折腾，看了很多博客还是没有处理好。 在 atom.xml 中我写了一句 ，以前一直是这样的啊，没报错。不知道 github pages 的后台 jekyll 编译器是不是做了版本或者其他方面的修改，定位到这个位置之后，把内容改成了 \{\{ post.excerpt }} \{\{ post.content }} # 改成这个也可以，只是内容太多，我不喜欢 差不多整了我两个小时，这么点小错误，妹的！]]></content>
       <categories>
-        <category>JavaScript</category>
         <category>前端杂烩</category>
       </categories>
       <tags>
-        <tag>hack</tag>
-        <tag>tips</tag>
+        <tag>error</tag>
+        <tag>jekyll</tag>
       </tags>
   </entry>
   <entry>
@@ -2222,17 +2211,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[老程序员Vs新程序员]]></title>
-    <url>%2F2014%2F03%2F31%2F2014-03-31-old-programmer-vs-newer%2F</url>
-    <content type="text"><![CDATA[经验越足、知道的越多编程越慢这就是为何不能让老程序员冲锋在一线开发岗位的原因。因为编程经验越足、知道的越多，他做项目时就会思前顾后。往往一个小功能给菜鸟开发需要一周，老鸟开发可能得两周，结果用户一个需求变更直接干趴老鸟程序员。 当你成为老程序员时是否也要开始重新审视下自己？！]]></content>
-      <categories>
-        <category>观点和感想</category>
-      </categories>
-      <tags>
-        <tag>talk</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[npm穿墙]]></title>
     <url>%2F2014%2F03%2F31%2F2014-03-31-npm-cross-wall%2F</url>
     <content type="text"><![CDATA[GWF 很给力，很多东西都能墙掉，但是把 npm 也纳入黑名单，不知道 GWFer 是怎么想的。翻墙翻了好多年了，原理其实也挺简单的，proxy 嘛！ » 方法一A) 国内源，http://cnpmjs.org 使用方式，你可以在 cmd 中键入 npm install -g cnpm，然后出去吃个饭，如果还没有安装好，那就换个方式： npm install -g cnpm --registry=http://r.cnpmjs.org registry 参数的作用就是指向需要 download 的仓库。 cnpm 跟国外的 npm 是同步的，只要 npm 有更新，cnpm 就会跟着一起更新。 当然，你也可以简单点搞： npm config set registry=&quot;http://r.cnpmjs.org&quot; 在配置中直接指定源头，下次就没有必要使用 --registry 参数了。配置好了之后，npm 就指向了国内的仓库。 B) 当然，你也可以安装 cnpm，安装好了之后使用 cnpm 来下载文件，其实原理跟上面是一样的，于是你就可以这样了： cnpm install -g package_name » 方法二代理，在配置中设置代理参数： # 全局路径，也就是 npm install -g，这里 -g 的意义 npm config set prefix=&quot;c:\nodejs&quot; # 一般使用 goagent 翻墙，他的默认端口是 8087 npm config set proxy=http://127.0.0.1:8087 # 设置 https 的代理 npm config set https_proxy=http://127.0.0.1:8087 # 这个地方记得设置下，别搞了个代理，结果在国内源下载 npm config set registry=http://registry.npmjs.org 这样配置好了之后，打开你的 goagent ，记得一定要打开，不然 npm 必然报错。上面写了一堆，其实没必要跟着写这么多，一句话就可以搞定： npm config set proxy=http://127.0.0.1:8087 为啥呢，npm -g 没必要自己去配置， registry 默认就是 http://registry.npmjs.org，不配置 https_proxy，也走的通，所以就只剩下上面这条命令了。 » 方法三直接下载到本地。 实在是怕麻烦，就直接把文件 download 下来，然后放到 node_module 之中就行了。如果是全局模块，找到全局 node_module 的位置，然后解压放进去就行了。]]></content>
@@ -2242,6 +2220,17 @@
       <tags>
         <tag>npm</tag>
         <tag>proxy</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[老程序员Vs新程序员]]></title>
+    <url>%2F2014%2F03%2F31%2F2014-03-31-old-programmer-vs-newer%2F</url>
+    <content type="text"><![CDATA[经验越足、知道的越多编程越慢这就是为何不能让老程序员冲锋在一线开发岗位的原因。因为编程经验越足、知道的越多，他做项目时就会思前顾后。往往一个小功能给菜鸟开发需要一周，老鸟开发可能得两周，结果用户一个需求变更直接干趴老鸟程序员。 当你成为老程序员时是否也要开始重新审视下自己？！]]></content>
+      <categories>
+        <category>观点和感想</category>
+      </categories>
+      <tags>
+        <tag>talk</tag>
       </tags>
   </entry>
   <entry>

@@ -28,7 +28,6 @@ https://handishenniu.com/2018/02/04/跨域二三事/
 https://handishenniu.com/2018/01/30/原生JS实现一个瀑布流插件/
 https://handishenniu.com/2018/01/16/MVVM 框架解析之双向绑定/
 https://handishenniu.com/2017/12/07/造轮子热身/
-https://handishenniu.com/2017/10/31/走近-Python/
 https://handishenniu.com/2017/09/22/Node.js 异步异闻录/
 https://handishenniu.com/2017/08/09/使用-Node-js-小玩一番-Alfred-Workflow/
 https://handishenniu.com/2017/07/02/从-JavaScript-到-TypeScript/
@@ -98,3 +97,4 @@ https://handishenniu.com/2015/10/15/2015-10-15-duoshuo-migrate-to-disqus/
 https://handishenniu.com/2015/10/14/2015-10-14-a-incredible-bug-in-taobao-homepage/
 https://handishenniu.com/2015/10/07/2015-10-07-debug-nodejs-in-command-line/
 https://handishenniu.com/2015/10/05/2015-10-05-how-to-build-a-https-server/
+https://handishenniu.com/2015/09/30/2015-09-30-confusion-about-for-loop-var/
